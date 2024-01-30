@@ -1,0 +1,207 @@
+
+.gameContainer {
+    background-color: black;
+    margin: 1em;
+    position: relative;
+    overflow: hidden;
+    height: 85%;
+    width: 85%;
+    margin: auto;
+}
+.instructions {
+    color: white;
+    text-align: right;
+    width: 45%;
+    position: absolute;
+    right: 2%;
+    left: auto;
+    bottom: 2%;
+    z-index: 250;
+    font-size: 1vw;
+
+    transition: -webkit-transform 0.75s ease;
+    transition: transform 1s ease;
+}
+.gameScore {
+    color: white;
+    text-align: left;
+    width: 50%;
+    position: absolute;
+    left: 2%;
+    right: auto;
+    bottom: 2%;
+    z-index: 250;
+
+    transition: -webkit-transform 0.75s ease;
+    transition: transform 1s ease;
+}
+.gameTitle {
+    text-align: center;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    z-index: 100;
+    background-color: black;
+    transition: -webkit-transform 0.75s ease;
+    transition: transform 1s ease;
+}
+
+.displayNone {
+    display: none;
+}
+.hidden {
+    animation: animateOut 1s forwards;
+}
+@keyframes animateOut {
+    0% {
+        opacity: 1;
+        display: initial;
+    }
+    100% {
+        opacity: 0;
+        display: none;
+    }
+}
+
+.gameAlert {
+    display: table;
+    position: absolute;
+    height: 30%;
+    width: 70%;
+    z-index: 999 !important;
+    top: -31%;
+    left: 15%;
+    overflow: hidden;
+    background: rgba(166, 166, 166, 0.90);
+    color: black;
+    text-align: center;
+}
+.gameAlert > h1,.gameAlert > h6,.gameAlert > span {
+    vertical-align: middle;
+}
+.focusAlertEnd {
+    animation: endAlert 5s forwards;
+}
+@keyframes endAlert {
+    0% {
+        top: -31%;
+    }
+    75% {
+        top: 25%;
+    }
+    80% {
+        top: 23%;
+    }
+    85% {
+        top: 25%;
+    }
+    90% {
+        top: 23%;
+    }
+    100% {
+        top: 25%;
+    }
+}
+.focusAlert {
+    animation: bringAlert 5s ease;
+}
+@keyframes bringAlert {
+    0% {
+        top: -31%;
+    }
+    50% {
+        top: 25%;
+    }
+    55% {
+        top: 25%;
+    }
+    60% {
+        top: 25%;
+    }       
+    100% {
+        top: -31%;
+    }
+}
+
+#theGame {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+}
+
+.gameStart {
+    width: 40%;
+    height: 2em;
+    position: relative;
+    display: inline-block;
+    margin-top: 5%;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-image: url('./contact-assets/startBtn.png');
+}
+.gameStart:hover {
+    cursor: pointer;
+    background-image: url('./contact-assets/startBtn2.png');
+}
+
+.gameFireworks {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+.fireworks {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    z-index: 100;
+
+    transition: -webkit-transform 0.75s ease;
+    transition: transform 1s ease;
+
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-image: url('./contact-assets//youwon.gif');
+}
+
+.ground {
+    stroke: black;
+    background: linear-gradient(90deg, rgba(84,21,0,1) 0%, rgba(148,72,0,1) 28%, rgba(96,42,0,1) 100%);
+}
+.scene {
+    transition: all 0.10s ease;
+}
+.user {
+    stroke: black;
+    z-index: 400;
+
+    transition: all 0.1s ease;
+}
+
+.enemy {
+    transition: all 0.01s ease;
+}
+
+.scroll {
+    animation: scrollLeft 5s;
+}
+@keyframes scrollLeft {
+    0% {
+        transform: translateX(0%);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+.hitEnemy {
+    animation: youdied 2s;
+}
+@keyframes youdied {
+    0% {
+        transform: rotate(0);
+    }
+    50% {
+        transform: rotate(180);
+    }
+    100% {
+        transform: rotate(360);
+    }
+}

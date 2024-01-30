@@ -1,0 +1,32 @@
+.aboutS {
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 65% 35%;
+    grid-gap: 1%;
+
+    .aboutPane {
+        align-items: center;
+
+        .txt {
+            padding-left: 4%;
+            padding-right: 4%;
+        }
+    }
+
+    .profDiv {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .profImg {
+            background-size: 100% 100%;
+            width: 25vw;
+            height: 25vw;
+            margin-left: auto;
+            margin-right: auto;
+            transition: all 0.1s ease-in-out;
+        }   
+    }
+}

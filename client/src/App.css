@@ -1,0 +1,74 @@
+.hide {
+  display: none;
+}
+.noOverflow {
+  overflow: hidden;
+}
+#root {
+  .textBG {
+    color: white;
+    line-height: 1.25em;
+    font-size: min(3vw, 30px);    
+
+    background-color: rgba(38, 205, 242,0.92);
+  }
+  .dspFlxCntr {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+
+  /* When screen is <=1650px but > 760px */
+  @media only screen and (max-width: 1650px) and (min-width: 761px) {
+    /* ~~~~~~~~~~~ */
+    /* ABOUT PAGE */
+    /* ~~~~~~~~~~~ */
+      .profImg {
+        width: 27vw;
+        height: 27vw;
+      }
+    /* ~~~~~~~~~~~ */
+    /* ~~~~~~~~~~~ */
+
+  }
+
+  /* When screen is 760px or less */
+	@media screen and (max-width: 760px) {
+    /* ~~~~~~~~~~~ */
+    /* ABOUT PAGE  */
+    /* ~~~~~~~~~~~ */
+      .aboutS {
+          grid-template-columns: 100%;
+          grid-template-rows: 41vw auto;
+
+          .aboutPane {
+            grid-row: 2;
+          }
+
+          .profImg {
+            grid-row: 1;
+            width: 40vw;
+            height: 40vw;
+            margin-top: 1vw;
+          }
+      }
+    /* ~~~~~~~~~~~ */
+    /* ~~~~~~~~~~~ */
+
+    /* ~~~~~~~~~~~ */
+    /* PORTFOLIO PAGE  */
+    /* ~~~~~~~~~~~ */
+      .port {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        grid-auto-rows: 30vw;
+      }
+    /* ~~~~~~~~~~~ */
+    /* ~~~~~~~~~~~ */    
+
+  }
+
+}
