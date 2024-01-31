@@ -1171,7 +1171,7 @@ class Contact extends React.Component {
               <Button variant="contained" onClick={() => this.handleSubmission()}>Send Form</Button>
             </Box>
           </div>
-          <div className='gameContainer'>
+{/*           <div className='gameContainer'>
             <div
               className={`
                 gameTitle
@@ -1227,7 +1227,7 @@ class Contact extends React.Component {
                 Press Esc to Restart
               </div>
             </div>
-          </div>
+          </div> */}
           </div>
         </BodyPane>
       </BodyPart>
