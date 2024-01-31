@@ -1,8 +1,7 @@
 const express = require("express");
-
 const app = express();
-
 const cors = require("cors");
+const path = require('path');
 
 require("dotenv").config({ path: "./config.env" });
 const port = process.env.PORT || 5000;
@@ -18,10 +17,10 @@ app.use('/api/record', recordRts);
 // const dbo = require("./db/conn");
 
 if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging') {
-    console.log('_ In PROD or STAGING _');
-    app.use(express.static(path.join(__dirname, "/client/build")));
+    const appName = __dirname + "/client/build/";
+    app.use(express.static(appName));
     app.get('*', (req, res) => {
-        res.sendFile(path.join(__dirname + "/client/build/index.html"));
+        res.sendFile(appName + "index.html");
     });
 }
 
