@@ -6,12 +6,14 @@
     grid-template-rows: 20% 80%;
     background-color: white; 
 
+    font-family: Arial, Helvetica, sans-serif;
+
     .header {
         color: white;
         display: grid;
         grid-template-rows: 100%;
         grid-template-columns: 65% 20% 15%;
-        background-color: darkslategray;
+        background-color: #252525;
 
         .name {
             display: block;
@@ -36,6 +38,10 @@
         overflow-y: auto;
         overflow-x: hidden;        
 
+        .leftDetails,
+        .rightDetails {
+            padding-top: 2%;
+        }
         .leftDetails {
             display: grid;
             grid-template-rows: auto;
@@ -62,12 +68,14 @@
                     display: grid;
                     grid-template-rows: auto;
                     grid-template-columns: 1fr 1fr;
+                    padding-left: 1%;
                 }
                 .infrastructure {
                     display: grid;
                     grid-template-rows: repeat(8, auto);
-                    grid-template-columns: 1fr 1fr 1fr 1fr;
+                    grid-template-columns: 30% 20% 30% 20%;
                     grid-column-end: span 2;
+                    padding-top: 2%;
 
                     span {
                         grid-column-end: span 4;
@@ -78,49 +86,75 @@
                 .backEnd,
                 .infrastructure {
                     span {
-                        font-weight: bold;
                         display: block;
                         text-decoration: underline;
                     }
                     .skillTitle {
                         display: inline-block;
                         padding-left: 3%;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
                     }
                     .skillExp {
-                        display: inline-block;
+                        display: flex;
+                        justify-content: flex-start;
+                        align-items: center;
+
+                        .star-bl {
+                            color: lightgray;
+                        }
+                        .star {
+                            color: #3A8DEF;
+                        }
                     }
                 }
             }
         }
 
         .mainTitle {
-            font-size: 1.8vw;
+            font-size: 1.5vw;
             font-weight: bold;
-            display: block;            
+            display: block;
+            padding-bottom: 1%;
         }
         .detailsDiv {
             display: grid;
             grid-template-columns: 100%;
             grid-template-rows: repeat(3, auto);
 
+            div {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
             .title {
                 font-weight: bold;
-                font-size: 1.5vw;
-                display: flex;
-                float: left;
+                font-size: 1.25vw;                
             }
             .date {
                 font-size: 1vw;
-                display: flex;
-                float: right;
+            }
+            .title,
+            .date {
+                color: #3A8DEF;
+                padding-top: 1%;
             }
             .location {
                 font-weight: bold;
-                font-size: 1vw;
+                font-size: 0.9vw;
                 display: inline-block;
+                padding-left: 1%;
+                padding-bottom: 1%;                
             }
             .bullets {
-    
+                margin-top: 0;
+                margin-bottom: 0;
+
+                li {
+                    padding-bottom: 1%;
+                    word-spacing: 1px;
+                }
             }            
         }
     }            

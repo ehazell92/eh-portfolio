@@ -4,6 +4,7 @@ import { BodyPart } from '../bodyEls';
 import {
   lftSkills, rghtSkills, frontEnd, backEnd, ifr, certsVolun
 } from '../../../shared/constants';
+import StarIcon from '@mui/icons-material/Star'
 import './resume.css';
 
 
@@ -122,7 +123,7 @@ class Resume extends React.Component {
               <br />
               <span
                 className='mainTitle'
-              >EDUCATION</span> <br />
+              >EDUCATION</span>
               <div
                 className='detailsDiv'
               >
@@ -140,6 +141,7 @@ class Resume extends React.Component {
                   >Thomas Edison State University, Trenton, NJ</span>
                 </div>
               </div>
+              <br/>
               <span
                 className='mainTitle'
               >SKILLS</span>
@@ -157,7 +159,18 @@ class Resume extends React.Component {
                       >{fe.title}</div>
                       <div
                         className='skillExp'
-                      >{'X'.repeat(fe.stars)}</div>
+                      >
+                        {
+                          Array.from({ length: 5 }).map((_, index) => (
+                            <StarIcon 
+                              key={`star-${index}`}
+                              className={`
+                                ${(index+1) <= fe.stars ? 'star' : 'star-bl'}
+                              `}
+                            />
+                          ))
+                        }
+                      </div>
                     </>
                   )}
                 </div>
@@ -172,7 +185,18 @@ class Resume extends React.Component {
                       >{be.title}</div>
                       <div
                         className='skillExp'
-                      >{'X'.repeat(be.stars)}</div>
+                      >
+                        {
+                          Array.from({ length: 5 }).map((_, index) => (
+                            <StarIcon 
+                              key={`star-${index}`}
+                              className={`
+                                ${(index+1) <= be.stars ? 'star' : 'star-bl'}
+                              `}
+                            />
+                          ))                        
+                        }
+                      </div>
                     </>
                   )}
                 </div>
@@ -187,40 +211,49 @@ class Resume extends React.Component {
                       >{ir.title}</div>
                       <div
                         className='skillExp'
-                      >{'X'.repeat(ir.stars)}</div>
-                    </>
-                  )}
-                </div>
-                <span
-                  className='mainTitle'
-                  style={{
-                    gridColumnEnd: 'span 2',
-                  }}
-                >CERTIFICATIONS & VOLUNTEERING</span>
-                <div
-                  className='detailsDiv'
-                  style={{
-                    gridColumnEnd: 'span 2',
-                  }}
-                >
-                  {certsVolun.map((certs, i) =>
-                    <>
-                      <div>
-                        <span
-                          className='title'
-                        >{certs.title}</span>
-                        <span
-                          className='date'
-                        >{certs.date}</span>
-                      </div>
-                      <div>
-                        <span
-                          className='location'
-                        >{certs.location}</span>
+                      >
+                        {
+                          Array.from({ length: 5 }).map((_, index) => (
+                            <StarIcon 
+                              key={`star-${index}`}
+                              className={`
+                                ${(index+1) <= ir.stars ? 'star' : 'star-bl'}
+                              `}                              
+                            />
+                          ))                        
+                        }
                       </div>
                     </>
                   )}
                 </div>
+              </div>
+              <br/>
+              <span
+                className='mainTitle'
+              >CERTIFICATIONS & VOLUNTEERING</span>
+              <div
+                className='detailsDiv'
+                style={{
+                  paddingBottom: '4%',
+                }}
+              >
+                {certsVolun.map((certs, i) =>
+                  <>
+                    <div>
+                      <span
+                        className='title'
+                      >{certs.title}</span>
+                      <span
+                        className='date'
+                      >{certs.date}</span>
+                    </div>
+                    <div>
+                      <span
+                        className='location'
+                      >{certs.location}</span>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
