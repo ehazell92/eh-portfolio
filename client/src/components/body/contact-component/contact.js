@@ -220,7 +220,7 @@ class Contact extends React.Component {
       const enemImg = Math.floor(Math.random() * 2) + 1;
       const yPlusHeight = Number(this.gameData.scene.user.height) * enemHeight;
       const isSmallEnm = Number(enemImg - 1) === 0 ? 'z' : 'o';
-      const enemImage = 
+      const enemImage =
         enemHeight === 2 ?
           this.enemyImgs.tall['z'][0] :
           this.enemyImgs.small[isSmallEnm][0];
@@ -842,7 +842,7 @@ class Contact extends React.Component {
             <image 
               preserveAspectRatio="xMidYMid slice"
               width="${(svg.getBoundingClientRect().width * 2)}" 
-              height="${Math.round(svg.getBoundingClientRect().height)*1.04}" 
+              height="${Math.round(svg.getBoundingClientRect().height) * 1.04}" 
               id="sceneBGImg" 
               href="${backgroundScenes.mountains}"
             />
@@ -1051,7 +1051,7 @@ class Contact extends React.Component {
   render() {
     return (
       <BodyPart id='contact'>
-        <BodyPane      
+        <BodyPane
           style={{
             height: '100%',
             width: '100%',
@@ -1064,170 +1064,170 @@ class Contact extends React.Component {
           <div
             className='bodyPaneCntct'
           >
-          <div
-            style={{
-              padding: '2em',
-            }}
-          >
-            <Box
-              component="form"
-              autoComplete='false'
-              sx={{
-                '& > :not(style)': { m: 1, width: '25ch' },
-                '& .MuiTextField-root': { m: 1, width: '25ch' },
-              }}
+            <div
               style={{
-                display: 'grid',
-                width: '100%',
-                gridTemplateColumns: '1fr 1fr',
-                gridTemplateRows: 'auto',
+                padding: '2em',
               }}
             >
-              <TextField
-                id="firstName"
-                label="First Name"
+              <Box
+                component="form"
+                autoComplete='false'
+                sx={{
+                  '& > :not(style)': { m: 1, width: '25ch' },
+                  '& .MuiTextField-root': { m: 1, width: '25ch' },
+                }}
                 style={{
-                  width: '100%'
-                }}
-                variant="outlined"
-                onChange={(e) => {
-                  this.setState({ fName: e.target.value });
-                  this.hasErrors();
-                }}
-                required
-                error={this.state.fNameError}
-              />
-              <TextField
-                id="lastName"
-                label="Last Name"
-                variant="outlined"
-                style={{
-                  width: '100%'
-                }}
-                onChange={(e) => {
-                  this.setState({ lName: e.target.value });
-                  this.hasErrors();
-                }}
-                required
-                error={this.state.lNameError}
-              />
-              <TextField
-                id="email"
-                label="Email"
-                variant="outlined"
-                style={{
+                  display: 'grid',
                   width: '100%',
-                  gridColumn: '1/-1',
-                }}
-                type={"email"}
-                onChange={(e) => { this.setState({ email: e.target.value }); }}
-                required
-                error={this.state.emailError}
-              />
-              <TextField
-                fullWidth
-                id="contactReason"
-                select
-                label="Reason for Contact"
-                helperText="Please select a reason for Contact"
-                required
-                onChange={(e) => {
-                  this.setState({ contactReason: e.target.value });
-                  this.hasErrors(e.target.value);
-                }}
-                error={this.state.contactRError}
-                defaultValue=""
-                style={{
-                  gridColumn: '1/-1',
-                  width: '100%',
+                  gridTemplateColumns: '1fr 1fr',
+                  gridTemplateRows: 'auto',
                 }}
               >
-                {
-                  contactReasons.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
-                    </MenuItem>
-                  ))
-                }
-              </TextField>
-              <TextField
-                fullWidth
-                id="contactBlurb"
-                label="What's on your mind?"
-                multiline
-                rows={8}
-                defaultValue=""
-                onChange={(e) => {
-                  this.setState({ contactBlurb: e.target.value });
-                  this.hasErrors();
-                }}
-                required
-                error={this.state.contactBError}
-                style={{
-                  gridColumn: '1/-1',
-                  width: '100%',
-                }}
-              />
-              <Button variant="contained" onClick={() => this.handleSubmission()}>Send Form</Button>
-            </Box>
-          </div>
-{/*           <div className='gameContainer'>
-            <div
-              className={`
+                <TextField
+                  id="firstName"
+                  label="First Name"
+                  style={{
+                    width: '100%'
+                  }}
+                  variant="outlined"
+                  onChange={(e) => {
+                    this.setState({ fName: e.target.value });
+                    this.hasErrors();
+                  }}
+                  required
+                  error={this.state.fNameError}
+                />
+                <TextField
+                  id="lastName"
+                  label="Last Name"
+                  variant="outlined"
+                  style={{
+                    width: '100%'
+                  }}
+                  onChange={(e) => {
+                    this.setState({ lName: e.target.value });
+                    this.hasErrors();
+                  }}
+                  required
+                  error={this.state.lNameError}
+                />
+                <TextField
+                  id="email"
+                  label="Email"
+                  variant="outlined"
+                  style={{
+                    width: '100%',
+                    gridColumn: '1/-1',
+                  }}
+                  type={"email"}
+                  onChange={(e) => { this.setState({ email: e.target.value }); }}
+                  required
+                  error={this.state.emailError}
+                />
+                <TextField
+                  fullWidth
+                  id="contactReason"
+                  select
+                  label="Reason for Contact"
+                  helperText="Please select a reason for Contact"
+                  required
+                  onChange={(e) => {
+                    this.setState({ contactReason: e.target.value });
+                    this.hasErrors(e.target.value);
+                  }}
+                  error={this.state.contactRError}
+                  defaultValue=""
+                  style={{
+                    gridColumn: '1/-1',
+                    width: '100%',
+                  }}
+                >
+                  {
+                    contactReasons.map((option) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))
+                  }
+                </TextField>
+                <TextField
+                  fullWidth
+                  id="contactBlurb"
+                  label="What's on your mind?"
+                  multiline
+                  rows={8}
+                  defaultValue=""
+                  onChange={(e) => {
+                    this.setState({ contactBlurb: e.target.value });
+                    this.hasErrors();
+                  }}
+                  required
+                  error={this.state.contactBError}
+                  style={{
+                    gridColumn: '1/-1',
+                    width: '100%',
+                  }}
+                />
+                <Button variant="contained" onClick={() => this.handleSubmission()}>Send Form</Button>
+              </Box>
+            </div>
+            <div className='gameContainer'>
+              <div
+                className={`
                 gameTitle
                 ${this.gameData.isStarted ? 'hidden' : ''}
               `}
-            >
-              <div
-                style={{
-                  marginTop: '14vw',
-                }}
               >
-                <span>Want to Play a Game?</span>
-                <br />
                 <div
-                  className='gameStart'
-                  onClick={() => this.startGame()}
-                ></div>
+                  style={{
+                    marginTop: '14vw',
+                  }}
+                >
+                  <span>Want to Play a Game?</span>
+                  <br />
+                  <div
+                    className='gameStart'
+                    onClick={() => this.startGame()}
+                  ></div>
+                </div>
               </div>
-            </div>
-            <div
-              id='fireWorks'
-              className='fireworks displayNone'
-            ></div>
-            <div
-              id='gameAlrt'
-              className='gameAlert'
-            ></div>
-            <svg
-              id='theGame'
-              style={{
-                position: 'absolute',
-                width: '100%',
-                height: '100%',
-              }}
-              viewBox={this.svgViewBox}
-            ></svg>
-            <div
-              id='scoreBoard'
-              className={`
+              <div
+                id='fireWorks'
+                className='fireworks displayNone'
+              ></div>
+              <div
+                id='gameAlrt'
+                className='gameAlert'
+              ></div>
+              <svg
+                id='theGame'
+                style={{
+                  position: 'absolute',
+                  width: '100%',
+                  height: '100%',
+                }}
+                viewBox={this.svgViewBox}
+              ></svg>
+              <div
+                id='scoreBoard'
+                className={`
               gameScore
               ${this.gameData.isStarted ? '' : 'hidden'}
             `}
-            >
-            </div>
-            <div
-              id='instructs'
-              className='instructions hidden'
-            >
-              <div>
-                Use the Arrows to move
+              >
               </div>
-              <div>
-                Press Esc to Restart
+              <div
+                id='instructs'
+                className='instructions hidden'
+              >
+                <div>
+                  Use the Arrows to move
+                </div>
+                <div>
+                  Press Esc to Restart
+                </div>
               </div>
             </div>
-          </div> */}
           </div>
         </BodyPane>
       </BodyPart>
