@@ -32,6 +32,9 @@ class Navbar extends React.Component {
                 className={`
                     ${notAtCampFire ? '' : 'hide '}
                 `}
+                style={{
+                    zIndex: '650',
+                }}
             >
                 <NavMenu>
                     {
