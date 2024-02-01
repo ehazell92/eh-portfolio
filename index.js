@@ -1,3 +1,13 @@
+/* SERVER INSTRUCTIONS
+    DEPLOY TO HEROKU
+    1.  CD TO CLIENT, DELETE BUILD
+    2.  MAKE CHANGES > NPM RUN BUILD in Client 
+    3.  GIT ADD -A > GIT COMMIT -M 
+    4.  HEROKU LOGIN
+    5.  GIT PUSH HEROKU MASTER 
+_________________________________________________________________
+*/
+
 const express = require("express");
 const app = express();
 const cors = require("cors");
