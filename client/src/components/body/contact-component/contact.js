@@ -132,10 +132,10 @@ class Contact extends React.Component {
       },
     ];
   };
-  handleSubmission = (event) => {
+  handleSubmission = async (event) => {
     let anyErrors = false;
     this.errsToHandle.forEach((errChk) => {
-      if (errChk.val.length < 1) {
+      if (errChk.val && errChk.val.length < 1) {
         errChk.hasError = true;
         errChk.err(true);
         anyErrors = true;
@@ -143,19 +143,49 @@ class Contact extends React.Component {
     });
     let snackBarMsg;
     if (!anyErrors) {
-      snackBarMsg = {
-        type: 'success',
-        msg: 'Great! The form has been submitted!',
-      };
-      console.log(this.errsToHandle);
-      console.log(this.state);
+      snackBarMsg = await this.transmitMessage();
     } else {
       snackBarMsg = {
         type: 'error',
-        msg: `Oops! Looks like some required details are missing!`,
+        msg: `Oops! Looks like some required details are missing.`,
       };
     }
     triggerSnackBar(snackBarMsg);
+  };
+
+  transmitMessage = async () => {
+    const dtls = {
+      from: this.state.email.val,
+      name: `${this.state.fName.val} ${this.state.lName.val}`,
+      subject: this.state.contactReason.val,
+      message: this.state.contactBlurb.val,
+    };
+
+    try {
+      const res = await fetch('/api/sendEmail', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dtls),
+      });
+      if (res.ok) {
+        return {
+          type: 'success',
+          msg: `Sweet Success ${dtls.name}! Your inquiry has been transmitted!`,
+        };
+      } else {
+        return {
+          type: 'error',
+          msg: 'Sorry, there seems to be an issue with our comms, please try again!'
+        };
+      }
+    }  catch (err) {
+      return {
+        type: 'error',
+        msg: `Catastrophic Failure! Abandon Ship! ... (just kidding) ... this has been logged and we'll investigate shortly.`
+      };
+    }
   };
 
   formFieldChange = (e, pos) => {
@@ -165,7 +195,10 @@ class Contact extends React.Component {
     });
   };
   hasErrors = (val = null, pos) => {
-    const strRegExp = /[a-zA-Z]/g;
+    const strRegExp = 
+      pos === 2 ? 
+      /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/ : 
+      /[a-zA-Z]/g;
     val = strRegExp.test(val) ? val : null;
     const errChk = this.errsToHandle[pos];
     const hasError = (pos === 3 && val) ? false : !val;

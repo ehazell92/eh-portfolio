@@ -36,7 +36,7 @@ if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging')
 //       ROUTES
 //  *****************
 //  *****************
-app.post('/sendEmail', async (req, res) => {
+app.post('/api/sendEmail', async (req, res) => {
     try {
         const { to, subject, msg } = req.body;
         await sendMail(to, subject, msg);

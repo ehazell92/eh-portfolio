@@ -1,11 +1,12 @@
 const nodemailer = require('nodemailer');
-const eml = 'hazelmailer@gmail.com';
+const eml = process.env.CONTACT_EMAIL;
+const pw = process.env.CONTACT_KEY;
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
     user: eml,
-    pass: '@pP3Ma!ler'
+    pass: pw
   }
 });
 
