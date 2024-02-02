@@ -1081,13 +1081,19 @@ class Contact extends React.Component {
                   width: '100%',
                   gridTemplateColumns: '1fr 1fr',
                   gridTemplateRows: 'auto',
+                  backgroundColor: 'white',
+                  borderRadius: '10px',
+                  padding: '4% 0px 4% 0px',
                 }}
               >
                 <TextField
                   id="firstName"
                   label="First Name"
                   style={{
-                    width: '100%'
+                    position: 'relative',
+                    width: '80%',
+                    marginLeft: 'auto',
+                    marginRight: 'auto',
                   }}
                   variant="outlined"
                   onChange={(e) => {
@@ -1102,7 +1108,10 @@ class Contact extends React.Component {
                   label="Last Name"
                   variant="outlined"
                   style={{
-                    width: '100%'
+                    position: 'relative',
+                    width: '80%',
+                    marginLeft: 'auto',
+                    marginRight: 'auto',
                   }}
                   onChange={(e) => {
                     this.setState({ lName: e.target.value });
@@ -1116,8 +1125,11 @@ class Contact extends React.Component {
                   label="Email"
                   variant="outlined"
                   style={{
-                    width: '100%',
+                    position: 'relative',
+                    width: '90%',
                     gridColumn: '1/-1',
+                    marginLeft: 'auto',
+                    marginRight: 'auto',
                   }}
                   type={"email"}
                   onChange={(e) => { this.setState({ email: e.target.value }); }}
@@ -1139,7 +1151,10 @@ class Contact extends React.Component {
                   defaultValue=""
                   style={{
                     gridColumn: '1/-1',
-                    width: '100%',
+                    position: 'relative',
+                    width: '90%',
+                    marginLeft: 'auto',
+                    marginRight: 'auto',
                   }}
                 >
                   {
@@ -1151,7 +1166,7 @@ class Contact extends React.Component {
                   }
                 </TextField>
                 <TextField
-                  fullWidth
+                  fullWidthform
                   id="contactBlurb"
                   label="What's on your mind?"
                   multiline
@@ -1165,10 +1180,21 @@ class Contact extends React.Component {
                   error={this.state.contactBError}
                   style={{
                     gridColumn: '1/-1',
-                    width: '100%',
+                    position: 'relative',
+                    width: '90%',
+                    marginLeft: 'auto',
+                    marginRight: 'auto',
                   }}
                 />
-                <Button variant="contained" onClick={() => this.handleSubmission()}>Send Form</Button>
+                <Button 
+                  variant="contained" 
+                  onClick={() => this.handleSubmission()}
+                  style={{
+                    marginLeft: 'auto',
+                    gridColumnEnd: 'span 2',
+                    marginRight: '5%',
+                  }}
+                >Send Form</Button>
               </Box>
             </div>
             <div className='gameContainer'>
@@ -1203,7 +1229,7 @@ class Contact extends React.Component {
                 id='theGame'
                 style={{
                   position: 'absolute',
-                  width: '100%',
+                  width: '90%',
                   height: '100%',
                 }}
                 viewBox={this.svgViewBox}

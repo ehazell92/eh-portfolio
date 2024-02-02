@@ -5,11 +5,17 @@ import {
   lftSkills, rghtSkills, frontEnd, backEnd, ifr, certsVolun
 } from '../../../shared/constants';
 import StarIcon from '@mui/icons-material/Star'
+import HouseIcon from '@mui/icons-material/Home';
+import EmailIcon from '@mui/icons-material/Email';
+import GitHubIcon from '@mui/icons-material/GitHub';
 import './resume.css';
 
 
 
 class Resume extends React.Component {
+  triggerContactUs= () => {
+    document.getElementById('nav-contact').click();
+  }
   render() {
     return (
       <BodyPart
@@ -29,21 +35,43 @@ class Resume extends React.Component {
           <div
             className='header'
           >
-            <div className='name'>
-              Edward <br />
-              Hazell
+            <div 
+              className='name'
+            >
+              <span className='nameSpn'>
+                Edward <br />
+                Hazell
+              </span>
             </div>
             <div className='contact'>
-              <div>[X]</div><div>Seattle, WA</div>
-              <div>[X]</div><div>ehazell.com</div>
-              <div>[X]</div><div>(862) 432-5993</div>
-              <div>[X]</div><div>github.com/ehazell92</div>
-              <div>[X]</div><div>ehazell94@gmail.com</div>
+              <div
+                className='icn'
+              ><HouseIcon /></div>
+              <div>
+                <a 
+                  className='link'
+                  target="_blank"
+                  href="https://maps.google.com/?q=Seattle, WA"
+                >Seattle, WA</a>
+              </div>
+              <div
+                className='icn'
+              ><EmailIcon /></div>
+              <div 
+                onClick={this.triggerContactUs}>
+                  <span className='link'>Contact Us</span>
+              </div>
+              <div
+                className='icn'
+              ><GitHubIcon /></div>
+              <div>
+                <a
+                  className='link'
+                  href="http://www.github.com/ehazell92">ehazell92</a>
+              </div>
             </div>
             <div className='headShot'>
-              (          )
-              ( Pic Here )
-              (          )
+              <div id='hdSht'></div>
             </div>
           </div>
           <div
@@ -74,7 +102,9 @@ class Resume extends React.Component {
                       className='bullets'
                     >
                       {skill.skills.map((s) => (
-                        <li key={`${s}-li`}>
+                        <li 
+                          key={`${s}-li`}
+                        >
                           {s}
                         </li>
                       ))}
@@ -110,7 +140,9 @@ class Resume extends React.Component {
                       >
                         {
                           skill.skills.map((s) => (
-                            <li key={`${s}-li`}>
+                            <li 
+                              key={`${s}-li`}
+                            >
                               {s}
                             </li>
                           ))

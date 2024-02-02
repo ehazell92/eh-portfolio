@@ -45,6 +45,7 @@ class Navbar extends React.Component {
                                 navLink 
                                 ${curView === el.to ? 'active ' : ''}
                             `}
+                            id={`nav-${el.to}`}
                             onClick={(event) => this.isActive(event, el.to)}
                         >
                             {el.type}

@@ -12,19 +12,77 @@
         color: white;
         display: grid;
         grid-template-rows: 100%;
-        grid-template-columns: 65% 20% 15%;
+        grid-template-columns: 51% 20% 29%;
         background-color: #252525;
 
         .name {
-            display: block;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-left: 5%;
+            font-size: 2vw;
+
+            .nameSpn:hover {
+                cursor: default;
+                transition: all 0.5s ease-in-out;
+                animation: blowUp 1s forwards;
+            }
         }
         .contact {
             display: grid;
             grid-template-rows: auto;
             grid-template-columns: 10% 90%;
+
+            div {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+
+                a {
+                    text-decoration: none;
+                    color: white;
+                }
+            }
+            .icn {
+                transition: transform 1s;
+                transform-style: preserve-3d;
+                -webkit-backface-visibility: hidden; /* Safari */
+                backface-visibility: hidden;
+            }
+            .icn:hover {
+                transform: rotateY(360deg);
+            }
+            .link:hover {
+                cursor: pointer;
+                transform: scale(1.075);
+            }
         }
         .headShot {
             display: block;
+            margin: auto;
+
+            #hdSht {
+                background-image: url('../../../shared/assets/hdShot.png');
+                background-size: 100% 100%;
+                background-repeat: no-repeat;
+                width: 11em;
+                height: 11em;
+                position: absolute;
+                top: 1%;
+                z-index: 600;
+            }
+            #hdSht:hover {
+                cursor: pointer;
+                transition: all 0.5s ease-in-out;
+                animation: blowUp 1s forwards;
+            }
+        }
+
+        .name,
+        .headShot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
     }
     .experience {
@@ -158,4 +216,17 @@
             }            
         }
     }            
+}
+
+
+@keyframes blowUp {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
