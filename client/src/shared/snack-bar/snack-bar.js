@@ -41,19 +41,22 @@ class SnackBars extends React.Component {
     const { snackBarMsg } = this.state;
     return (
       <Stack spacing={2} sx={{ width: '100%' }}>
-        <Snackbar
-          open={snackBarMsg.type?.length > 0}
-          autoHideDuration={6000}
-          onClose={() => this.handleClose()}
-        >
-          <Alert
+        {
+          snackBarMsg.type?.length > 0 &&
+          <Snackbar
+            open={snackBarMsg.type?.length > 0}
+            autoHideDuration={6000}
             onClose={() => this.handleClose()}
-            severity={snackBarMsg.type}
-            sx={{ width: '100%' }}
           >
-            {snackBarMsg.msg}
-          </Alert>
-        </Snackbar>
+            <Alert
+              onClose={() => this.handleClose()}
+              severity={snackBarMsg.type}
+              sx={{ width: '100%' }}
+            >
+              {snackBarMsg.msg}
+            </Alert>
+          </Snackbar>
+        }
       </Stack>
     )
   }
