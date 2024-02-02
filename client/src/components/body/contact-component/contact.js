@@ -49,33 +49,7 @@ class Contact extends React.Component {
     };
     this.gameData = {};
 
-    this.errsToHandle = [
-      {
-        err: this.setFNameError,
-        val: this.state.fName,
-        hasError: false,
-      },
-      {
-        err: this.setLNameError,
-        val: this.state.lName,
-        hasError: false,
-      },
-      {
-        err: this.setEmailError,
-        val: this.state.email,
-        hasError: false,
-      },
-      {
-        err: this.setContactRError,
-        val: this.state.contactReason,
-        hasError: false,
-      },
-      {
-        err: this.setContactBError,
-        val: this.state.contactBlurb,
-        hasError: false,
-      },
-    ];
+    this.errsToHandle = this.setErrs();
 
     this.svgViewBox = '0 0 0 0';
 
@@ -129,30 +103,75 @@ class Contact extends React.Component {
     this.setState({ contactBError: hasError });
   };
 
+  setErrs = () => {
+    return [
+      {
+        err: this.setFNameError,
+        val: this.state.fName,
+        hasError: false,
+      },
+      {
+        err: this.setLNameError,
+        val: this.state.lName,
+        hasError: false,
+      },
+      {
+        err: this.setEmailError,
+        val: this.state.email,
+        hasError: false,
+      },
+      {
+        err: this.setContactRError,
+        val: this.state.contactReason,
+        hasError: false,
+      },
+      {
+        err: this.setContactBError,
+        val: this.state.contactBlurb,
+        hasError: false,
+      },
+    ];
+  };
   handleSubmission = (event) => {
-    const anyErrors = this.hasErrors();
+    let anyErrors = false;
+    this.errsToHandle.forEach((errChk) => {
+      if (errChk.val.length < 1) {
+        errChk.hasError = true;
+        errChk.err(true);
+        anyErrors = true;
+      }
+    });
     let snackBarMsg;
     if (!anyErrors) {
       snackBarMsg = {
         type: 'success',
         msg: 'Great! The form has been submitted!',
       };
+      console.log(this.errsToHandle);
+      console.log(this.state);
     } else {
       snackBarMsg = {
         type: 'error',
-        msg: `Oops! Looks like there's an issue with the form!`,
+        msg: `Oops! Looks like some required details are missing!`,
       };
     }
     triggerSnackBar(snackBarMsg);
   };
 
-  hasErrors = (val = null) => {
-    this.errsToHandle.forEach((errChk, i) => {
-      const hasError = (i === 3 && val) ? false : errChk.val === '';
-      errChk.err(hasError);
-      errChk.hasError = hasError;
+  formFieldChange = (e, pos) => {
+    const frmId = e.target.name;
+    this.setState({ [frmId]: e.target.value }, () => {
+      this.hasErrors(this.state[frmId], pos);
     });
-    return this.errsToHandle.some((hasErr) => hasErr.hasError) || null;
+  };
+  hasErrors = (val = null, pos) => {
+    const strRegExp = /[a-zA-Z]/g;
+    val = strRegExp.test(val) ? val : null;
+    const errChk = this.errsToHandle[pos];
+    const hasError = (pos === 3 && val) ? false : !val;
+    errChk.err(hasError);
+    errChk.hasError = hasError;
+    errChk.val = val;
   };
 
   postScore = (score, lvl) => {
@@ -1089,6 +1108,7 @@ class Contact extends React.Component {
                 <TextField
                   id="firstName"
                   label="First Name"
+                  name="fName"
                   style={{
                     position: 'relative',
                     width: '80%',
@@ -1097,8 +1117,10 @@ class Contact extends React.Component {
                   }}
                   variant="outlined"
                   onChange={(e) => {
-                    this.setState({ fName: e.target.value });
-                    this.hasErrors();
+                    this.formFieldChange(e, 0);
+                  }}
+                  onBlur={(e) => {
+                    this.formFieldChange(e, 0);
                   }}
                   required
                   error={this.state.fNameError}
@@ -1106,6 +1128,7 @@ class Contact extends React.Component {
                 <TextField
                   id="lastName"
                   label="Last Name"
+                  name="lName"
                   variant="outlined"
                   style={{
                     position: 'relative',
@@ -1114,15 +1137,18 @@ class Contact extends React.Component {
                     marginRight: 'auto',
                   }}
                   onChange={(e) => {
-                    this.setState({ lName: e.target.value });
-                    this.hasErrors();
+                    this.formFieldChange(e, 1);
                   }}
+                  onBlur={(e) => {
+                    this.formFieldChange(e, 1);
+                  }}                  
                   required
                   error={this.state.lNameError}
                 />
                 <TextField
                   id="email"
                   label="Email"
+                  name="email"
                   variant="outlined"
                   style={{
                     position: 'relative',
@@ -1132,21 +1158,29 @@ class Contact extends React.Component {
                     marginRight: 'auto',
                   }}
                   type={"email"}
-                  onChange={(e) => { this.setState({ email: e.target.value }); }}
+                  onChange={(e) => {
+                    this.formFieldChange(e, 2);
+                  }}
+                  onBlur={(e) => {
+                    this.formFieldChange(e, 2);
+                  }}                  
                   required
                   error={this.state.emailError}
                 />
                 <TextField
                   fullWidth
                   id="contactReason"
+                  name="contactReason"
                   select
                   label="Reason for Contact"
                   helperText="Please select a reason for Contact"
                   required
                   onChange={(e) => {
-                    this.setState({ contactReason: e.target.value });
-                    this.hasErrors(e.target.value);
+                    this.formFieldChange(e, 3);
                   }}
+                  onBlur={(e) => {
+                    this.formFieldChange(e, 3);
+                  }}                  
                   error={this.state.contactRError}
                   defaultValue=""
                   style={{
@@ -1166,16 +1200,19 @@ class Contact extends React.Component {
                   }
                 </TextField>
                 <TextField
-                  fullWidthform
+                  fullwidthform="true"
                   id="contactBlurb"
+                  name="contactBlurb"
                   label="What's on your mind?"
                   multiline
                   rows={8}
                   defaultValue=""
                   onChange={(e) => {
-                    this.setState({ contactBlurb: e.target.value });
-                    this.hasErrors();
+                    this.formFieldChange(e, 4);
                   }}
+                  onBlur={(e) => {
+                    this.formFieldChange(e, 4);
+                  }}                  
                   required
                   error={this.state.contactBError}
                   style={{
