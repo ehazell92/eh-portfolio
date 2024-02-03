@@ -43,7 +43,7 @@ class Contact extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = this.clearState();
+    this.state = this.clearState(true);
     this.gameData = {};
 
     this.errsToHandle = this.setErrs();
@@ -100,10 +100,12 @@ class Contact extends React.Component {
     this.setState({ contactBError: hasError });
   };
 
-  clearState = () => {
-    fields.forEach((fld) => {
-      document.getElementById(fld).value = '';
-    });
+  clearState = (init = false) => {
+    if (!init) {
+      fields.forEach((fld) => {
+        document.getElementById(fld).value = '';
+      });
+    }
     return {
       fName: '',
       lName: '',
