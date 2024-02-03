@@ -35,18 +35,7 @@ class Contact extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      fName: '',
-      lName: '',
-      email: '',
-      contactReason: '',
-      contactBlurb: '',
-      fNameError: false,
-      lNameError: false,
-      emailError: false,
-      contactRError: false,
-      contactBError: false,
-    };
+    this.state = this.clearState();
     this.gameData = {};
 
     this.errsToHandle = this.setErrs();
@@ -103,6 +92,20 @@ class Contact extends React.Component {
     this.setState({ contactBError: hasError });
   };
 
+  clearState = () => {
+    return {
+      fName: '',
+      lName: '',
+      email: '',
+      contactReason: '',
+      contactBlurb: '',
+      fNameError: false,
+      lNameError: false,
+      emailError: false,
+      contactRError: false,
+      contactBError: false,
+    };
+  }
   setErrs = () => {
     return [
       {
@@ -152,6 +155,7 @@ class Contact extends React.Component {
     }
     if (!anyErrors) {
       snackBarMsg = await this.transmitMessage();
+      this.clearState();
       triggerSnackBar(snackBarMsg);
     }
   };

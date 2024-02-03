@@ -24,16 +24,34 @@ const sendMail = (from, name, subject, message) => {
       reject('ERROR');
     }
     const nwDt = new Date();
+    const sty = "style='"
+    const dispInline = "display:inline-block"
+    const bldLtr = `${sty}font-weight:bold; ${dispInline};'`;
+    const dispI = `${sty}${dispInline}'`;
     const mailOptions = {
       from: from,
       to: process.env.TO_EML,
       subject: `New Contact Message - ${subject}`,
       text: message,
       html: `
-        <h3>Users Name:</h3><h2>${name}</h2>
-        <h3>Users Email:</h3><h2>${from}</h2>
-        <h3>Sent On:</h3><h2>${nwDt}</h2>
-        <h3>${message}</h3>
+        <span
+          ${bldLtr}
+        >Users Name:</span><span
+          ${dispI}
+        >${name}</span>
+        <span
+          ${bldLtr}
+        >Users Email:</span><span
+          ${dispI}
+        >${from}</span>
+        <span
+          ${bldLtr}
+        >Sent On:</span><span
+          ${dispI}
+        >${nwDt}</span>
+        <span
+          ${bldLtr}
+        >${message}</span>
       `,
     };
     transporter.sendMail(mailOptions, (error, info) => {
