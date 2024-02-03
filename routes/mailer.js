@@ -37,6 +37,7 @@ const sendMail = (from, name, subject, message) => {
       `,
     };
     console.log(mailOptions);
+    console.log(transporter);
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
         console.error(error);
