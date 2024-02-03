@@ -38,17 +38,17 @@ const sendMail = (from, name, subject, message) => {
           ${bldLtr}
         >Users Name:</span><span
           ${dispI}
-        >${name}</span>
+        >${name}</span> <br/>
         <span
           ${bldLtr}
         >Users Email:</span><span
           ${dispI}
-        >${from}</span>
+        >${from}</span> <br/>
         <span
           ${bldLtr}
         >Sent On:</span><span
           ${dispI}
-        >${nwDt}</span>
+        >${nwDt}</span> <br/>
         <span
           ${bldLtr}
         >${message}</span>

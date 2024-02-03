@@ -105,7 +105,11 @@ class Contact extends React.Component {
       fields.forEach((fld) => {
         const docEl = document.getElementById(fld);
         if (docEl) {
-          docEl.value = '';
+          if (fld === 'contactReason') {
+            docEl.selectedIndex = -1;
+          } else {
+            docEl.value = '';
+          }
         }
       });
     }
