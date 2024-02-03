@@ -135,22 +135,25 @@ class Contact extends React.Component {
   handleSubmission = async (event) => {
     let anyErrors = false;
     this.errsToHandle.forEach((errChk) => {
-      if (errChk.val && errChk.val.length < 1) {
+      const failure = (!errChk.val) || (errChk.val && errChk.val.length < 1);
+      if (failure) {
         errChk.hasError = true;
         errChk.err(true);
         anyErrors = true;
       }
     });
     let snackBarMsg;
-    if (!anyErrors) {
-      snackBarMsg = await this.transmitMessage();
-    } else {
+    if (anyErrors) {
       snackBarMsg = {
         type: 'error',
         msg: `Oops! Looks like some required details are missing.`,
       };
+      triggerSnackBar(snackBarMsg);
     }
-    triggerSnackBar(snackBarMsg);
+    if (!anyErrors) {
+      snackBarMsg = await this.transmitMessage();
+      triggerSnackBar(snackBarMsg);
+    }
   };
 
   transmitMessage = async () => {
@@ -180,7 +183,7 @@ class Contact extends React.Component {
           msg: 'Sorry, there seems to be an issue with our comms, please try again!'
         };
       }
-    }  catch (err) {
+    } catch (err) {
       return {
         type: 'error',
         msg: `Catastrophic Failure! Abandon Ship! ... (just kidding) ... this has been logged and we'll investigate shortly.`
@@ -195,10 +198,10 @@ class Contact extends React.Component {
     });
   };
   hasErrors = (val = null, pos) => {
-    const strRegExp = 
-      pos === 2 ? 
-      /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/ : 
-      /[a-zA-Z]/g;
+    const strRegExp =
+      pos === 2 ?
+        /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/ :
+        /[a-zA-Z]/g;
     val = strRegExp.test(val) ? val : null;
     const errChk = this.errsToHandle[pos];
     const hasError = (pos === 3 && val) ? false : !val;
@@ -1174,7 +1177,7 @@ class Contact extends React.Component {
                   }}
                   onBlur={(e) => {
                     this.formFieldChange(e, 1);
-                  }}                  
+                  }}
                   required
                   error={this.state.lNameError}
                 />
@@ -1196,7 +1199,7 @@ class Contact extends React.Component {
                   }}
                   onBlur={(e) => {
                     this.formFieldChange(e, 2);
-                  }}                  
+                  }}
                   required
                   error={this.state.emailError}
                 />
@@ -1213,7 +1216,7 @@ class Contact extends React.Component {
                   }}
                   onBlur={(e) => {
                     this.formFieldChange(e, 3);
-                  }}                  
+                  }}
                   error={this.state.contactRError}
                   defaultValue=""
                   style={{
@@ -1245,7 +1248,7 @@ class Contact extends React.Component {
                   }}
                   onBlur={(e) => {
                     this.formFieldChange(e, 4);
-                  }}                  
+                  }}
                   required
                   error={this.state.contactBError}
                   style={{
@@ -1256,8 +1259,8 @@ class Contact extends React.Component {
                     marginRight: 'auto',
                   }}
                 />
-                <Button 
-                  variant="contained" 
+                <Button
+                  variant="contained"
                   onClick={() => this.handleSubmission()}
                   style={{
                     marginLeft: 'auto',

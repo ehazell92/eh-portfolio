@@ -38,8 +38,8 @@ if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging')
 //  *****************
 app.post('/api/sendEmail', async (req, res) => {
     try {
-        const { to, subject, msg } = req.body;
-        await sendMail(to, subject, msg);
+        const { from, name, subject, message } = req.body;
+        await sendMail(from, name, subject, message);
         res.status(200).json({ message: 'Sucessfully sent your email!' });
     } catch(err) {
         console.error(err);
