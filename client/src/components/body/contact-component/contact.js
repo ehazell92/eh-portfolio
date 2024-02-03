@@ -103,7 +103,10 @@ class Contact extends React.Component {
   clearState = (init = false) => {
     if (!init) {
       fields.forEach((fld) => {
-        document.getElementById(fld).value = '';
+        const docEl = document.getElementById(fld);
+        if (docEl) {
+          docEl.value = '';
+        }
       });
     }
     return {
