@@ -50,6 +50,8 @@ class Contact extends React.Component {
 
     this.svgViewBox = '0 0 0 0';
 
+    this.isSending = false;
+
     this.userImgs = [
       require('./contact-assets/user/001.png'),
       require('./contact-assets/user/002.png'),
@@ -113,6 +115,8 @@ class Contact extends React.Component {
         }
       });
     }
+    this.isSending = false;
+    this.forceUpdate();
     return {
       fName: '',
       lName: '',
@@ -174,23 +178,24 @@ class Contact extends React.Component {
       triggerSnackBar(snackBarMsg);
     }
     if (!anyErrors) {
-      snackBarMsg = await this.transmitMessage();
-      this.clearState();
+      const subjc = contactReasons.find(
+        (cR) => cR.value === this.state.contactReason
+      ).label || '(Missing Subject)';
+      const dtls = {
+        from: this.state.email,
+        name: `${this.state.fName} ${this.state.lName}`,
+        subject: subjc,
+        message: this.state.contactBlurb,
+      };
+      this.isSending = true;
+      this.forceUpdate();
+      snackBarMsg = await this.transmitMessage(dtls);
       triggerSnackBar(snackBarMsg);
+      this.clearState();
     }
   };
 
-  transmitMessage = async () => {
-    const subjc = contactReasons.find(
-      (cR) => cR.value === this.state.contactReason
-    ).label || '(Missing Subject)';
-    const dtls = {
-      from: this.state.email,
-      name: `${this.state.fName} ${this.state.lName}`,
-      subject: subjc,
-      message: this.state.contactBlurb,
-    };
-
+  transmitMessage = async (dtls) => {
     try {
       const res = await fetch('/api/sendEmail', {
         method: 'POST',
@@ -1150,152 +1155,158 @@ class Contact extends React.Component {
               style={{
                 padding: '2em',
               }}
+              className={`${this.isSending ? 'sendingCtr' : ''}`}
             >
-              <Box
-                component="form"
-                autoComplete='false'
-                sx={{
-                  '& > :not(style)': { m: 1, width: '25ch' },
-                  '& .MuiTextField-root': { m: 1, width: '25ch' },
-                }}
-                style={{
-                  display: 'grid',
-                  width: '100%',
-                  gridTemplateColumns: '1fr 1fr',
-                  gridTemplateRows: 'auto',
-                  backgroundColor: 'white',
-                  borderRadius: '10px',
-                  padding: '4% 0px 4% 0px',
-                }}
-              >
-                <TextField
-                  id="firstName"
-                  label="First Name"
-                  name="fName"
+              {!this.isSending &&
+                <Box
+                  component="form"
+                  autoComplete='false'
+                  sx={{
+                    '& > :not(style)': { m: 1, width: '25ch' },
+                    '& .MuiTextField-root': { m: 1, width: '25ch' },
+                  }}
                   style={{
-                    position: 'relative',
-                    width: '80%',
-                    marginLeft: 'auto',
-                    marginRight: 'auto',
-                  }}
-                  variant="outlined"
-                  onChange={(e) => {
-                    this.formFieldChange(e, 0);
-                  }}
-                  onBlur={(e) => {
-                    this.formFieldChange(e, 0);
-                  }}
-                  required
-                  error={this.state.fNameError}
-                />
-                <TextField
-                  id="lastName"
-                  label="Last Name"
-                  name="lName"
-                  variant="outlined"
-                  style={{
-                    position: 'relative',
-                    width: '80%',
-                    marginLeft: 'auto',
-                    marginRight: 'auto',
-                  }}
-                  onChange={(e) => {
-                    this.formFieldChange(e, 1);
-                  }}
-                  onBlur={(e) => {
-                    this.formFieldChange(e, 1);
-                  }}
-                  required
-                  error={this.state.lNameError}
-                />
-                <TextField
-                  id="email"
-                  label="Email"
-                  name="email"
-                  variant="outlined"
-                  style={{
-                    position: 'relative',
-                    width: '90%',
-                    gridColumn: '1/-1',
-                    marginLeft: 'auto',
-                    marginRight: 'auto',
-                  }}
-                  type={"email"}
-                  onChange={(e) => {
-                    this.formFieldChange(e, 2);
-                  }}
-                  onBlur={(e) => {
-                    this.formFieldChange(e, 2);
-                  }}
-                  required
-                  error={this.state.emailError}
-                />
-                <TextField
-                  fullWidth
-                  id="contactReason"
-                  name="contactReason"
-                  select
-                  label="Reason for Contact"
-                  helperText="Please select a reason for Contact"
-                  required
-                  onChange={(e) => {
-                    this.formFieldChange(e, 3);
-                  }}
-                  onBlur={(e) => {
-                    this.formFieldChange(e, 3);
-                  }}
-                  error={this.state.contactRError}
-                  defaultValue=""
-                  style={{
-                    gridColumn: '1/-1',
-                    position: 'relative',
-                    width: '90%',
-                    marginLeft: 'auto',
-                    marginRight: 'auto',
+                    display: 'grid',
+                    width: '100%',
+                    gridTemplateColumns: '1fr 1fr',
+                    gridTemplateRows: 'auto',
+                    backgroundColor: 'white',
+                    borderRadius: '10px',
+                    padding: '4% 0px 4% 0px',
                   }}
                 >
-                  {
-                    contactReasons.map((option) => (
-                      <MenuItem key={option.value} value={option.value}>
-                        {option.label}
-                      </MenuItem>
-                    ))
-                  }
-                </TextField>
-                <TextField
-                  fullwidthform="true"
-                  id="contactBlurb"
-                  name="contactBlurb"
-                  label="What's on your mind?"
-                  multiline
-                  rows={8}
-                  defaultValue=""
-                  onChange={(e) => {
-                    this.formFieldChange(e, 4);
-                  }}
-                  onBlur={(e) => {
-                    this.formFieldChange(e, 4);
-                  }}
-                  required
-                  error={this.state.contactBError}
-                  style={{
-                    gridColumn: '1/-1',
-                    position: 'relative',
-                    width: '90%',
-                    marginLeft: 'auto',
-                    marginRight: 'auto',
-                  }}
-                />
-                <Button
-                  variant="contained"
-                  onClick={() => this.handleSubmission()}
-                  style={{
-                    marginLeft: 'auto',
-                    gridColumnEnd: 'span 2',
-                    marginRight: '5%',
-                  }}
-                >Send Form</Button>
-              </Box>
+                  <TextField
+                    id="firstName"
+                    label="First Name"
+                    name="fName"
+                    style={{
+                      position: 'relative',
+                      width: '80%',
+                      marginLeft: 'auto',
+                      marginRight: 'auto',
+                    }}
+                    variant="outlined"
+                    onChange={(e) => {
+                      this.formFieldChange(e, 0);
+                    }}
+                    onBlur={(e) => {
+                      this.formFieldChange(e, 0);
+                    }}
+                    required
+                    error={this.state.fNameError}
+                  />
+                  <TextField
+                    id="lastName"
+                    label="Last Name"
+                    name="lName"
+                    variant="outlined"
+                    style={{
+                      position: 'relative',
+                      width: '80%',
+                      marginLeft: 'auto',
+                      marginRight: 'auto',
+                    }}
+                    onChange={(e) => {
+                      this.formFieldChange(e, 1);
+                    }}
+                    onBlur={(e) => {
+                      this.formFieldChange(e, 1);
+                    }}
+                    required
+                    error={this.state.lNameError}
+                  />
+                  <TextField
+                    id="email"
+                    label="Email"
+                    name="email"
+                    variant="outlined"
+                    style={{
+                      position: 'relative',
+                      width: '90%',
+                      gridColumn: '1/-1',
+                      marginLeft: 'auto',
+                      marginRight: 'auto',
+                    }}
+                    type={"email"}
+                    onChange={(e) => {
+                      this.formFieldChange(e, 2);
+                    }}
+                    onBlur={(e) => {
+                      this.formFieldChange(e, 2);
+                    }}
+                    required
+                    error={this.state.emailError}
+                  />
+                  <TextField
+                    fullWidth
+                    id="contactReason"
+                    name="contactReason"
+                    select
+                    label="Reason for Contact"
+                    helperText="Please select a reason for Contact"
+                    required
+                    onChange={(e) => {
+                      this.formFieldChange(e, 3);
+                    }}
+                    onBlur={(e) => {
+                      this.formFieldChange(e, 3);
+                    }}
+                    error={this.state.contactRError}
+                    defaultValue=""
+                    style={{
+                      gridColumn: '1/-1',
+                      position: 'relative',
+                      width: '90%',
+                      marginLeft: 'auto',
+                      marginRight: 'auto',
+                    }}
+                  >
+                    {
+                      contactReasons.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))
+                    }
+                  </TextField>
+                  <TextField
+                    fullwidthform="true"
+                    id="contactBlurb"
+                    name="contactBlurb"
+                    label="What's on your mind?"
+                    multiline
+                    rows={8}
+                    defaultValue=""
+                    onChange={(e) => {
+                      this.formFieldChange(e, 4);
+                    }}
+                    onBlur={(e) => {
+                      this.formFieldChange(e, 4);
+                    }}
+                    required
+                    error={this.state.contactBError}
+                    style={{
+                      gridColumn: '1/-1',
+                      position: 'relative',
+                      width: '90%',
+                      marginLeft: 'auto',
+                      marginRight: 'auto',
+                    }}
+                  />
+                  <Button
+                    variant="contained"
+                    onClick={() => this.handleSubmission()}
+                    style={{
+                      marginLeft: 'auto',
+                      gridColumnEnd: 'span 2',
+                      marginRight: '5%',
+                    }}
+                  >Send Form</Button>
+                </Box>
+              }
+              {this.isSending &&
+                <div class="sending"></div>
+              }
             </div>
             <div className='gameContainer'>
               <div
