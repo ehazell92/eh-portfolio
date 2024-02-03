@@ -10,7 +10,7 @@ const transporter = nodemailer.createTransport({
     pass: pw,
     clientId: process.env.CID,
     clientSecret: process.env.CS,
-    refreshToken: process.envRT,
+    refreshToken: process.env.RT,
   },
   tls: {
     rejectUnauthorized: false,
@@ -36,8 +36,6 @@ const sendMail = (from, name, subject, message) => {
         <h3>${message}</h3>
       `,
     };
-    console.log(mailOptions);
-    console.log(transporter);
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
         console.error(error);
