@@ -157,11 +157,14 @@ class Contact extends React.Component {
   };
 
   transmitMessage = async () => {
+    const subjc = contactReasons.find(
+      (cR) => cR.value === this.state.contactReason
+    ).label || '(Missing Subject)';
     const dtls = {
-      from: this.state.email.val,
-      name: `${this.state.fName.val} ${this.state.lName.val}`,
-      subject: this.state.contactReason.val,
-      message: this.state.contactBlurb.val,
+      from: this.state.email,
+      name: `${this.state.fName} ${this.state.lName}`,
+      subject: subjc,
+      message: this.state.contactBlurb,
     };
 
     try {
