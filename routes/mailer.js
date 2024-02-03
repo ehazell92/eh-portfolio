@@ -19,10 +19,14 @@ const transporter = nodemailer.createTransport({
 
 const sendMail = (from, name, subject, message) => {
   return new Promise((resolve, reject) => {
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('LOCAL DEV');
+      reject('ERROR');
+    }
     const nwDt = new Date();
     const mailOptions = {
       from: from,
-      to: process.env.TO_EML || 'hazemailer@gmail.com',
+      to: process.env.TO_EML,
       subject: `New Contact Message - ${subject}`,
       text: message,
       html: `
@@ -31,9 +35,8 @@ const sendMail = (from, name, subject, message) => {
         <h3>Sent On:</h3><h2>${nwDt}</h2>
         <h3>${message}</h3>
       `,
-      date: nwDt,
     };
-
+    console.log(mailOptions);
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
         console.error(error);
