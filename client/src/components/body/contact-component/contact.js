@@ -31,6 +31,14 @@ const contactReasons = [
   },
 ];
 
+const fields = [
+  'firstName',
+  'lastName',
+  'email',
+  'contactReason',
+  'contactBlurb'
+];
+
 class Contact extends React.Component {
   constructor(props) {
     super(props);
@@ -93,6 +101,9 @@ class Contact extends React.Component {
   };
 
   clearState = () => {
+    fields.forEach((fld) => {
+      document.getElementById(fld).value = '';
+    });
     return {
       fName: '',
       lName: '',
