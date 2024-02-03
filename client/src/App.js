@@ -4,7 +4,8 @@ import './App.css';
 import Navbar from './shared/nav-bar/nav-bar';
 import Body from './components/body/body';
 import SnackBars from './shared/snack-bar/snack-bar';
-import background from "./shared/assets/bg.jpg"
+import bg from "./shared/assets/bg.webp";
+import bg2 from "./shared/assets/bg2.webp";
 
 
 class App extends React.Component {
@@ -44,7 +45,7 @@ class App extends React.Component {
       <div
         style={{
           height: '100vh',
-          backgroundImage: `url(${background})`,
+          backgroundImage: `url(${bg})`,
           backgroundSize: '100% 100%',
           overflow: 'hidden'
         }}
