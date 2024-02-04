@@ -125,9 +125,23 @@
           position: relative;
           width: 100%;
 
+          .active {
+            width: 100%;
+            justify-content: center;
+          }
           .navLink {
             padding: 0;
             height: 12vw;
+          }
+          
+          .icoLinks {
+            grid-template-columns: 50% 50%;
+            grid-template-rows: 100%;
+            height: 8vw;
+            width: 95%;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
           }
         }
       }
@@ -184,7 +198,8 @@
           }
         }
         .experience {
-
+          grid-template-columns: auto;
+          display: block;
 
           .skills {
             grid-template-columns: 100%;

@@ -190,10 +190,10 @@
             }
             .title {
                 font-weight: bold;
-                font-size: min(5vw, 25px);
+                font-size: min(4vw, 25px);
             }
             .date {
-                font-size: min(5vw, 20px);
+                font-size: min(4vw, 20px);
             }
             .title,
             .date {

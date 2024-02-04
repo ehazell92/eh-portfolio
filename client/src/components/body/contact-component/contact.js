@@ -53,10 +53,10 @@ class Contact extends React.Component {
     this.isSending = false;
 
     this.userImgs = [
-      require('./contact-assets/user/001.webp'),
-      require('./contact-assets/user/002.webp'),
-      require('./contact-assets/user/003.webp'),
-      require('./contact-assets/user/004.webp')
+      require('./contact-assets/user/001.png'),
+      require('./contact-assets/user/002.png'),
+      require('./contact-assets/user/003.png'),
+      require('./contact-assets/user/004.png')
     ];
 
     this.enemyImgs = {

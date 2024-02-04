@@ -1,0 +1,23 @@
+.icoLinks {
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 45% 45%;
+
+    position: absolute;
+    right: 1%;
+    color: white;
+    height: 100%;
+
+    div {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        svg {
+            transform: scale(1.5);
+        }
+        button {
+            color: white;
+        }
+    }
+}
