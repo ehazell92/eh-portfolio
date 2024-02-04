@@ -39,7 +39,6 @@ export const TextHolder = styled.div`
     display: flex;
     flex-flow: column;
     align-items: center;
-    justify-content: center;
     position: relative;
 
     height: 80%;
@@ -49,7 +48,7 @@ export const TextHolder = styled.div`
 
     color: white;
     line-height: 1.25em;
-    font-size: min(3vw, 30px);    
+    font-size: min(5vw, 35px);
 
     background-color: rgba(38, 205, 242,0.98);
 `;

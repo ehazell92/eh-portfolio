@@ -1,5 +1,5 @@
 .hide {
-  display: none;
+  display: none !important;
 }
 .noOverflow {
   overflow: hidden;
@@ -8,7 +8,8 @@
   .textBG {
     color: white;
     line-height: 1.25em;
-    font-size: min(3vw, 30px);    
+    /* font-size: 2em; */
+    font-size: min(5vw, 35px);
 
     background-color: rgba(38, 205, 242,0.98);
   }
@@ -35,15 +36,73 @@
     /* ~~~~~~~~~~~ */
 
   }
-
+  @media screen and (max-width: 760px) and (min-width: 605px) {
+    .aboutS {
+      .profImg {
+        width: 50vw !important;
+        height: 50vw !important;
+      }
+    }
+  }
   /* When screen is 760px or less */
 	@media screen and (max-width: 760px) {
+    /* ~~~~~~~~~~~ */
+    /*     NAV     */
+    /* ~~~~~~~~~~~ */
+      .hideNav {
+        width: 0;
+        transition: all 0.5s ease-in-out;
+      }
+      .showNav {
+        width: 20%;
+        transition: all 0.5s ease-in-out;
+      }
+      .menIco {
+        background-color: rgba(2, 43, 149, 0.95);
+        z-index: 650;
+        position: absolute;
+        right: 1%;
+        width: 3em;
+        height: 3em;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        top: 1%;
+        color: white;
+
+        opacity: 1;
+        transition: all 0.5s ease-in-out;
+      }      
+      #nav {
+        height: auto;
+        right: 0%;
+        position: absolute;
+        overflow: hidden;
+
+        .navMnu {
+          flex-flow: column;
+          padding-right: 0;
+          padding-left: 0;
+          position: relative;
+          width: 100%;
+
+          .navLink {
+            padding: 0;
+            height: 12vw;
+          }
+        }
+      }
+
+
     /* ~~~~~~~~~~~ */
     /* ABOUT PAGE  */
     /* ~~~~~~~~~~~ */
       .aboutS {
           grid-template-columns: 100%;
-          grid-template-rows: 41vw auto;
+          grid-template-rows: 42vh 57vh;
+          margin-top: 0;
+          height: 100vh;
 
           .aboutPane {
             grid-row: 2;
@@ -51,8 +110,8 @@
 
           .profImg {
             grid-row: 1;
-            width: 40vw;
-            height: 40vw;
+            width: 55vw;
+            height: 55vw;
             margin-top: 1vw;
           }
       }
@@ -60,14 +119,105 @@
     /* ~~~~~~~~~~~ */
 
     /* ~~~~~~~~~~~ */
+    /* RESUME PAGE  */
+    /* ~~~~~~~~~~~ */
+
+    #resume {
+      height: 99vh;
+      margin: 1%;
+      width: 98% !important;  
+      .main {
+
+        .header {
+          grid-template-columns: 40% 34% 26%;
+
+
+          .nameSpn {
+            font-size: min(5vw, 40px);
+          }
+          .contact {
+            grid-template-columns: 25% 75%;
+          }
+          #hdSht {
+            width: 20vw;
+            height: 20vw;
+            position: relative;
+    
+          }
+        }
+        .experience {
+
+
+          .skills {
+            grid-template-columns: 100%;
+            grid-template-rows: 45vw 45vw;
+
+            .backEnd {
+              grid-row: 2;
+            }
+            .infrastructure {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+
+    /* ~~~~~~~~~~~ */
+    /* ~~~~~~~~~~~ */        
+
+    /* ~~~~~~~~~~~ */
     /* PORTFOLIO PAGE  */
     /* ~~~~~~~~~~~ */
+    #campsite {
+      height: 100vh;
+      margin: 0;
+
       .port {
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
         grid-auto-rows: 30vw;
+        grid-gap: 6vw;
       }
+
+      .appOption {
+        width: 25vw;
+        height: 25vw;
+        min-height: 50px;
+        min-width: 50px;
+      }
+    }
     /* ~~~~~~~~~~~ */
-    /* ~~~~~~~~~~~ */    
+    /* ~~~~~~~~~~~ */ 
+    
+    /* ~~~~~~~~~~~ */
+    /* CONTACT PAGE  */
+    /* ~~~~~~~~~~~ */
+    #contact {
+      height: 100%;
+      margin: 0;
+      overflow: auto;
+
+      .bodyPaneCntct {
+        height: 100%;
+        width: 95%;
+        grid-template-columns: 100%;
+        background-color: rgba(38, 205, 242,0);
+
+        .cntctForm  {
+          padding: 0 !important;
+          display: flex;
+          flex-flow: column;
+          align-items: center;
+          justify-content: center;
+
+        }
+        .gameContainer {
+          display: none;
+        }
+      }
+    }
+    /* ~~~~~~~~~~~ */
+    /* ~~~~~~~~~~~ */     
 
   }
 

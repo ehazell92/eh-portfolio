@@ -73,9 +73,6 @@ padding-left: 1em;
 /* Third Nav */
 /* width: 100vw;
 white-space: nowrap; */
-	@media screen and (max-width: 760px) {
-		/* display: none; */
-	}
 `;
 
 export const NavBtn = styled.nav`
@@ -85,9 +82,6 @@ margin-right: 24px;
 /* Third Nav */
 /* justify-content: flex-end;
 width: 100vw; */
-	@media screen and (max-width: 760px) {
-		/* display: none; */
-	}
 `;
 
 export const NavBtnLink = styled(Link)`

@@ -46,7 +46,7 @@ class App extends React.Component {
         style={{
           height: '100vh',
           backgroundImage: `url(${bg})`,
-          backgroundSize: '100% 100%',
+          backgroundSize: 'cover',
           overflow: 'hidden'
         }}
       >

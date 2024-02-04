@@ -1,6 +1,6 @@
 .aboutS {
     display: grid;
-    grid-template-rows: 1fr;
+    grid-template-rows: 100%;
     grid-template-columns: 65% 35%;
     grid-gap: 1%;
 

@@ -12,7 +12,8 @@
 
     color: white;
     line-height: 1.25em;
-    font-size: min(3vw, 30px);    
+    /* font-size: 2em; */
+    font-size: min(5vw, 35px);
 
     background-color: rgba(38, 205, 242,0.98);
 }

@@ -1155,7 +1155,7 @@ class Contact extends React.Component {
               style={{
                 padding: '2em',
               }}
-              className={`${this.isSending ? 'sendingCtr' : ''}`}
+              className={`cntctForm ${this.isSending ? 'sendingCtr' : ''}`}
             >
               {!this.isSending &&
                 <Box
