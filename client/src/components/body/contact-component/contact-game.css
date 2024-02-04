@@ -137,11 +137,11 @@
     margin-top: 5%;
     background-repeat: no-repeat;
     background-size: 100% 100%;
-    background-image: url('./contact-assets/startBtn.png');
+    background-image: url('./contact-assets/startBtn.webp');
 }
 .gameStart:hover {
     cursor: pointer;
-    background-image: url('./contact-assets/startBtn2.png');
+    background-image: url('./contact-assets/startBtn2.webp');
 }
 
 .gameFireworks {

@@ -48,7 +48,7 @@ export const TextHolder = styled.div`
 
     color: white;
     line-height: 1.25em;
-    font-size: min(5vw, 35px);
+    font-size: min(5vw, 30px);
 
     background-color: rgba(38, 205, 242,0.98);
 `;
