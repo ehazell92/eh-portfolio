@@ -16,7 +16,12 @@ const About = () => {
         <TextHolder
           className=''
         >
-          <p className='txt'>
+          <p 
+            style={{
+              marginTop: '6%',
+            }}
+            className='txt'
+          >
             Hey! My name is Edward Hazell, <br/> I'm a highly motivated individual with a love 
             for the outdoors, traveling, learning, experiencing new cultures, meeting new 
             people, snowboarding, programming, and so so much more.

@@ -4,10 +4,21 @@
 .noOverflow {
   overflow: hidden;
 }
+::-webkit-scrollbar{
+  width: 0.75vw;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 0 10px 10px 0;
+}
+::-webkit-scrollbar-thumb{
+  background-color: rgba(58,141,239);
+  border-radius: 50px;
+  box-shadow: 0px 0px 6px 2px rgba(0, 0, 0, 0.5) inset;
+}
 #root {
   .textBG {
     color: white;
-    line-height: 1.25em;
+    /* line-height: 1.25em; */
+    line-height: min(5vw, 40px);
     /* font-size: 2em; */
     font-size: min(5vw, 35px);
 
@@ -36,6 +47,33 @@
     /* ~~~~~~~~~~~ */
 
   }
+  @media screen and (max-width: 999px) {
+    #contact {
+      height: 100%;
+      margin: 0;
+      overflow: auto;
+
+      .bodyPaneCntct {
+        height: 100%;
+        width: 60%;
+        grid-template-columns: 100%;
+        background-color: rgba(38, 205, 242,0);
+
+        .cntctForm  {
+          padding: 0 !important;
+          display: flex;
+          flex-flow: column;
+          align-items: center;
+          justify-content: center;
+
+        }
+        .gameContainer {
+          display: none;
+        }
+      }
+    }    
+    /* #contact { .bodyPaneCntct { .gameContainer { display: none; } } } */
+  }  
   @media screen and (max-width: 760px) and (min-width: 605px) {
     .aboutS {
       .profImg {
@@ -218,7 +256,6 @@
     }
     /* ~~~~~~~~~~~ */
     /* ~~~~~~~~~~~ */     
-
   }
 
 }
