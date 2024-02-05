@@ -9,7 +9,7 @@ export const navBarOptions = [
     },
     {
         type: 'Portfolio',
-        to: 'campsite'
+        to: 'portfolio'
     },
     {
         type: 'Contact',
@@ -17,14 +17,23 @@ export const navBarOptions = [
     }
 ];
 
-export const campFireOptions = [
+// external EXAMPLE
+// {
+//     id: 'App1',
+//     name: 'DEEHV - IP',
+//     label: 'Deehv is a sandbox for development by Edward Hazell',
+//     external: "https://deehv-94b3d7c81638.herokuapp.com/",
+//     title: "Web App Developed by Edward Hazell",
+//     etc: 'Angular'
+// },
+export const portfolioOptions = [
     {
-        id: 'App1',
-        name: 'DEEHV - IP',
-        label: 'Deehv is a sandbox for development by Edward Hazell',
-        external: "https://deehv-94b3d7c81638.herokuapp.com/",
-        title: "Web App Developed by Edward Hazell",
-        etc: 'Angular'
+        id: 'Logon',
+        name: 'Logon Component',
+        label: 'A basic logon component for logging in, or registering if unregistered.',
+        title: "Logon Component Developed by Edward Hazell",
+        etc: 'React',
+        img: '',
     },
     {
         id: 'App2',

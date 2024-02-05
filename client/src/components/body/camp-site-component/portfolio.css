@@ -1,0 +1,94 @@
+.Mui-Tooltip-popper {
+    position: absolute !important;
+}
+
+.portfolio-animate {
+    transition: -webkit-transform 0.75s ease-in-out;
+    transition: all 0.75s ease-in-out;
+}
+
+.port {
+    background-color: rgba(0,0,0,0.85);
+    color: white;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    height: 100%;
+    overflow-y: scroll;
+
+    display: grid;
+    grid-auto-rows: 34vh;
+    grid-template-columns: repeat(auto-fill,  minmax(20vw, 1fr))
+}
+
+    .appHldr {
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .appFS {
+        position: absolute;
+        top: 0;
+        height: 100%;
+        width: 100%;
+        left: 0;
+        z-index: 700;
+        background-color: lightcyan;
+        transition: all 0.75s ease-in-out;
+                
+        .title {
+            display: none;
+        }
+        .app {
+            height: 100%;
+            width: 100%;
+            display: grid;
+            grid-template-rows: 5% 95%;
+            grid-template-columns: 100%;
+
+            .menuBar {
+                display: block;
+                width: 100%;
+                height: 100%;
+
+                button {
+                    float: right;
+                }
+            }
+            iframe {
+                position: relative;
+                display: block;
+                width: 100%;
+                height: 100%;
+            }
+        }
+
+    }
+    .appOption {
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        justify-content: center;
+
+        min-height: 150px;
+        min-width: 150px;
+        height: 13vw;
+        width: 13vw;
+        z-index: 600;
+
+        margin: 0 auto;
+        text-align: center;
+        background-color: grey;
+        transition: all 0.2s ease-in-out;
+        .title {
+            display: inherit;
+        }
+        .app {
+            display: none;
+        }
+    }
+    .appOption:hover {
+        transform: scale(1.1);
+        cursor: pointer;
+    }

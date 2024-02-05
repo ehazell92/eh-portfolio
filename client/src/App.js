@@ -21,13 +21,13 @@ class App extends React.Component {
     this.setState({
       cfVar: (
         onOff 
-        // || this.state.curView !== 'campsite'
+        // || this.state.curView !== 'portfolio'
       )
     });
   };
   setCurrentView = (cView) => {
     this.setState({ curView: cView });
-    // if (cView === 'campsite') {
+    // if (cView === 'portfolio') {
     //   this.setCampFireClasses(true);
     // }
   };
