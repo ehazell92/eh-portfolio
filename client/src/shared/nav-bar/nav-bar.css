@@ -21,3 +21,6 @@
         }
     }
 }
+.menIco:hover {
+    cursor: pointer;
+}
