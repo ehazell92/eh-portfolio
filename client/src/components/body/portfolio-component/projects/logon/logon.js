@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -27,24 +27,33 @@ const reqLength = {
     uName: 3,
     passW: 7,
     eml: 5,
-    phone: 14
+    phone: 10
 };
 
-class Logon extends React.Component {
-    constructor(props) {
-        super(props);
+const Logon = () => {
+    const [formData, setFormData] = useState({
+        uNameErr: false,
+        passWErr: false,
+        phoneErr: false,
+        emlErr: false,
+        lNameErr: false,
+        fNameErr: false,
+        uNameRErr: false,
+        uName: '',
+        passW: '',
+        phone: '',
+        eml: '',
+        lName: '',
+        fName: '',
+        uNameR: '',
+    });
 
-        this.state = this.clearState();
-        this.isLoading = false;
-        this.showPassword = false;
-        this.isSignUp = false;
-    }
+    const [isLoading, setIsLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+    const [isSignUp, setIsSignUp] = useState(false);
 
-    fu = () => {
-        this.forceUpdate();
-    }
-    clearState = () => {
-        return {
+    const clearState = () => {
+        setFormData({
             uNameErr: false,
             passWErr: false,
             phoneErr: false,
@@ -59,70 +68,74 @@ class Logon extends React.Component {
             lName: '',
             fName: '',
             uNameR: '',
-        };
-    }
-    hasErrors = (name, frmVal) => {
-        let hasErr = frmVal.length <= (reqLength[name] || 3);
-        hasErr =
-            name === 'phone' ?
-                (
-                    frmVal.length > reqLength[name] ||
-                    frmVal.length === 0
-                ) :
-                hasErr;
-        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-        const emailTst = !emailRegex.test(frmVal);
-        hasErr =
-            name === 'eml' ?
-                emailTst :
-                hasErr;
-        this.setState({ [`${name}Err`]: hasErr });
-    }
-    frmChanges = (e, bypass = null) => {
-        let { name, value } = e.target;
-        name = bypass ? bypass : name;
-        this.setState(
-            { [name]: value },
-            () => {
-                this.hasErrors(name, this.state[name])
-            }
-        );
+        });        
     };
 
-    login = (e) => {
+    const filterPhoneVal = (val) => {
+        const numbersOnly = val.match(/\d/g);
+        return numbersOnly ? numbersOnly.join('') : '';
+    }
+    const hasErrors = (name, frmVal) => {
+        let hasErr = frmVal.length <= (reqLength[name] || 3);
+        if (name === 'phone') {
+            frmVal = filterPhoneVal(frmVal);
+            hasErr = (
+                frmVal.length !== reqLength[name] || 
+                frmVal.length === 0
+            );
+        }
+        if (name === 'eml') {
+            const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+            hasErr = !emailRegex.test(frmVal);
+        }
+        return hasErr;
+    };
+
+    const frmChanges = (e, bypass = null) => {
+        let { name, value } = e.target;
+        name = bypass ? bypass : name;
+        const nameHasErr = hasErrors(name, value);
+        const nameErr = `${name}Err`;
+        setFormData(prevState => {
+            const updatedState = { 
+                ...prevState, 
+                [name]: value,
+                [nameErr]: nameHasErr
+            };
+            return updatedState;
+        });
+    };
+
+    const login = (e) => {
         e.preventDefault();
-        this.isLoading = true;
+        setIsLoading(true);
         let anyErrors = false;
         frmFields.forEach((fld) => {
-            const failure = (!this.state[fld]) || (this.state[fld] && this.state[fld].length < reqLength[fld])
+            const failure = (
+                !formData[fld]) || 
+                (formData[fld] && formData[fld].length <= reqLength[fld]
+            );
             if (failure) {
                 anyErrors = true;
-                this.setState({ [`${fld}Err`]: true });
+                setFormData(prevState => ({ ...prevState, [`${fld}Err`]: true }));
             }
         });
         if (anyErrors) {
-            this.isLoading = false;
-            this.fu();
+            setIsLoading(false);
             alert('there was a form error');
             return;
         }
-        this.isLoading = true;
-        this.fu();
+        setIsLoading(true);
         setTimeout(() => {
-            this.state = this.clearState();
-            frmFields.forEach((fld) => {
-                const ele = document.getElementById(fld);
-                if (ele) {
-                    ele.value = '';
-                }
-            })
-            this.isLoading = false;
-            this.fu();
+            console.log(formData);
+            clearState();
+            console.log(formData);
+            setIsLoading(false);
             alert('Login successful!');
         }, 5000);
     };
 
-    register = (e) => {
+    const register = (e) => {
         e.preventDefault();
         const formFields = [
             'uNameR',
@@ -133,271 +146,198 @@ class Logon extends React.Component {
         ];
         let anyErrors = false;
         formFields.forEach((fld) => {
-            const failure = (!this.state[fld]) || (this.state[fld] && this.state[`${fld}Err`]);
+            const failure = (!formData[fld]) || (formData[fld] && formData[`${fld}Err`]);
             if (failure) {
                 anyErrors = true;
-                this.setState({ [`${fld}Err`]: true });
+                setFormData(prevState => ({ ...prevState, [`${fld}Err`]: true }));
             }
         });
         if (anyErrors) {
-            this.isLoading = false;
-            this.fu();
+            setIsLoading(false);
             alert('Theres a form error!');
             return;
         }
-        this.isLoading = true;
-        this.fu();
+        setIsLoading(true);
         setTimeout(() => {
-            this.state = this.clearState();
-            formFields.forEach((fld) => {
-                const ele = document.getElementById(fld);
-                if (ele) {
-                    ele.value = '';
-                }
-            })
-            this.isLoading = false;
-            this.fu();
+            console.log(formData);
+            clearState();
+            console.log(formData);
+            setIsLoading(false);
             alert('Register Successful!');
-        }, 5000);        
-    }
+        }, 5000);
+    };
 
-    toggleSignUp = () => {
-        this.isSignUp = !this.isSignUp;
-        this.fu();
-    }
+    const toggleSignUp = () => {
+        console.log(formData);
+        clearState();
+        console.log(formData);
+        setIsSignUp(prevState => !prevState);
+    };
 
-    forgotPassword = () => {
+    const forgotPassword = () => {
         alert('Forgot your password?! Too Bad!');
-    }
+    };
 
-    render() {
-        return (
-            <AppParent
-                className='parent'
+    return (
+        <div className='parent'>
+            <div 
+                className='child'
+                style={{
+                    backgroundImage: `url(${logBG})`,
+                }}                
             >
-                <div
-                    className='child'
-                    style={{
-                        backgroundImage: `url(${logBG})`,
-                    }}
+                <Box
+                    component="form"
+                    autoComplete='false'
+                    className={`${isSignUp ? 'sgnUp' : ''} ${isLoading ? 'spnr' : ''}`}
                 >
-                    <Box
-                        component="form"
-                        autoComplete='false'
-                        className={`${this.isSignUp ? 'sgnUp' : ''}`}
-                    >
-                        {
-                            this.isLoading ?
-                                <Box sx={{ display: 'flex' }}>
-                                    <CircularProgress />
-                                </Box> :
-                                this.isSignUp ?
-                                    <>
-                                        <div
-                                            className='lnk'
-                                            onClick={this.toggleSignUp}
-                                        >
-                                            <ArrowBackIcon />
-                                        </div>
-                                        <FormControl
-                                            className='fcS'
-                                            variant="outlined"
-                                        >
-                                            <InputLabel htmlFor="userNameR">Username</InputLabel>
-                                            <OutlinedInput
-                                                id="userNameR"
-                                                name="uNameR"
-                                                type='text'
-                                                onChange={(e) => {
-                                                    this.frmChanges(e);
-                                                }}
-                                                onBlur={(e) => {
-                                                    this.frmChanges(e);
-                                                }}
-                                                error={this.state.uNameRErr}
-                                                label="UserName Request"
-                                            />
-                                        </FormControl>
-                                        <FormControl
-                                            className='fcS'
-                                            variant="outlined"
-                                        >
-                                            <InputLabel htmlFor="firstName">First Name</InputLabel>
-                                            <OutlinedInput
-                                                id="firstName"
-                                                name="fName"
-                                                type='text'
-                                                onChange={(e) => {
-                                                    this.frmChanges(e);
-                                                }}
-                                                onBlur={(e) => {
-                                                    this.frmChanges(e);
-                                                }}
-                                                error={this.state.fNameErr}
-                                                label="First Name"
-                                            />
-                                        </FormControl>
-                                        <FormControl
-                                            className='fcS'
-                                            variant="outlined"
-                                        >
-                                            <InputLabel htmlFor="lastName">Last Name</InputLabel>
-                                            <OutlinedInput
-                                                id="lastName"
-                                                name="lName"
-                                                type='text'
-                                                onChange={(e) => {
-                                                    this.frmChanges(e);
-                                                }}
-                                                onBlur={(e) => {
-                                                    this.frmChanges(e);
-                                                }}
-                                                error={this.state.lNameErr}
-                                                label="Last Name"
-                                            />
-                                        </FormControl>
-                                        <FormControl
-                                            className='fcS'
-                                            variant="outlined"
-                                        >
-                                            <InputLabel htmlFor="email">Email</InputLabel>
-                                            <OutlinedInput
-                                                id="email"
-                                                name="eml"
-                                                type='text'
-                                                onChange={(e) => {
-                                                    this.frmChanges(e);
-                                                }}
-                                                onBlur={(e) => {
-                                                    this.frmChanges(e);
-                                                }}
-                                                error={this.state.emlErr}
-                                                label="Email"
-                                            />
-                                        </FormControl>
-                                        <FormControl
-                                            className='fcS'
-                                            variant="outlined"
-                                        >
-                                            <InputLabel htmlFor="masked-input">Phone</InputLabel>
-                                            <InputMask
-                                                name="phone"
-                                                mask="(999) 999-9999"
-                                                value={this.state.phone}
-                                                onChange={(e) => {
-                                                    this.frmChanges(e, 'phone');
-                                                }}
-                                                onBlur={(e) => {
-                                                    this.frmChanges(e, 'phone');
-                                                }}
-                                                maskChar="_"
+                    {isLoading ? (
+                        <Box 
+                            sx={{ display: 'flex' }}
+                        >
+                            <CircularProgress />
+                        </Box>
+                    ) : isSignUp ? (
+                        <>
+                            <div className='lnk' onClick={toggleSignUp}>
+                                <ArrowBackIcon />
+                            </div>
+                            <FormControl className='fcS' variant="outlined">
+                                <InputLabel htmlFor="userNameR">Username</InputLabel>
+                                <OutlinedInput
+                                    id="userNameR"
+                                    name="uNameR"
+                                    type='text'
+                                    onChange={frmChanges}
+                                    onBlur={frmChanges}
+                                    error={formData.uNameRErr}
+                                    label="UserName Request"
+                                    autoComplete="username"
+                                />
+                            </FormControl>
+                            <FormControl className='fcS' variant="outlined">
+                                <InputLabel htmlFor="firstName">First Name</InputLabel>
+                                <OutlinedInput
+                                    id="firstName"
+                                    name="fName"
+                                    type='text'
+                                    onChange={frmChanges}
+                                    onBlur={frmChanges}
+                                    error={formData.fNameErr}
+                                    label="First Name"
+                                    autoComplete="firstname"
+                                />
+                            </FormControl>
+                            <FormControl className='fcS' variant="outlined">
+                                <InputLabel htmlFor="lastName">Last Name</InputLabel>
+                                <OutlinedInput
+                                    id="lastName"
+                                    name="lName"
+                                    type='text'
+                                    onChange={frmChanges}
+                                    onBlur={frmChanges}
+                                    error={formData.lNameErr}
+                                    label="Last Name"
+                                    autoComplete="lastname"
+                                />
+                            </FormControl>
+                            <FormControl className='fcS' variant="outlined">
+                                <InputLabel htmlFor="email">Email</InputLabel>
+                                <OutlinedInput
+                                    id="email"
+                                    name="eml"
+                                    type='text'
+                                    onChange={frmChanges}
+                                    onBlur={frmChanges}
+                                    error={formData.emlErr}
+                                    label="Email"
+                                    autoComplete="email"
+                                />
+                            </FormControl>
+                            <FormControl className='fcS' variant="outlined">
+                                <InputLabel htmlFor="masked-input">Phone</InputLabel>
+                                <InputMask
+                                    name="phone"
+                                    mask="(999) 999-9999"
+                                    value={formData.phone}
+                                    onChange={(e) => frmChanges(e, 'phone')}
+                                    onBlur={(e) => frmChanges(e, 'phone')}
+                                    error={formData.phoneErr}
+                                    maskChar="_"
+                                >
+                                    {(inputProps) => (
+                                        <OutlinedInput
+                                            {...inputProps}
+                                            label="Phone Number"
+                                            id="masked-input"
+                                            autoComplete="phone"
+                                        />
+                                    )}
+                                </InputMask>
+                            </FormControl>
+                            <Button variant="contained" className='sbmt' onClick={register}>Request SignUp</Button>
+                        </>
+                    ) : (
+                        <>
+                            <FormControl className='fc unme' variant="outlined">
+                                <InputLabel htmlFor="userName">Username</InputLabel>
+                                <OutlinedInput
+                                    id="userName"
+                                    name="uName"
+                                    type='text'
+                                    onChange={frmChanges}
+                                    onBlur={frmChanges}
+                                    error={formData.uNameErr}
+                                    endAdornment={
+                                        <InputAdornment position="end">
+                                            <PersonOutlineOutlinedIcon />
+                                        </InputAdornment>
+                                    }
+                                    label="UserName"
+                                    autoComplete="username"
+                                />
+                            </FormControl>
+                            <FormControl className='fc' variant="outlined">
+                                <InputLabel htmlFor="password">Password</InputLabel>
+                                <OutlinedInput
+                                    id="password"
+                                    name="passW"
+                                    type={showPassword ? 'text' : 'password'}
+                                    onChange={frmChanges}
+                                    onBlur={frmChanges}
+                                    error={formData.passWErr}
+                                    autoComplete="password"
+                                    endAdornment={
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                aria-label="toggle password visibility"
+                                                onClick={() => setShowPassword(!showPassword)}
+                                                onMouseDown={(e) => e.preventDefault()}
+                                                edge="end"
                                             >
-                                                {(inputProps) => (
-                                                    <OutlinedInput
-                                                        {...inputProps}
-                                                        label="Phone Number"
-                                                        id="masked-input"
-                                                    />
-                                                )}
-                                            </InputMask>
-                                        </FormControl>
-                                        <Button
-                                            variant="contained"
-                                            className='sbmt'
-                                            onClick={(e) => this.register(e)}
-                                        >Request SignUp</Button>
-                                    </> :
-                                    <>
-                                        <FormControl
-                                            className='fc unme'
-                                            variant="outlined"
-                                        >
-                                            <InputLabel htmlFor="userName">Username</InputLabel>
-                                            <OutlinedInput
-                                                id="userName"
-                                                name="uName"
-                                                type='text'
-                                                onChange={(e) => {
-                                                    this.frmChanges(e);
-                                                }}
-                                                onBlur={(e) => {
-                                                    this.frmChanges(e);
-                                                }}
-                                                error={this.state.uNameErr}
-                                                endAdornment={
-                                                    <InputAdornment position="end">
-                                                        <PersonOutlineOutlinedIcon />
-                                                    </InputAdornment>
-                                                }
-                                                label="UserName"
-                                            />
-                                        </FormControl>
-                                        <FormControl
-                                            className='fc'
-                                            variant="outlined"
-                                        >
-                                            <InputLabel htmlFor="password">Password</InputLabel>
-                                            <OutlinedInput
-                                                id="password"
-                                                name="passW"
-                                                type={this.showPassword ? 'text' : 'password'}
-                                                onChange={(e) => {
-                                                    this.frmChanges(e);
-                                                }}
-                                                onBlur={(e) => {
-                                                    this.frmChanges(e);
-                                                }}
-                                                error={this.state.passWErr}
-                                                endAdornment={
-                                                    <InputAdornment position="end">
-                                                        <IconButton
-                                                            aria-label="toggle password visibility"
-                                                            onClick={() => { this.showPassword = !this.showPassword; this.fu() }}
-                                                            onMouseDown={(e) => e.preventDefault()}
-                                                            edge="end"
-                                                        >
-                                                            {this.showPassword ? <VisibilityOff /> : <Visibility />}
-                                                        </IconButton>
-                                                    </InputAdornment>
-                                                }
-                                                label="Password"
-                                            />
-                                        </FormControl>
-                                        <Button
-                                            variant="contained"
-                                            className='sbmt'
-                                            onClick={(e) => this.login(e)}
-                                        >Login</Button>
-                                        <div>
-                                            <div
-                                                className='lnk'
-                                                onClick={this.forgotPassword}
-                                            >Forgot password?</div>
-                                        </div>
-                                        <div
-                                            className='unme acct'
-                                        >
-                                            <div>
-                                                Don't have an account?
-                                                <div
-                                                    style={{
-                                                        paddingLeft: '1%',
-                                                        display: 'inline-block'
-                                                    }}
-                                                    className='lnk'
-                                                    onClick={this.toggleSignUp}
-                                                >
-                                                    Sign Up
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </>
-                        }
-                    </Box>
-                </div>
-            </AppParent>
-        )
-    }
-}
+                                                {showPassword ? <VisibilityOff /> : <Visibility />}
+                                            </IconButton>
+                                        </InputAdornment>
+                                    }
+                                    label="Password"
+                                />
+                            </FormControl>
+                            <Button variant="contained" className='sbmt' onClick={login}>Login</Button>
+                            <div className='lnk' onClick={forgotPassword}>Forgot password?</div>
+                            <div className='unme acct'>
+                                <div>
+                                    Don't have an account?
+                                    <div style={{ paddingLeft: '1%', display: 'inline-block' }} className='lnk' onClick={toggleSignUp}>
+                                        Sign Up
+                                    </div>
+                                </div>
+                            </div>
+                        </>
+                    )}
+                </Box>
+            </div>
+        </div>
+    );
+};
 
 export default Logon;

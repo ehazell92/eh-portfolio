@@ -1,20 +1,27 @@
 .parent {
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
 
     .child {
         display: flex;
         flex-flow: column;
         justify-content: flex-end;
-        width: 20%;
+        width: min(95vw, 385px);
         margin-left: auto;
         margin-right: auto;
         border-radius: 25px;
-        height: 80%;
+        height: min(98vh, 659px);
         overflow: hidden;
         background-size: 100% 60%;
         background-repeat: no-repeat;
         background-position-x: 50%;
         background-position-y: -38%;
 
+        .spnr {
+            justify-content: center !important;
+            align-items: center !important;
+        }
         .sgnUp {
             height: 75% !important;
             align-items: flex-start;
@@ -78,6 +85,18 @@
             }
             .sbmt:hover {
                 background-color: #283021;
+            }
+        }
+    }
+}
+
+@media screen and (max-height: 650px) {
+    .parent {
+
+        .child {
+
+            form {
+                overflow-y: auto;
             }
         }
     }
