@@ -29,8 +29,8 @@
             .lnk {
 
                 svg {
-                    width: 2vw;
-                    height: 2vw;
+                    width: min(10vw, 40px);
+                    height: min(10vw, 40px);
                 }
             }
         }
