@@ -1,3 +1,5 @@
+import Logon from "../components/body/portfolio-component/projects/logon/logon";
+
 export const navBarOptions = [
     {
         type: 'About',
@@ -34,6 +36,7 @@ export const portfolioOptions = [
         title: "Logon Component Developed by Edward Hazell",
         etc: 'React',
         img: '',
+        cmp: <Logon />
     },
     {
         id: 'App2',

@@ -24,11 +24,15 @@ class Navbar extends React.Component {
         curView: ''
     };
     isActive = (event, to) => {
-        if (to) {
+        const docEl = document.getElementById(to);
+        if (
+            to &&
+            docEl
+        ) {
             this.setState({
                 curView: to
             });
-            document.getElementById(to).scrollIntoView({
+            docEl.scrollIntoView({
                 block: 'end',
                 behavior: 'smooth'
             });
@@ -48,9 +52,7 @@ class Navbar extends React.Component {
         setTimeout(() => {
             this.doSz = false;
             if (!this.doSz) {
-                const to = this.state.curView;
-                console.log(`curView: ${to} | stateView: ${this.stateView}`);
-                this.isActive(null, to);
+                this.isActive(null, this.state.curView);
             }
         }, 500);
     }

@@ -1,0 +1,84 @@
+.parent {
+
+    .child {
+        display: flex;
+        flex-flow: column;
+        justify-content: flex-end;
+        width: 20%;
+        margin-left: auto;
+        margin-right: auto;
+        border-radius: 25px;
+        height: 80%;
+        overflow: hidden;
+        background-size: 100% 60%;
+        background-repeat: no-repeat;
+        background-position-x: 50%;
+        background-position-y: -38%;
+
+        .sgnUp {
+            height: 75% !important;
+            align-items: flex-start;
+
+            .lnk {
+
+                svg {
+                    width: 2vw;
+                    height: 2vw;
+                }
+            }
+        }
+        form {
+            background-color: rgba(255, 255, 255, 1);
+            color: black;
+            height: 62%;
+            border-radius: 20px;
+            display: flex;
+            flex-flow: column;
+            align-items: center;
+            justify-content: flex-start;
+            border-top: 2px solid rgba(0,0,0, 0.75);
+            transition: all 0.5s ease-in-out;
+
+            .lnk {
+                color: #52737a;
+                cursor: pointer;
+                transition: all 0.25s ease-in-out;
+            }
+            .lnk:hover {
+                color: #29301c;
+                transform: scale(1.1);
+                text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
+            }
+            .unme {
+                margin-top: 15%;
+            }
+            .acct {
+                width: 100%;
+                text-align: center;
+            }
+            .fcS,
+            .fc {
+                position: relative;
+                width: 80%;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .fc {
+                margin-bottom: 10%;
+            }
+            .fcS {
+                margin-bottom: 5%;
+            }            
+            .fc .MuiOutlinedInput-root.Mui-focused {
+                box-shadow: 3px 4px 3px rgba(0, 0, 0, 0.2);
+            }
+            .sbmt {
+                margin: 2% auto 2% auto;
+                background-color: #52737a;
+            }
+            .sbmt:hover {
+                background-color: #283021;
+            }
+        }
+    }
+}

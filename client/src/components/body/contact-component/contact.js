@@ -43,14 +43,12 @@ class Contact extends React.Component {
   constructor(props) {
     super(props);
 
+    this.isSending = false;
     this.state = this.clearState(true);
     this.gameData = {};
 
     this.errsToHandle = this.setErrs();
-
     this.svgViewBox = '0 0 0 0';
-
-    this.isSending = false;
 
     this.userImgs = [
       require('./contact-assets/user/001.png'),
@@ -114,9 +112,9 @@ class Contact extends React.Component {
           }
         }
       });
+      this.isSending = false;
+      this.forceUpdate();
     }
-    this.isSending = false;
-    this.forceUpdate();
     return {
       fName: '',
       lName: '',
@@ -225,9 +223,12 @@ class Contact extends React.Component {
 
   formFieldChange = (e, pos) => {
     const frmId = e.target.name;
-    this.setState({ [frmId]: e.target.value }, () => {
-      this.hasErrors(this.state[frmId], pos);
-    });
+    this.setState(
+      { [frmId]: e.target.value }, 
+      () => {
+        this.hasErrors(this.state[frmId], pos);
+      }
+    );
   };
   hasErrors = (val = null, pos) => {
     const strRegExp =
