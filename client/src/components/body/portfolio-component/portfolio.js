@@ -6,6 +6,7 @@ import Tooltip from '@mui/material/Tooltip';
 import CloseIcon from '@mui/icons-material/Close'
 import './portfolio.css';
 import { IconButton } from '@mui/material';
+import { triggerSnackBar } from '../../../services/app-service';
 
 let isAppFS = false;
 
@@ -30,7 +31,14 @@ class Portfolio extends React.Component {
             return;
           }
         } else {
-          alert(`Sorry, failed to locate the - ${id} Component!`);
+          triggerSnackBar(
+            {
+              vert: 'top',
+              hor: 'center',
+              type: 'error',
+              msg: `Oops! Looks like some required details are missing.`,
+            }
+          );
           return;
         }
       } else {

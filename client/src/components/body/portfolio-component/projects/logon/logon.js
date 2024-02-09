@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -17,8 +17,7 @@ import { triggerSnackBar } from '../../../../../services/app-service';
 
 
 import './logon.css';
-import { AppParent } from '../projectEls';
-import logBG from './assets/logBG.png'
+import logBG from './assets/logBG.webp'
 
 const frmFields = [
     'uName',
