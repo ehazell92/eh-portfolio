@@ -30,6 +30,7 @@
         }
         .contact {
             display: grid;
+            grid-gap: 0.25vw;
             grid-template-rows: auto;
             grid-template-columns: 10% 90%;
 

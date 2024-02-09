@@ -9,7 +9,14 @@ import MenuIcon from '@mui/icons-material/Menu';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import { IconButton } from '@mui/material';
+import Tooltip from '@mui/material/Tooltip';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import DownloadIcon from '@mui/icons-material/Download';
+import EHResumePDF from '../../shared/assets/docs/EdwardHazellResumeW.pdf'
 import './nav-bar.css';
+
+/* eslint-disable no-restricted-globals */
 
 class Navbar extends React.Component {
     constructor(props) {
@@ -19,10 +26,27 @@ class Navbar extends React.Component {
         this.stateView = '';
 
         this.doSz = null;
+        this.handleClose = this.handleClose.bind(this);
+        this.tggleDwnload = this.tggleDwnload.bind(this);
     }
     state = {
-        curView: ''
+        curView: '',
+        anchorEl: false,
+        open: false,
     };
+    tggleDwnload = (ev) => {
+        this.setState({ anchorEl: ev.currentTarget });
+    }
+    handleClose = () => {
+        this.setState({ anchorEl: null });
+    }
+    downloadFile = (fileType) => {
+        const link = document.createElement('a');
+        link.href = EHResumePDF;
+        link.download = 'EdwardHazellResume.pdf'; // Specify the file name
+        link.click();
+        this.handleClose();
+    }
     isActive = (event, to) => {
         const docEl = document.getElementById(to);
         if (
@@ -48,7 +72,7 @@ class Navbar extends React.Component {
         this.doSz = true;
         this.isMobile = window.innerWidth <= 760;
         this.forceUpdate();
-        
+
         setTimeout(() => {
             this.doSz = false;
             if (!this.doSz) {
@@ -70,9 +94,9 @@ class Navbar extends React.Component {
         const escapeEl = (
             ev.target.classList.contains('navLink')
         ) || (
-            ev.target.localName === 'path' ||
-            ev.target.localName === 'svg'
-        );
+                ev.target.localName === 'path' ||
+                ev.target.localName === 'svg'
+            );
         if (escapeEl) {
             return;
         }
@@ -85,7 +109,7 @@ class Navbar extends React.Component {
         this.forceUpdate();
     }
     render() {
-        const { curView } = this.state;
+        const { curView, anchorEl } = this.state;
         const { notAtCampFire } = this.props;
         return (
             <>
@@ -136,25 +160,56 @@ class Navbar extends React.Component {
                             className='icoLinks'
                         >
                             <div>
-                                <IconButton 
+                                <IconButton
                                     onClick={() => this.routeTo(
                                         "https://www.linkedin.com/in/EdwardHazell/"
-                                    )} 
-                                    aria-label="Go to my LinkedIn" 
+                                    )}
+                                    aria-label="Go to my LinkedIn"
                                 >
                                     <LinkedInIcon />
                                 </IconButton>
                             </div>
                             <div>
-                                <IconButton 
+                                <IconButton
                                     onClick={() => this.routeTo(
                                         "https://github.com/ehazell92"
-                                    )} 
-                                    aria-label="Go to my GitHub" 
+                                    )}
+                                    aria-label="Go to my GitHub"
                                 >
                                     <GitHubIcon />
                                 </IconButton>
                             </div>
+                            <div>
+                                <Tooltip title="Files to download">
+                                    <IconButton
+                                        aria-label="more"
+                                        aria-controls="dropdown-menu"
+                                        aria-haspopup="true"
+                                        onClick={this.tggleDwnload}
+                                    >
+                                        <DownloadIcon sx={{ width: 32, height: 32 }} />
+                                    </IconButton>
+                                </Tooltip>
+                                <Menu
+                                    id="dropdown-menu"
+                                    anchorEl={anchorEl}
+                                    keepMounted
+                                    open={Boolean(anchorEl)}
+                                    onClose={this.handleClose}
+                                    classes={{
+                                        paper: 'ddl-opt'
+                                    }}
+                                >
+                                    {/* <MenuItem onClick={() => this.downloadFile(0)}>
+                                        DOCX Resume
+                                    </MenuItem> */}
+                                    <MenuItem 
+                                        onClick={() => this.downloadFile(1)}
+                                    >
+                                        Download My Resume
+                                    </MenuItem>
+                                </Menu>
+                            </div>                            
                         </div>
                     </NavMenu>
                 </Nav>

@@ -1,12 +1,13 @@
 .icoLinks {
     display: grid;
     grid-template-columns: 100%;
-    grid-template-rows: 45% 45%;
+    grid-template-rows: repeat(3, 30%);
 
     position: absolute;
     right: 1%;
     color: white;
     height: 100%;
+    grid-gap: 3%;
 
     div {
         display: flex;
@@ -14,17 +15,35 @@
         justify-content: center;
 
         svg {
-            transform: scale(1.5);
+            font-size: min(7vw, 35px);
+            width: 1em;
+            height: 1em;
         }
         button {
-            color: rgba(255, 255, 255, 0.75);
+            color: rgba(255, 255, 255, 0.9);
         }
         button:hover {
             color: rgba(255, 255, 255, 1);
-            transform: scale(1.05);
+            transform: scale(1.1);
         }
     }
 }
 .menIco:hover {
     cursor: pointer;
+}
+
+#dropdown-menu {
+
+    .css-3dzjca-MuiPaper-root-MuiPopover-paper-MuiMenu-paper,
+    .ddl-opt {
+        background-color: rgba(2, 43, 149, 0.95) !important;
+        color: white;
+
+        ul:hover {
+
+            li {
+                transform: scale(1.1);
+            }
+        }
+    }
 }

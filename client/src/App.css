@@ -83,6 +83,28 @@
       }
     }
   }
+
+  @media screen and (max-width: 1050px) {
+    /* ~~~~~~~~~~~ */
+    /* ABOUT PAGE  */
+    /* ~~~~~~~~~~~ */
+    .aboutS {
+      grid-template-columns: 100%;
+      grid-template-rows: 50% 49%;
+
+      .aboutPane {
+        grid-row: 2;
+      }
+
+      .profImg {
+        grid-row: 1;
+        width: 40vw;
+        height: 40vw;
+      }
+  }
+/* ~~~~~~~~~~~ */
+/* ~~~~~~~~~~~ */
+  }
   /* When screen is 760px or less */
 	@media screen and (max-width: 760px) {
     /* ~~~~~~~~~~~ */
@@ -161,7 +183,7 @@
           }
           
           .icoLinks {
-            grid-template-columns: 50% 50%;
+            grid-template-columns: 30% 30% 30%;
             grid-template-rows: 100%;
             height: 8vw;
             width: 95%;
@@ -213,7 +235,7 @@
           .nameSpn {
             font-size: min(5vw, 40px);
           }
-          .contact {
+          .contact {            
             grid-template-columns: 25% 75%;
           }
           #hdSht {

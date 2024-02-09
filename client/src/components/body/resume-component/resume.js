@@ -6,6 +6,7 @@ import {
 } from '../../../shared/constants';
 import StarIcon from '@mui/icons-material/Star'
 import HouseIcon from '@mui/icons-material/Home';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import EmailIcon from '@mui/icons-material/Email';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import './resume.css';
@@ -13,8 +14,11 @@ import './resume.css';
 
 
 class Resume extends React.Component {
-  triggerContactUs= () => {
+  triggerContactUs = () => {
     document.getElementById('nav-contact').click();
+  }
+  triggerRoute = (rte) => {
+    window.open(rte, '_blank');
   }
   render() {
     return (
@@ -47,27 +51,36 @@ class Resume extends React.Component {
               <div
                 className='icn'
               ><HouseIcon /></div>
-              <div>
-                <a 
-                  className='link'
-                  target="_blank"
-                  href="https://maps.google.com/?q=Seattle, WA"
-                >Seattle, WA</a>
+              <div
+                onClick={() => this.triggerRoute("https://maps.google.com/?q=Seattle, WA")}
+              >
+                <span className='link'>Seattle, WA</span>
               </div>
               <div
                 className='icn'
               ><EmailIcon /></div>
               <div 
                 onClick={this.triggerContactUs}>
-                  <span className='link'>Contact Us</span>
+                  <span className='link'>Email Me</span>
               </div>
               <div
                 className='icn'
+              ><LinkedInIcon /></div>
+              <div
+                onClick={() => this.triggerRoute("https://www.linkedin.com/in/EdwardHazell/")}
+              >
+                <span 
+                  className='link'>LinkedIn</span>
+              </div>              
+              <div
+                className='icn'
               ><GitHubIcon /></div>
-              <div>
-                <a
+              <div
+                onClick={() => this.triggerRoute("http://www.github.com/ehazell92")}
+              >
+                <span
                   className='link'
-                  href="http://www.github.com/ehazell92">ehazell92</a>
+                >ehazell92</span>
               </div>
             </div>
             <div className='headShot'>
