@@ -93,7 +93,13 @@
     background-color: grey;
     transition: all 0.2s ease-in-out;
     .title {
-        display: inherit;
+        width: 100%;
+        background-color: rgba(0,0,0,0.85);
+        height: 20%;
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        justify-content: center;
     }
     .app {
         display: none;

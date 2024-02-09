@@ -170,6 +170,8 @@ class Contact extends React.Component {
     let snackBarMsg;
     if (anyErrors) {
       snackBarMsg = {
+        vert: 'bottom',
+        hor: 'left',
         type: 'error',
         msg: `Oops! Looks like some required details are missing.`,
       };
@@ -204,17 +206,23 @@ class Contact extends React.Component {
       });
       if (res.ok) {
         return {
+          vert: 'bottom',
+          hor: 'left',
           type: 'success',
           msg: `Sweet Success ${dtls.name}! Your inquiry has been transmitted!`,
         };
       } else {
         return {
+          vert: 'bottom',
+          hor: 'left',
           type: 'error',
           msg: 'Sorry, there seems to be an issue with our comms, please try again!'
         };
       }
     } catch (err) {
       return {
+        vert: 'bottom',
+        hor: 'left',
         type: 'error',
         msg: `Catastrophic Failure! Abandon Ship! ... (just kidding) ... this has been logged and we'll investigate shortly.`
       };

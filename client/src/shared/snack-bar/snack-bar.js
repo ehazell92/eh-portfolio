@@ -23,7 +23,7 @@ class SnackBars extends React.Component {
       this.setState({ snackBarMsg: sbData });
       setTimeout(() => {
         this.handleClose();
-      }, 60000);
+      }, 6000);
     });
   }
   componentWillUnmount() {
@@ -45,8 +45,12 @@ class SnackBars extends React.Component {
           snackBarMsg.type?.length > 0 &&
           <Snackbar
             open={snackBarMsg.type?.length > 0}
-            autoHideDuration={60000}
+            autoHideDuration={6000}
             onClose={() => this.handleClose()}
+            anchorOrigin={{ vertical: snackBarMsg.vert, horizontal: snackBarMsg.hor }}
+            style={{
+              zIndex: '1600'
+            }}
           >
             <Alert
               onClose={() => this.handleClose()}

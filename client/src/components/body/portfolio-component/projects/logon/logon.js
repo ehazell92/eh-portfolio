@@ -13,6 +13,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import InputMask from 'react-input-mask';
+import { triggerSnackBar } from '../../../../../services/app-service';
 
 
 import './logon.css';
@@ -120,18 +121,29 @@ const Logon = () => {
                 setFormData(prevState => ({ ...prevState, [`${fld}Err`]: true }));
             }
         });
+        let snackBarMsg;
         if (anyErrors) {
             setIsLoading(false);
-            alert('there was a form error');
+            snackBarMsg = {
+                vert: 'top',
+                hor: 'center',
+                type: 'error',
+                msg: `Oops! Looks like some required details are missing.`,
+              };
+            triggerSnackBar(snackBarMsg);
             return;
         }
         setIsLoading(true);
         setTimeout(() => {
-            console.log(formData);
             clearState();
-            console.log(formData);
             setIsLoading(false);
-            alert('Login successful!');
+            snackBarMsg = {
+                vert: 'top',
+                hor: 'center',
+                type: 'success',
+                msg: `Awesome! If this were a real platform you would have logged on.`,
+              };
+            triggerSnackBar(snackBarMsg);
         }, 5000);
     };
 
@@ -152,19 +164,30 @@ const Logon = () => {
                 setFormData(prevState => ({ ...prevState, [`${fld}Err`]: true }));
             }
         });
+        let snackBarMsg;
         if (anyErrors) {
             setIsLoading(false);
-            alert('Theres a form error!');
+            snackBarMsg = {
+                vert: 'top',
+                hor: 'center',
+                type: 'error',
+                msg: `Oops! Looks like some required details are missing.`,
+              };
+            triggerSnackBar(snackBarMsg);
             return;
         }
         setIsLoading(true);
         setTimeout(() => {
-            console.log(formData);
             clearState();
-            console.log(formData);
             setIsLoading(false);
-            alert('Register Successful!');
-        }, 5000);
+            snackBarMsg = {
+                vert: 'top',
+                hor: 'center',
+                type: 'success',
+                msg: `Awesome! If this were a real platform you would have just registered successfully.`,
+              };
+            triggerSnackBar(snackBarMsg);
+        }, 3000);
     };
 
     const toggleSignUp = () => {
@@ -175,7 +198,12 @@ const Logon = () => {
     };
 
     const forgotPassword = () => {
-        alert('Forgot your password?! Too Bad!');
+        triggerSnackBar(
+            {
+                type: 'error',
+                msg: `Sorry, since this platform isn't live I can't reset your password at this time.`,
+            }
+        );
     };
 
     return (

@@ -88,6 +88,10 @@ class Portfolio extends React.Component {
                       onClick={() => this.handleAppLoad(true, cfOpt.id, cfOpt.cmp)}
                       key={cfOpt.name}
                       id={cfOpt.id}
+                      style={{
+                        backgroundSize: !this.appIsFS(cfOpt.id) ? 'contain' : '',
+                        backgroundImage: !this.appIsFS(cfOpt.id) ? `url(${cfOpt.bgImg})` : ''
+                      }}
                     >
                       <div className='title'>{cfOpt.name}</div>
                       <div

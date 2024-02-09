@@ -1,4 +1,5 @@
 import Logon from "../components/body/portfolio-component/projects/logon/logon";
+import logBg from '../components/body/portfolio-component/assets/LogonAppImg.webp';
 
 export const navBarOptions = [
     {
@@ -35,7 +36,7 @@ export const portfolioOptions = [
         label: 'A basic logon component for logging in, or registering if unregistered.',
         title: "Logon Component Developed by Edward Hazell",
         etc: 'React',
-        img: '',
+        bgImg: logBg,
         cmp: <Logon />
     },
     {
