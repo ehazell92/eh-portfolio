@@ -345,6 +345,13 @@
         height: 65vw;
       }
     }
+    .aboutS {
+      grid-template-rows: 38vh 61vh;
+
+      .aboutPane {
+        height: 95%;
+      }
+    }
   }
 
 }

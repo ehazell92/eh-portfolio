@@ -776,7 +776,7 @@ class Contact extends React.Component {
 
                     const gmeAlrt = document.getElementById('gameAlrt');
                     gmeAlrt.innerHTML = `
-                      <h1 style='display:table-cell;'>Game Over...</h1>
+                      <span class='alrtTitle' style='display:table-cell;'>Game Over...</span>
                     `;
                     gmeAlrt.classList.add('focusAlert');
                     setTimeout(() => {
@@ -888,18 +888,22 @@ class Contact extends React.Component {
 
                   if (hasNextLevel) {
                     this.gameData.scene.enemiesThisLevel = 0;
-                    gmeAlrt.innerHTML = `<h2 ${displayBlock}>Sweet! On to the NEXT level</h2>`;
+                    gmeAlrt.innerHTML = `<br/><span class='lvlTitle' ${displayBlock}>Sweet! On to the NEXT level</span><br/>`;
                     showAlert = 'focusAlert';
                     this.gameData.user.curLevel += 1;
+                    if (this.gameData.user.curLevel === 2) {
+                      const bgEl = document.getElementById('sceneBGImg');
+                      bgEl.setAttribute('href', this.sceneTemplateImgs.backgrounds[0]);
+                    }
                     this.postScore(
                       this.gameData.user.score,
                       this.gameData.user.curLevel
                     );
                   } else {
                     gmeAlrt.innerHTML = `
-                    <h2 ${displayBlock}>CONGRATS, YOU'VE WON!!</h2>
-                    <span ${displayBlock}>Press [Esc] to play again!</span>
-                    <span ${displayBlock}>(O__o)(''')</span>
+                    <span class='lvlTitle wnTitle' ${displayBlock}>CONGRATS, YOU'VE WON!!</span>
+                    <span class='wnTitle' ${displayBlock}>Press [Esc] to play again!</span>
+                    <span class='wnTitle' ${displayBlock}>(O__o)(''')</span>
                   `;
                     showAlert = 'focusAlertEnd';
                     drawNextEnemy = false;
@@ -909,7 +913,7 @@ class Contact extends React.Component {
                   }
                 }
                 if (showAlert) {
-                  gmeAlrt.innerHTML += `<h6 ${displayBlock}>Your score is: ${this.gameData.user.score}</h6>`;
+                  gmeAlrt.innerHTML += `<span class='lvlTitle' ${displayBlock}>Your score is: ${this.gameData.user.score}</span><br/>`;
 
                   gmeAlrt.classList.add(showAlert);
 
@@ -954,13 +958,6 @@ class Contact extends React.Component {
                 this.forceUpdate();
               }
             }
-            // setTimeout(() => {
-            //   if (this.gameData.background) {
-            //     requestAnimationFrame(
-            //       this.gameData.background.backgroundMove
-            //     );
-            //   }
-            // }, 50);
           }
         },
       },
@@ -973,7 +970,7 @@ class Contact extends React.Component {
               width="${(svg.getBoundingClientRect().width * 2)}" 
               height="${Math.round(svg.getBoundingClientRect().height) * 1.04}" 
               id="sceneBGImg" 
-              href="${(!this.gameData?.user || this.gameData.user.curLevel < 2) ? this.sceneTemplateImgs.backgrounds[1] : this.sceneTemplateImgs.backgrounds[0]}"
+              href="${this.sceneTemplateImgs.backgrounds[1]}"
             />
           </defs>
           <use 
@@ -1098,7 +1095,7 @@ class Contact extends React.Component {
       }
     };
     this.drawFrame();
-    document.body.style.cursor = 'none';
+    // document.body.style.cursor = 'none';
   };
 
   endGame = () => {
@@ -1354,7 +1351,14 @@ class Contact extends React.Component {
                 <div class="sending"></div>
               }
             </div>
-            <div className='gameContainer'>
+            <div 
+              className={
+                `
+                  gameContainer
+                  ${this.gameData.isStarted ? 'hideCursor' : ''}
+                `
+              }
+            >
               <div
                 className={`
                 gameTitle
@@ -1367,8 +1371,8 @@ class Contact extends React.Component {
                   }}
                 >
                   <span>Want to Play a Game?</span><br/><br/>
-                  <span>Help Ed escape from</span> <br/>
-                  <span>the city to the mountains</span>
+                  <span>Can you escape from</span> <br/>
+                  <span>the city to the mountains?</span>
                   <br />
                   <div
                     className='gameStart'
