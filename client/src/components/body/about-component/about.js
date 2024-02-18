@@ -14,7 +14,7 @@ const About = () => {
         className='aboutPane'
       >
         <TextHolder
-          className=''
+          className='aboutBdy'
         >
           <p 
             style={{
@@ -28,7 +28,9 @@ const About = () => {
           </p>
           <p className='txt'>
             Over the years I've continued to enhance and refine my expertise in 
-            Software Development and Engineering, both in the office and at home. 
+            Software Development and Engineering, both in the office and at home.
+            <br/>
+            <br/>
             Software Engineering isn't just a position for me, it's something I 
             genuinely enjoy performing and learning more about whenever I can. 
             I personally feel that having the capability to provide information and 

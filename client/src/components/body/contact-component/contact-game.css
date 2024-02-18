@@ -9,7 +9,9 @@
     margin: auto;
 }
 .instructions {
-    color: white;
+    /* color: white; */
+    color: black;
+    font-weight: bold;
     text-align: right;
     width: 45%;
     position: absolute;
@@ -23,7 +25,9 @@
     transition: transform 1s ease;
 }
 .gameScore {
-    color: white;
+    /* color: white; */
+    color: black;
+    font-weight: bold;
     text-align: left;
     width: 50%;
     position: absolute;

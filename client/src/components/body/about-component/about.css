@@ -11,6 +11,11 @@
             padding-left: 4%;
             padding-right: 4%;
         }
+        .aboutBdy {
+            &:hover {
+                animation: scrollBorder 8s ease-in-out infinite;
+            }
+        }
     }
 
     .profDiv {
@@ -21,12 +26,84 @@
         align-items: center;
 
         .profImg {
+            border-radius: 50%;
+            box-shadow: 2px 4px 5px black;
+            filter: brightness(0.9);
             background-size: 100% 100%;
             width: 25vw;
             height: 25vw;
             margin-left: auto;
             margin-right: auto;
             transition: all 0.1s ease-in-out;
-        }   
+            transform: rotate(0deg);
+
+            &:hover {
+                animation: pulseProf 3s ease-in-out infinite;
+            }
+        }
+    }
+}
+@keyframes pulseProf {
+    0% {
+        box-shadow: 2px 4px 5px rgba(255,255,255,1);
+        transform: rotate(0deg);
+    }
+    10% {
+        box-shadow: 2px 4px 5px rgba(255,255,255,0.25);
+    }
+    20% {
+        box-shadow: 2px 4px 5px rgba(255,255,255,1);
+        transform: rotate(2.5deg);
+    }
+    40% {
+        box-shadow: 2px 4px 5px rgba(255,255,255,0.25);
+        transform: rotate(-2.5deg);
+    }
+    60% {
+        box-shadow: 2px 4px 5px rgba(255,255,255,1);
+        transform: rotate(2.5deg);
+    }
+    80% {
+        box-shadow: 2px 4px 5px rgba(255,255,255,0.25);
+        transform: rotate(-2.5deg);
+    }
+    100% {
+        box-shadow: 2px 4px 5px rgba(255,255,255,1);
+        transform: rotate(2.5deg);
+    }
+}
+@keyframes scrollBorder {
+    0% {
+        border-radius: 100px 12px 12px 12px;
+    }
+    10% {
+        border-radius: 12px 100px 12px 12px;
+    }
+    20% {
+        border-radius: 12px 12px 100px 12px;
+    }
+    30% {
+        border-radius: 12px 12px 12px 100px;
+    }
+    40% {
+        border-radius: 100px 12px 12px 12px;
+    }
+    50% {
+        border-radius: 12px 100px 12px 12px;
+    }
+    60% {
+        border-radius: 12px 12px 100px 12px;
+    }
+    70% {
+        border-radius: 12px 12px 12px 100px;
+    }
+    80% {
+        border-radius: 100px 12px 12px 12px;
+    }
+    90% {
+        border-radius: 12px 100px 12px 12px;
+    }
+    100% {
+        border-radius: 12px 12px 100px 12px;
     }
 }

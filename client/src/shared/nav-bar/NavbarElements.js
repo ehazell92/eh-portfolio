@@ -43,8 +43,8 @@ transition: background 0.8s;
 	background: rgb(1, 22, 75);
 }
 &:hover {
-    color: #0FDCE9 !important;
-    border-bottom: 0.25em solid #0FDCE9;
+    color: rgba(2, 149, 107, 1) !important;
+    border-bottom: 0.25em solid rgba(2, 149, 107, 1);
 	background: rgba(1, 22, 75, 0.75);
 }
 `;

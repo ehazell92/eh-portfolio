@@ -50,6 +50,15 @@ class Contact extends React.Component {
     this.errsToHandle = this.setErrs();
     this.svgViewBox = '0 0 0 0';
 
+    this.sceneTemplateImgs = {
+      backgrounds: [
+        require('./contact-assets/scene/mtnsBg.png'),
+        require('./contact-assets/scene/cityBg.png')
+      ],
+      ground: [
+      ]
+    };
+
     this.userImgs = [
       require('./contact-assets/user/001.png'),
       require('./contact-assets/user/002.png'),
@@ -58,23 +67,42 @@ class Contact extends React.Component {
     ];
 
     this.enemyImgs = {
+      tallC: {
+        z: [
+          require(`./contact-assets/enemy/city/tall/001.png`),
+          require('./contact-assets/enemy/city/tall/002.png'),
+          require('./contact-assets/enemy/city/tall/003.png')
+        ],
+      },
+      smallC: {
+        z: [
+          require('./contact-assets/enemy/city/small/0/001.png'),
+          require('./contact-assets/enemy/city/small/0/002.png'),
+          require('./contact-assets/enemy/city/small/0/003.png')
+        ],
+        o: [
+          require('./contact-assets/enemy/city/small/1/001.png'),
+          require('./contact-assets/enemy/city/small/1/002.png'),
+          require('./contact-assets/enemy/city/small/1/003.png')
+        ],
+      },
       tall: {
         z: [
-          require('./contact-assets/enemy/tall/001.png'),
-          require('./contact-assets/enemy/tall/002.png'),
-          require('./contact-assets/enemy/tall/003.png')
+          require(`./contact-assets/enemy/mtns/tall/001.png`),
+          require('./contact-assets/enemy/mtns/tall/002.png'),
+          require('./contact-assets/enemy/mtns/tall/003.png')
         ],
       },
       small: {
         z: [
-          require('./contact-assets/enemy/small/0/001.png'),
-          require('./contact-assets/enemy/small/0/002.png'),
-          require('./contact-assets/enemy/small/0/003.png')
+          require('./contact-assets/enemy/mtns/small/0/001.png'),
+          require('./contact-assets/enemy/mtns/small/0/002.png'),
+          require('./contact-assets/enemy/mtns/small/0/003.png')
         ],
         o: [
-          require('./contact-assets/enemy/small/1/001.png'),
-          require('./contact-assets/enemy/small/1/002.png'),
-          require('./contact-assets/enemy/small/1/003.png')
+          require('./contact-assets/enemy/mtns/small/1/001.png'),
+          require('./contact-assets/enemy/mtns/small/1/002.png'),
+          require('./contact-assets/enemy/mtns/small/1/003.png')
         ],
       },
     };
@@ -316,10 +344,15 @@ class Contact extends React.Component {
       const enemImg = Math.floor(Math.random() * 2) + 1;
       const yPlusHeight = Number(this.gameData.scene.user.height) * enemHeight;
       const isSmallEnm = Number(enemImg - 1) === 0 ? 'z' : 'o';
+      const isCity = this.gameData.user.curLevel < 2;
+      const eImgs = {
+        tall: isCity ? this.enemyImgs.tallC : this.enemyImgs.tall,
+        small: isCity ? this.enemyImgs.smallC : this.enemyImgs.small,
+      }
       const enemImage =
         enemHeight === 2 ?
-          this.enemyImgs.tall['z'][0] :
-          this.enemyImgs.small[isSmallEnm][0];
+          eImgs.tall['z'][0] :
+          eImgs.small[isSmallEnm][0];
       const enemyGrnd = (this.gameData.scene.ground.y - yPlusHeight);
       const enemies = {
         ground: {
@@ -338,7 +371,7 @@ class Contact extends React.Component {
         }
       };
       const smallTall = (enemHeight === 2) ? 'tall' : 'small';
-      const imgs = smallTall === 'tall' ? this.enemyImgs.tall['z'] : this.enemyImgs.small[isSmallEnm];
+      const imgs = smallTall === 'tall' ? eImgs.tall['z'] : eImgs.small[isSmallEnm];
       this.gameData.scene.enemies.push({
         id: enemies.ground.id,
         time: 0,
@@ -940,7 +973,7 @@ class Contact extends React.Component {
               width="${(svg.getBoundingClientRect().width * 2)}" 
               height="${Math.round(svg.getBoundingClientRect().height) * 1.04}" 
               id="sceneBGImg" 
-              href="${backgroundScenes.mountains}"
+              href="${(!this.gameData?.user || this.gameData.user.curLevel < 2) ? this.sceneTemplateImgs.backgrounds[1] : this.sceneTemplateImgs.backgrounds[0]}"
             />
           </defs>
           <use 
@@ -1162,7 +1195,10 @@ class Contact extends React.Component {
           >
             <div
               style={{
-                padding: '2em',
+                flexFlow: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                display: 'flex',
               }}
               className={`cntctForm ${this.isSending ? 'sendingCtr' : ''}`}
             >
@@ -1176,7 +1212,8 @@ class Contact extends React.Component {
                   }}
                   style={{
                     display: 'grid',
-                    width: '100%',
+                    width: '90%',
+                    height: '75%',
                     gridTemplateColumns: '1fr 1fr',
                     gridTemplateRows: 'auto',
                     backgroundColor: 'white',
@@ -1326,10 +1363,12 @@ class Contact extends React.Component {
               >
                 <div
                   style={{
-                    marginTop: '14vw',
+                    marginTop: '9vw',
                   }}
                 >
-                  <span>Want to Play a Game?</span>
+                  <span>Want to Play a Game?</span><br/><br/>
+                  <span>Help Ed escape from</span> <br/>
+                  <span>the city to the mountains</span>
                   <br />
                   <div
                     className='gameStart'
@@ -1349,7 +1388,7 @@ class Contact extends React.Component {
                 id='theGame'
                 style={{
                   position: 'absolute',
-                  width: '90%',
+                  width: '100%',
                   height: '100%',
                 }}
                 viewBox={this.svgViewBox}

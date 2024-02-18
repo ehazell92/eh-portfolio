@@ -48,91 +48,91 @@ export const portfolioOptions = [
     },
     {
         id: 'App3',
-        name: 'App 3',
+        name: 'Place Holder',
         label: 'App 3 was built around some lorem ipsum lorem ipsum',
         external: false,
         etc: 'extra stuff here'
     },
     {
         id: 'App4',
-        name: 'App 4',
+        name: 'Place Holder',
         label: 'App 4 was built around some lorem ipsum lorem ipsum',
         external: false,
         etc: 'extra stuff here'
     },
     {
         id: 'App5',
-        name: 'App 5',
+        name: 'Place Holder',
         label: 'App 5 was built around some lorem ipsum lorem ipsum',
         external: false,
         etc: 'extra stuff here'
     },
     {
         id: 'App6',
-        name: 'App 6',
+        name: 'Place Holder',
         label: 'App 6 was built around some lorem ipsum lorem ipsum',
         external: false,
         etc: 'extra stuff here'
     },
     {
         id: 'App7',
-        name: 'App 7',
+        name: 'Place Holder',
         label: 'App 7 was built around some lorem ipsum lorem ipsum',
         external: false,
         etc: 'extra stuff here'
     },
     {
         id: 'App8',
-        name: 'App 8',
+        name: 'Place Holder',
         label: 'App 8 was built around some lorem ipsum lorem ipsum',
         external: false,
         etc: 'extra stuff here'
     },
     {
         id: 'App9',
-        name: 'App 9',
+        name: 'Place Holder',
         label: 'App 9 was built around some lorem ipsum lorem ipsum',
         external: false,
         etc: 'extra stuff here'
     },
     {
         id: 'App10',
-        name: 'App 10',
+        name: 'Place Holder',
         label: 'App 10 was built around some lorem ipsum lorem ipsum',
         external: false,
         etc: 'extra stuff here'
     },
     {
         id: 'App11',
-        name: 'App 11',
+        name: 'Place Holder',
         label: 'App 11 was built around some lorem ipsum lorem ipsum',
         external: false,
         etc: 'extra stuff here'
     },
     {
         id: 'App12',
-        name: 'App 12',
+        name: 'Place Holder',
         label: 'App 12 was built around some lorem ipsum lorem ipsum',
         external: false,
         etc: 'extra stuff here'
     },
     {
         id: 'App13',
-        name: 'App 13',
+        name: 'Place Holder',
         label: 'App 10 was built around some lorem ipsum lorem ipsum',
         external: false,
         etc: 'extra stuff here'
     },
     {
         id: 'App14',
-        name: 'App 14',
+        name: 'Place Holder',
         label: 'App 14 was built around some lorem ipsum lorem ipsum',
         external: false,
         etc: 'extra stuff here'
     },
     {
         id: 'App15',
-        name: 'App 15',
+        name: 'Place Holder',
         label: 'App 15 was built around some lorem ipsum lorem ipsum',
         external: false,
         etc: 'extra stuff here'

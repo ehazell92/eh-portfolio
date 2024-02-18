@@ -50,11 +50,14 @@ class App extends React.Component {
           overflow: 'hidden'
         }}
       >
+        <div className='setFocus'></div>
         <Navbar
           setCurrentView={this.setCurrentView}
-          notAtCampFire={this.state.cfVar} />
+          notAtCampFire={this.state.cfVar} 
+        />
         <Body
-          notAtCampFire={this.state.cfVar} />
+          notAtCampFire={this.state.cfVar} 
+        />
         <SnackBars />
       </div>
     );

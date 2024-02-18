@@ -6,6 +6,8 @@ export const TheBody = styled.div`
     grid-template-columns: 1fr;
     overflow-y: hidden;
     overflow-x: hidden;
+    z-index: 200 !important;
+    position: relative;
 `;
 
 export const BodyPart = styled.div`
@@ -49,6 +51,11 @@ export const TextHolder = styled.div`
     color: white;
     line-height: 1.25em;
     font-size: min(5vw, 30px);
+    box-shadow: 3px 3px 5px black;
 
-    background-color: rgba(38, 205, 242,0.98);
+    background-color: rgba(2, 149, 107, 0.98);
+
+    &:hover {
+        animation: borderScroll 3s ease-in-out infinite;
+    }
 `;

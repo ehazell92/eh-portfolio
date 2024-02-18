@@ -36,7 +36,7 @@ class Portfolio extends React.Component {
               vert: 'top',
               hor: 'center',
               type: 'error',
-              msg: `Oops! Looks like some required details are missing.`,
+              msg: `Sorry, these are just placeholders for now. Check back later!`,
             }
           );
           return;
