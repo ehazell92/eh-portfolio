@@ -25,6 +25,9 @@
 
         .weather-location {
 
+            .MuiFormControl-root > .MuiInputBase-root > .MuiChip-root {
+                display: none !important;
+            }
         }
         .weather-rpt {
 

@@ -11,7 +11,9 @@ import Chip from '@mui/material/Chip';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
 import { triggerSnackBar } from '../../../../../services/app-service';
+import unitedstates from './assets/usCities.json';
 
 import './weather.css';
 
@@ -43,6 +45,26 @@ const locations = [
         latlong: '33,35'
     }
 ];
+const allCityLabels = Object.values(unitedstates.cities.reduce((acc, city) => {
+    const key = `${city.city}, ${city.stateAb}`;
+    if (!acc[key]) {
+        acc[key] = city;
+    }
+    return acc;
+}, {}))
+    .sort((a, b) => a.stateAb.localeCompare(b.stateAb))
+    .map(city => `${city.city}, ${city.stateAb}`);
+
+const localCityLabels = Object.values(unitedstates.cities.reduce((acc, city) => {
+    const key = `${city.city}, ${city.stateAb}`;
+    if (!acc[key]) {
+        acc[key] = city;
+    }
+    return acc;
+}, {}))
+    .filter(city => city.stateAb === 'WA')
+    .sort((a, b) => a.stateAb.localeCompare(b.stateAb))
+    .map(city => `${city.city}, ${city.stateAb}`);
 
 const getStyles = (name, personName, theme) => {
     const isSelected = personName.indexOf(name) === -1;
@@ -58,15 +80,14 @@ const getStyles = (name, personName, theme) => {
 }
 
 const Weather = () => {
-    const [zipCodes, setZipCodes] = useState([]);
-    const [currentZip, setCurrentZip] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const theme = useTheme();
     const [locationName, setlocationName] = React.useState([]);
     const [loctn, setLoctn] = React.useState([]);
+    const [selectedColors, setSelectedColors] = useState([]);
+    const [options, setOptions] = useState(localCityLabels);
 
     const changeLocations = (event) => {
-        console.log(locationName);
         const {
             target: { value },
         } = event;
@@ -99,18 +120,29 @@ const Weather = () => {
     const getLocLengthVal = (locLength) => {
         return `${locLength}` || "7";
     }
-    const handleZipPress = (event) => {
-        if (event.key === 'Enter' || event.type === 'blur') {
-            const newZip = event.target.value.trim();
-            if (newZip !== '' && newZip.length === 5) {
-                setZipCodes([...zipCodes, newZip]);
+
+
+    const handleCitySelect = (event, value) => {
+        if (value) {
+            if (Array.isArray(value)) {
+                const distArr = [...selectedColors, ...value].filter((value, index, self) => self.indexOf(value) === index);
+                setSelectedColors(distArr);
+                const filteredOpts = options.filter(
+                    (city) => !(value.some(
+                        (vl) => vl === city)
+                    ))
+                setOptions(filteredOpts);
+            } else {
+                const distArr = [...selectedColors, value].filter((value, index, self) => self.indexOf(value) === index);
+                setSelectedColors(distArr);
+                setOptions(options.filter((city) => city !== value));
             }
-            setCurrentZip('');
         }
     };
 
-    const handleZipDelete = (zipToDelete) => {
-        setZipCodes(zipCodes.filter((zip) => zip !== zipToDelete));
+    const handleDelete = (cityToDelete) => {
+        setSelectedColors(selectedColors.filter((city) => city !== cityToDelete));
+        setOptions([...options, cityToDelete]);
     };
 
 
@@ -119,6 +151,37 @@ const Weather = () => {
             <div className='wth-child'>
                 <div className='weather-location'>
                     <div>
+                        <div>
+                            {selectedColors.map((city, index) => (
+                                <Chip
+                                    key={`${city}-${index}`}
+                                    label={city}
+                                    onDelete={() => handleDelete(city)}
+                                    style={{ margin: '4px' }}
+                                />
+                            ))}
+                        </div>
+                        <div>
+                            <Autocomplete
+                                multiple
+                                id="city-input"
+                                className='cities-autocomplete '
+                                options={options}
+                                value={selectedColors}
+                                onChange={handleCitySelect}
+                                getOptionLabel={(option) => option}
+                                disableCloseOnSelect
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        label="Available Cities"
+                                        variant="outlined"
+                                    />
+                                )}
+                            />
+                        </div>
+                    </div>
+                    {/* <div>
                         <div>
                             {zipCodes.map((zip, index) => (
                                 <Chip
@@ -136,7 +199,7 @@ const Weather = () => {
                             onKeyDown={handleZipPress}
                             onBlur={handleZipPress}
                         />
-                    </div>
+                    </div> */}
                     <FormControl sx={{
                         m: 1,
                         width: 300,
