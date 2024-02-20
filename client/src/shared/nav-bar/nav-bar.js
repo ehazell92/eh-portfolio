@@ -116,14 +116,12 @@ class Navbar extends React.Component {
                 {
                     this.isMobile &&
                     <div
+                        id='mbl-nav'
                         className={`
-                                menIco
+                                menIco zDex
                                 ${this.isIcon ? '' : 'hide'}
                                 ${this.isMobile ? '' : 'hide'}
                             `}
-                        style={{
-                            zIndex: '650',
-                        }}
                         onClick={this.showMenu}
                     >
                         <MenuIcon />
@@ -132,12 +130,10 @@ class Navbar extends React.Component {
                 <Nav
                     id='nav'
                     className={`
+                                zDex
                                 ${notAtCampFire ? '' : 'hide '}
                                 ${this.isIcon ? 'hideNav' : 'showNav'}
                             `}
-                    style={{
-                        zIndex: '650',
-                    }}
                 >
                     <NavMenu
                         className='navMnu'

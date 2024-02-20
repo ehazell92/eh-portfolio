@@ -1,3 +1,7 @@
+.zDex {
+    z-index: 650 !important;
+}
+
 .icoLinks {
     display: grid;
     grid-template-columns: 100%;

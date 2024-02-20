@@ -17,6 +17,10 @@ class Portfolio extends React.Component {
     }
     const bdy = document.getElementById('theBody');
     const ele = document.getElementById(id);
+    const nav = [
+      document.getElementById('nav'),
+      document.getElementById('mbl-nav')
+    ];
     const cmpExists = this.getLocalComponent(cmp);
     if (bdy && ele) {
       if (isOpen) {
@@ -24,6 +28,11 @@ class Portfolio extends React.Component {
           if (!isAppFS) {
             bdy.classList.add('noOverflow');
             isAppFS = true;
+            nav.forEach((navEle) => {
+              if (navEle) {
+                navEle.classList.remove('zDex');
+              }
+            });
             ele.classList.add('appFS');
             ele.classList.remove('appOption');
             this.forceUpdate();
@@ -45,6 +54,11 @@ class Portfolio extends React.Component {
         setTimeout(() => {
           bdy.classList.remove('noOverflow');
           isAppFS = false;
+          nav.forEach((navEle) => {
+            if (navEle) {
+              navEle.classList.add('zDex');
+            }
+          });
           ele.classList.remove('appFS');
           ele.classList.add('appOption');
           this.forceUpdate();

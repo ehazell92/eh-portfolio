@@ -206,9 +206,9 @@ const Logon = () => {
     };
 
     return (
-        <div className='parent'>
+        <div className='lg-parent'>
             <div 
-                className='child'
+                className='lg-child'
                 style={{
                     backgroundImage: `url(${logBG})`,
                 }}                

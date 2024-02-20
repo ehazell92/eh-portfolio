@@ -1,4 +1,5 @@
 import Logon from "../components/body/portfolio-component/projects/logon/logon";
+import Weather from "../components/body/portfolio-component/projects/weather/weather";
 import logBg from '../components/body/portfolio-component/assets/LogonAppImg.webp';
 
 export const navBarOptions = [
@@ -40,11 +41,12 @@ export const portfolioOptions = [
         cmp: <Logon />
     },
     {
-        id: 'App2',
-        name: 'Test React App',
-        label: 'Test React App is a test app for loading components',
+        id: 'weather',
+        name: 'Weather Component',
+        label: 'A basic weather component used for searching for one or multiple forecast reports.',
         external: false,
-        etc: 'React'
+        etc: 'React',
+        cmp: <Weather />
     },
     {
         id: 'App3',

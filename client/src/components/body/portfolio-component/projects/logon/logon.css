@@ -1,9 +1,9 @@
-.parent {
+.lg-parent {
     display: flex;
     flex-flow: column;
     justify-content: center;
 
-    .child {
+    .lg-child {
         display: flex;
         flex-flow: column;
         justify-content: flex-end;
@@ -91,9 +91,9 @@
 }
 
 @media screen and (max-height: 650px) {
-    .parent {
+    .lg-parent {
 
-        .child {
+        .lg-child {
 
             form {
                 overflow-y: auto;
