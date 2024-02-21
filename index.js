@@ -14,6 +14,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 // const recordRts = require("./routes/record");
 const { sendMail } = require("./routes/mailer");
+const { processWeatherRequest } = require("./routes/weather");
 
 require("dotenv").config({ path: "./config.env" });
 const port = process.env.PORT || 5000;
@@ -49,6 +50,24 @@ app.post('/api/sendEmail', async (req, res) => {
     } catch(err) {
         console.error(err);
         res.status(500).json({ error: 'Apologies, your email failed to send...' });
+    }
+});
+
+app.post('/api/getWeather', async (req, res) => {
+    try {
+        const selCity = req.body.city || null;
+        if (selCity) {
+            if (process.env.NODE_ENV !== 'production') {
+                console.log('LOCAL DEV');
+                reject('ERROR');
+            } else {
+                const cityWeatherData = await processWeatherRequest(selCity);
+                res.json(cityWeatherData);
+            }
+        }
+    } catch(err) {
+        console.error(err);
+        res.status(500).json({ error: 'Apologies, your request failed...' });
     }
 });
 

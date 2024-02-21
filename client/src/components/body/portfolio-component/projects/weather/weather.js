@@ -12,40 +12,14 @@ import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
+import CircularProgress from '@mui/material/CircularProgress';
+
 import { triggerSnackBar } from '../../../../../services/app-service';
 import unitedstates from './assets/usCities.json';
 
 import './weather.css';
 
-
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-    PaperProps: {
-        style: {
-            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-            width: 250,
-        },
-    },
-};
-const locations = [
-    {
-        name: 'Seattle, WA',
-        stat: 'SEW',
-        latlong: '124,68'
-    },
-    {
-        name: 'San Fransisco, CA',
-        stat: 'MTR',
-        latlong: '86,106'
-    },
-    {
-        name: 'New York, NY',
-        stat: 'OKX',
-        latlong: '33,35'
-    }
-];
-const allCityLabels = Object.values(unitedstates.cities.reduce((acc, city) => {
+const allStateCityLabels = Object.values(unitedstates.cities.reduce((acc, city) => {
     const key = `${city.city}, ${city.stateAb}`;
     if (!acc[key]) {
         acc[key] = city;
@@ -53,63 +27,56 @@ const allCityLabels = Object.values(unitedstates.cities.reduce((acc, city) => {
     return acc;
 }, {}))
     .sort((a, b) => a.stateAb.localeCompare(b.stateAb))
-    .map(city => `${city.city}, ${city.stateAb}`);
+    .map(city => ({ ...city, cityState: `${city.city}, ${city.stateAb}` }));
 
-const localCityLabels = Object.values(unitedstates.cities.reduce((acc, city) => {
-    const key = `${city.city}, ${city.stateAb}`;
-    if (!acc[key]) {
-        acc[key] = city;
-    }
-    return acc;
-}, {}))
-    .filter(city => city.stateAb === 'WA')
-    .sort((a, b) => a.stateAb.localeCompare(b.stateAb))
-    .map(city => `${city.city}, ${city.stateAb}`);
-
-const getStyles = (name, personName, theme) => {
-    const isSelected = personName.indexOf(name) === -1;
-    return {
-        backgroundColor: !isSelected ? 'rgba(0,0,0,0.2)' : '',
-        color: !isSelected ? 'white' : '',
-        textShadow: !isSelected ? '1px 1px 2px rgba(0,0,0,1)' : '',
-        fontWeight:
-            isSelected
-                ? theme.typography.fontWeightRegular
-                : theme.typography.fontWeightBold,
-    };
-}
+const allStateLabels = allStateCityLabels.map(city => city.stateAb).filter((value, index, self) => self.indexOf(value) === index);
 
 const Weather = () => {
     const [isLoading, setIsLoading] = useState(false);
     const theme = useTheme();
-    const [locationName, setlocationName] = React.useState([]);
     const [loctn, setLoctn] = React.useState([]);
-    const [selectedColors, setSelectedColors] = useState([]);
-    const [options, setOptions] = useState(localCityLabels);
+    const [selectedCities, setSelectedCities] = useState([]);
+    const [options, setOptions] = useState([]);
+    const [state, setState] = React.useState('');
 
-    const changeLocations = (event) => {
-        const {
-            target: { value },
-        } = event;
-        setlocationName(
-            typeof value === 'string' ? value.split(',') : value,
-        );
-        const selVals = typeof value === 'string' ? value.split(',') : value;
-        const builtVals = [];
-        selVals.forEach((loc) => {
-            const foundLoc = locations.find((l) => l.name === loc) || null;
-            if (foundLoc) {
-                builtVals.push({
-                    ...foundLoc,
-                    fCastLength: 7
+    const getCityWeather = async (city) => {
+        const foundCity = allStateCityLabels.find((c) => c.cityState === city) || null;
+        const loctnExists = foundCity ? loctn.some((l) => l.state === foundCity.state && l.city === foundCity.city) || null : null;
+        if (foundCity) {
+            if (!loctnExists) {
+                const newLoctns = [
+                    ...loctn, 
+                    {
+                        ...foundCity,
+                        fCastLength: 7,
+                        weather: []
+                    }
+                ];
+                setLoctn(newLoctns);
+            }
+            try {
+                const res = await fetch('/getWeather', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ city: foundCity })
+                });
+                const recvdWeather = await res.json();
+                console.log(recvdWeather);
+                console.log('');
+            } catch (error) {   
+                triggerSnackBar({
+                    message: `An error occurred while fetching weather data for ${foundCity.cityState}`,
+                    type: 'error'
                 });
             }
-        });
-        setLoctn(builtVals);
+        }
     };
+
     const handleForecastLength = (event, locName) => {
         const newLoc = loctn.map((loc) => {
-            const fCast = loc.name === locName ? Number(event.target.value) : loc.fCastLength;
+            const fCast = loc.cityState === locName ? Number(event.target.value) : loc.fCastLength;
             return {
                 ...loc,
                 fCastLength: fCast
@@ -121,28 +88,61 @@ const Weather = () => {
         return `${locLength}` || "7";
     }
 
-
+    const handleStateChange = (event) => {
+        const theState = event.target.value;
+        const filteredCities = allStateCityLabels
+            .filter(city => city.stateAb === theState)
+            .map(city => `${city.city}, ${city.stateAb}`)
+            .sort((a, b) => a.localeCompare(b));
+        setOptions(filteredCities);
+        setState(theState);
+    }
     const handleCitySelect = (event, value) => {
+        // When the user clears
+        if (event.type === 'click' && (value && !value.length)) {
+            setSelectedCities([]);
+            setLoctn([]);
+            const filteredCities = allStateCityLabels
+                .filter(city => city.stateAb === state)
+                .map(city => `${city.city}, ${city.stateAb}`)
+                .sort((a, b) => a.localeCompare(b));
+            setOptions(filteredCities);
+            return;
+        }
         if (value) {
+            const selectedCity = value[value.length - 1];
             if (Array.isArray(value)) {
-                const distArr = [...selectedColors, ...value].filter((value, index, self) => self.indexOf(value) === index);
-                setSelectedColors(distArr);
+                const distArr = [...selectedCities, ...value].filter((value, index, self) => self.indexOf(value) === index);
+                setSelectedCities(distArr);
                 const filteredOpts = options.filter(
                     (city) => !(value.some(
                         (vl) => vl === city)
-                    ))
+                    )).sort((a, b) => a.localeCompare(b));
                 setOptions(filteredOpts);
             } else {
-                const distArr = [...selectedColors, value].filter((value, index, self) => self.indexOf(value) === index);
-                setSelectedColors(distArr);
-                setOptions(options.filter((city) => city !== value));
+                const distArr = [...selectedCities, value].filter((value, index, self) => self.indexOf(value) === index);
+                setSelectedCities(distArr);
+                setOptions(
+                    options.filter(
+                        (city) => city !== value
+                    ).sort(
+                        (a, b) => a.localeCompare(b)
+                    )
+                );
             }
+            getCityWeather(selectedCity);
         }
     };
 
     const handleDelete = (cityToDelete) => {
-        setSelectedColors(selectedColors.filter((city) => city !== cityToDelete));
-        setOptions([...options, cityToDelete]);
+        setSelectedCities(selectedCities.filter((city) => city !== cityToDelete));
+        const toDelete =[...options, cityToDelete].sort(
+            (a, b) => a.localeCompare(b)
+        );
+        setOptions(toDelete);
+        setLoctn(
+            loctn.filter((loc) => loc.cityState !== cityToDelete)
+        );
     };
 
 
@@ -152,89 +152,58 @@ const Weather = () => {
                 <div className='weather-location'>
                     <div>
                         <div>
-                            {selectedColors.map((city, index) => (
-                                <Chip
-                                    key={`${city}-${index}`}
-                                    label={city}
-                                    onDelete={() => handleDelete(city)}
-                                    style={{ margin: '4px' }}
-                                />
-                            ))}
-                        </div>
-                        <div>
-                            <Autocomplete
-                                multiple
-                                id="city-input"
-                                className='cities-autocomplete '
-                                options={options}
-                                value={selectedColors}
-                                onChange={handleCitySelect}
-                                getOptionLabel={(option) => option}
-                                disableCloseOnSelect
-                                renderInput={(params) => (
-                                    <TextField
-                                        {...params}
-                                        label="Available Cities"
-                                        variant="outlined"
-                                    />
-                                )}
-                            />
-                        </div>
-                    </div>
-                    {/* <div>
-                        <div>
-                            {zipCodes.map((zip, index) => (
-                                <Chip
-                                    key={index}
-                                    label={zip}
-                                    onDelete={() => handleZipDelete(zip)}
-                                    style={{ margin: '4px' }}
-                                />
-                            ))}
-                        </div>
-                        <TextField
-                            label="Enter ZIP code"
-                            value={currentZip}
-                            onChange={(e) => setCurrentZip(e.target.value)}
-                            onKeyDown={handleZipPress}
-                            onBlur={handleZipPress}
-                        />
-                    </div> */}
-                    <FormControl sx={{
-                        m: 1,
-                        width: 300,
-                        borderRadius: '10px',
-                    }}>
-                        <InputLabel id="location">
-                            Locations
-                        </InputLabel>
-                        <Select
-                            labelId="location-select"
-                            id="location-select"
-                            multiple
-                            value={locationName}
-                            onChange={changeLocations}
-                            input={<OutlinedInput id="select-multiple" label="locations" />}
-                            renderValue={(selected) => (
-                                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                    {selected.map((value) => (
-                                        <Chip key={value} label={value} />
-                                    ))}
-                                </Box>
-                            )}
-                            MenuProps={MenuProps}
-                        >
-                            {locations.map((loc) => (
-                                <MenuItem
-                                    key={loc.name}
-                                    value={loc.name}
-                                    style={getStyles(loc.name, locationName, theme)}
+                            <FormControl fullWidth>
+                                <InputLabel id="state-select">Select State</InputLabel>
+                                <Select
+                                    labelId="state-select-label"
+                                    id="state-select"
+                                    value={state}
+                                    label="Select State"
+                                    onChange={handleStateChange}
                                 >
-                                    {loc.name}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
+                                    {
+                                        allStateLabels.map((state) => (
+                                            <MenuItem key={`${state}-ky`} value={state}>{state}</MenuItem>
+                                        ))
+                                    }
+                                </Select>
+                            </FormControl>
+                        </div>
+                        {
+                            state && state.length > 0 &&
+                            <div>
+                                <div>
+                                    {selectedCities.map((city, index) => (
+                                        <Chip
+                                            key={`${city}-${index}`}
+                                            label={city}
+                                            onDelete={() => handleDelete(city)}
+                                            style={{ margin: '4px' }}
+                                        />
+                                    ))}
+                                </div>
+                                <div>
+                                    <Autocomplete
+                                        multiple
+                                        id="city-input"
+                                        className='cities-autocomplete '
+                                        options={options}
+                                        value={selectedCities}
+                                        onChange={handleCitySelect}
+                                        getOptionLabel={(option) => option}
+                                        disableCloseOnSelect
+                                        renderInput={(params) => (
+                                            <TextField
+                                                {...params}
+                                                label="Available Cities"
+                                                variant="outlined"
+                                            />
+                                        )}
+                                    />
+                                </div>
+                            </div>
+                        }
+                    </div>
                 </div>
                 {
                     loctn.length > 0 &&
@@ -242,12 +211,12 @@ const Weather = () => {
                         loctn.map((loc) => (
                             <div className='weather-rpt'>
                                 <div>
-                                    <h2>{loc.name}</h2>
+                                    <h2>{loc.cityState}</h2>
                                     <ToggleButtonGroup
                                         color="primary"
                                         value={getLocLengthVal(loc.fCastLength)}
                                         exclusive
-                                        onChange={(ev) => handleForecastLength(ev, loc.name)}
+                                        onChange={(ev) => handleForecastLength(ev, loc.cityState)}
                                         aria-label="Platform"
                                     >
                                         <ToggleButton value="3">3</ToggleButton>
@@ -256,10 +225,16 @@ const Weather = () => {
                                     </ToggleButtonGroup>
                                 </div>
                                 <div className='weather-forecast'>
-                                    {
+                                    {   loc.weather?.length > 0 &&
                                         Array.from({ length: loc.fCastLength }).map((_, index) => (
                                             <div>[ Weather Box ]</div>
                                         ))
+                                    }
+                                    {
+                                        loc.weather.length === 0 &&
+                                        <Box sx={{ display: 'flex' }}>
+                                            <CircularProgress />
+                                        </Box>
                                     }
                                 </div>
                             </div>

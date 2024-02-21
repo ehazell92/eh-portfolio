@@ -1,2 +1,28 @@
+// https://api.weather.gov/points/40.6943,-73.9249
+// https://api.weather.gov/points/{xords}
+
 // https://api.weather.gov/gridpoints/{station}/{xords}/forecast
 // https://api.weather.gov/gridpoints/TOP/32,81/forecast
+
+const processWeatherRequest = async (city) => {
+    const weatherData = [];
+    try {
+        const latLong = `${city.lat},${city.long}`;
+        const response = await fetch(`https://api.weather.gov/points/${latLong}`);
+        const data = await response.json();
+        console.log(data);
+
+        const wthResponse = await fetch(`https://api.weather.gov/gridpoints/${data.properties.gridId}/${data.properties.gridX},${data.properties.gridY}/forecast`);
+        const wData = await wthResponse.json();
+        console.log(wData);
+        console.log('~~~~~~');
+        weatherData = wData.properties.periods;
+
+        res.json(weatherData);
+    } catch (error) {
+        console.error(error);
+        res.json({ error: 'An error occurred' });
+    }
+}
+
+module.exports = { processWeatherRequest };
