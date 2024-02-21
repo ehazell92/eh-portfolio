@@ -23,16 +23,14 @@ const processWeatherRequest = async (city) => {
             if (hasInitialData(data)) {
                 const wthResponse = await fetch(`https://api.weather.gov/gridpoints/${data.properties.gridId}/${data.properties.gridX},${data.properties.gridY}/forecast`);
                 wData = await wthResponse.json();
+                wData = wData.properties ? wData.properties.periods || [] : [];
             }
             weatherData = {
                 city: city.city,
                 state: city.state,
                 cityState: city.cityState,
-                weather: wData.properties.periods || []
+                weather: wData
             };
-    
-            console.log(weatherData);
-            console.log('~~~~~~');
             resolve(weatherData);
         } catch (error) {
             console.error(error);
