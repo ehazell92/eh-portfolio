@@ -5,7 +5,7 @@
 // https://api.weather.gov/gridpoints/TOP/32,81/forecast
 
 const processWeatherRequest = async (city) => {
-    const weatherData = [];
+    let weatherData = [];
     try {
         console.log('CITY');
         console.log(city);
@@ -21,10 +21,10 @@ const processWeatherRequest = async (city) => {
         console.log('~~~~~~');
         weatherData = wData.properties.periods;
 
-        res.json(weatherData);
+        resolve(weatherData);
     } catch (error) {
         console.error(error);
-        res.json({ error: 'An error occurred' });
+        reject({ error: 'An error occurred' });
     }
 }
 
