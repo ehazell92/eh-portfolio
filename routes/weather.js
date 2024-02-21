@@ -4,29 +4,40 @@
 // https://api.weather.gov/gridpoints/{station}/{xords}/forecast
 // https://api.weather.gov/gridpoints/TOP/32,81/forecast
 
+const hasInitialData = (dt) => {
+    return (
+        data && 
+        data.properties && 
+        (
+            data.properties.gridId &&
+            data.properties.gridX &&
+            data.properties.gridY
+        )
+    )
+};
+
 const processWeatherRequest = async (city) => {
     return new Promise(async (resolve, reject) => {
         let weatherData = [];
         try {
-            console.log('CITY');
-            console.log(city);
             const latLong = `${city.long},${city.lat}`;
-            console.log(`https://api.weather.gov/points/${latLong}`);
             const response = await fetch(`https://api.weather.gov/points/${latLong}`);
-            const data = await response.json();
-            console.log(data);
+            const data = await response.json() || null;
     
-            const wthResponse = await fetch(`https://api.weather.gov/gridpoints/${data.properties.gridId}/${data.properties.gridX},${data.properties.gridY}/forecast`);
-            const wData = await wthResponse.json();
-            console.log(wData);
-            console.log('~~~~~~');
+            let wData;
+            if (hasInitialData(data)) {
+                const wthResponse = await fetch(`https://api.weather.gov/gridpoints/${data.properties.gridId}/${data.properties.gridX},${data.properties.gridY}/forecast`);
+                wData = await wthResponse.json();
+            }
             weatherData = {
                 city: city.city,
                 state: city.state,
                 cityState: city.cityState,
-                weather: wData.properties.periods
+                weather: wData.properties.periods || []
             };
     
+            console.log(weatherData);
+            console.log('~~~~~~');
             resolve(weatherData);
         } catch (error) {
             console.error(error);
