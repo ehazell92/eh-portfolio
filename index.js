@@ -68,7 +68,7 @@ app.post('/api/getWeather', async (req, res) => {
     } catch(err) {
         console.error(err);
         res.status(500).json({ error: 'Apologies, your request failed...' });
-    }
+    }    
 });
 
 app.listen(port, () => {

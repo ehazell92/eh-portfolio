@@ -7,7 +7,10 @@
 const processWeatherRequest = async (city) => {
     const weatherData = [];
     try {
-        const latLong = `${city.lat},${city.long}`;
+        console.log('CITY');
+        console.log(city);
+        const latLong = `${city.long},${city.lat}`;
+        console.log(`https://api.weather.gov/points/${latLong}`);
         const response = await fetch(`https://api.weather.gov/points/${latLong}`);
         const data = await response.json();
         console.log(data);
