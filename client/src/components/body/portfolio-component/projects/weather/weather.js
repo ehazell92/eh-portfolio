@@ -55,7 +55,7 @@ const Weather = () => {
                 setLoctn(newLoctns);
             }
             try {
-                const res = await fetch('/getWeather', {
+                const res = await fetch('/api/getWeather', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
