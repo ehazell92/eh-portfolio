@@ -6,12 +6,12 @@
 
 const hasInitialData = (dt) => {
     return (
-        data && 
-        data.properties && 
+        dt && 
+        dt.properties && 
         (
-            data.properties.gridId &&
-            data.properties.gridX &&
-            data.properties.gridY
+            dt.properties.gridId &&
+            dt.properties.gridX &&
+            dt.properties.gridY
         )
     )
 };
