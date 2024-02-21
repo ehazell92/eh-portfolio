@@ -420,13 +420,30 @@ const Weather = () => {
     const [options, setOptions] = useState([]);
     const [state, setState] = React.useState('');
 
+    const unpackWeather = (weather) => {
+        const newWeather = [];
+        weather.forEach((wthr) => {
+            let newDay;
+            if (wthr) {
+                const isNight = wthr.name.toLowerCase().includes('night');
+                if (!isNight) {
+                    newDay.day = wthr;
+                } else {
+                    newWeather[newWeather.length - 1].night = wthr;
+                }
+            }
+            newWeather.push(newDay);
+        });
+        return newWeather;
+    }
+
     const getCityWeather = async (city) => {
         const foundCity = allStateCityLabels.find((c) => c.cityState === city) || null;
         const loctnExists = foundCity ? loctn.some((l) => l.state === foundCity.state && l.city === foundCity.city) || null : null;
         if (foundCity) {
             if (!loctnExists) {
                 const newLoctns = [
-                    ...loctn, 
+                    ...loctn,
                     {
                         ...foundCity,
                         fCastLength: 7,
@@ -446,7 +463,19 @@ const Weather = () => {
                 const recvdWeather = await res.json();
                 console.log(recvdWeather);
                 console.log('');
-            } catch (error) {   
+
+                const wthrLocsUpdte = unpackWeather(recvdWeather.weather);
+                const newLoctns = loctn.map((loc) => {
+                    let newLoc = loc;
+                    if (
+                        loc.city === recvdWeather.city &&
+                        loc.state === recvdWeather.state
+                    ) {
+                        newLoc.weather = wthrLocsUpdte;
+                    }
+                });
+                setLoctn(newLoctns);
+            } catch (error) {
                 triggerSnackBar({
                     message: `An error occurred while fetching weather data for ${foundCity.cityState}`,
                     type: 'error'
@@ -517,7 +546,7 @@ const Weather = () => {
 
     const handleDelete = (cityToDelete) => {
         setSelectedCities(selectedCities.filter((city) => city !== cityToDelete));
-        const toDelete =[...options, cityToDelete].sort(
+        const toDelete = [...options, cityToDelete].sort(
             (a, b) => a.localeCompare(b)
         );
         setOptions(toDelete);
@@ -606,9 +635,18 @@ const Weather = () => {
                                     </ToggleButtonGroup>
                                 </div>
                                 <div className='weather-forecast'>
-                                    {   loc.weather?.length > 0 &&
+                                    {loc.weather?.length > 0 &&
                                         Array.from({ length: loc.fCastLength }).map((_, index) => (
-                                            <div>[ Weather Box ]</div>
+                                            <>
+                                                {
+                                                    loc.weather[index]?.day && 
+                                                    <div>{loc.weather[index].day.shortForecast}</div>
+                                                }
+                                                {
+                                                    loc.weather[index]?.night && 
+                                                    <div>{loc.weather[index].night.shortForecast}</div>
+                                                }
+                                            </>
                                         ))
                                     }
                                     {

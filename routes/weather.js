@@ -1,8 +1,3 @@
-// https://api.weather.gov/points/40.6943,-73.9249
-// https://api.weather.gov/points/{xords}
-
-// https://api.weather.gov/gridpoints/{station}/{xords}/forecast
-// https://api.weather.gov/gridpoints/TOP/32,81/forecast
 
 const hasInitialData = (dt) => {
     return (
