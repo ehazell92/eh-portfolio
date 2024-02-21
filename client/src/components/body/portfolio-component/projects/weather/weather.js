@@ -461,23 +461,25 @@ const Weather = () => {
                     body: JSON.stringify({ city: foundCity })
                 });
                 const recvdWeather = await res.json();
-                console.log(recvdWeather);
-                console.log('');
 
                 const wthrLocsUpdte = unpackWeather(recvdWeather.weather);
                 const newLoctns = loctn.map((loc) => {
-                    let newLoc = loc;
                     if (
                         loc.city === recvdWeather.city &&
                         loc.state === recvdWeather.state
                     ) {
-                        newLoc.weather = wthrLocsUpdte;
+                        return {
+                            ...loc,
+                            weather: wthrLocsUpdte,
+                            noWeatherFound: wthrLocsUpdte.length === 0
+                        };
                     }
+                    return loc;
                 });
                 setLoctn(newLoctns);
             } catch (error) {
                 triggerSnackBar({
-                    message: `An error occurred while fetching weather data for ${foundCity.cityState}`,
+                    message: `Seems like we had some troubles finding the weather for ${foundCity.cityState}`,
                     type: 'error'
                 });
             }
@@ -639,21 +641,31 @@ const Weather = () => {
                                         Array.from({ length: loc.fCastLength }).map((_, index) => (
                                             <>
                                                 {
-                                                    loc.weather[index]?.day && 
+                                                    loc.weather[index]?.day &&
                                                     <div>{loc.weather[index].day.shortForecast}</div>
                                                 }
                                                 {
-                                                    loc.weather[index]?.night && 
+                                                    loc.weather[index]?.night &&
                                                     <div>{loc.weather[index].night.shortForecast}</div>
                                                 }
                                             </>
                                         ))
                                     }
                                     {
-                                        loc.weather.length === 0 &&
+                                        (
+                                            loc.weather.length === 0 &&
+                                            !loc.noWeatherFound
+                                        ) &&
                                         <Box sx={{ display: 'flex' }}>
                                             <CircularProgress />
                                         </Box>
+                                    }
+                                    {
+                                        (
+                                            loc.weather.length === 0 &&
+                                            loc.noWeatherFound
+                                        ) &&
+                                        <h2>Sorry, couldn't find weather for {loc.cityState}</h2>
                                     }
                                 </div>
                             </div>
