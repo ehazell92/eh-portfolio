@@ -30,7 +30,7 @@ const allStateCityLabels = Object.values(unitedstates.cities.reduce((acc, city) 
     .map(city => ({ ...city, cityState: `${city.city}, ${city.stateAb}` }));
 
 const allStateLabels = allStateCityLabels.map(city => city.stateAb).filter((value, index, self) => self.indexOf(value) === index);
-
+const daysOfWeek = ['Sun', 'Mon', 'Tues', 'Weds', 'Thurs', 'Fri', 'Sat'];
 const tmpWeatherData = [
     {
         "number": 1,
@@ -420,19 +420,43 @@ const Weather = () => {
     const [options, setOptions] = useState([]);
     const [state, setState] = React.useState('');
 
+    function getTimeZoneOffset(timeZone) {
+        const now = new Date();
+        const timeZoneOffset = Intl.DateTimeFormat(undefined, { timeZone }).resolvedOptions().timeZone;
+        const offsetInMinutes = now.getTimezoneOffset();
+        return offsetInMinutes;
+    }
+    const getDayOfWeek = (dtString) => {
+        const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        const userTimeZoneOffst = getTimeZoneOffset(userTimeZone);
+        const date = new Date(`${dtString}T00:00:00${userTimeZoneOffst > 0 ? '-' : '+'}${Math.abs(userTimeZoneOffst / 60).toString().padStart(2, '0')}:${(Math.abs(userTimeZoneOffst) % 60).toString().padStart(2, '0')}`);
+        const dayIndex = date.getUTCDay();
+        return daysOfWeek[dayIndex];
+    };
     const unpackWeather = (weather) => {
         const newWeather = [];
+        let curDay = null;
         weather.forEach((wthr) => {
             let newDay;
             if (wthr) {
-                const isNight = wthr.name.toLowerCase().includes('night');
-                if (!isNight) {
-                    newDay.day = wthr;
-                } else {
-                    newWeather[newWeather.length - 1].night = wthr;
+                let theDay = wthr.startTime.split('T');
+                const theTime = theDay[1].split('-')[0].split(':')[0];
+                theDay = theDay[0];
+                const isDay = theTime === '06';
+                const dayNight = isDay ? 'day' : 'night';
+
+                if (theDay !== curDay) {
+                    curDay = theDay;
+                    newWeather.push({
+                        night: null,
+                        day: null,
+                    })
                 }
+                newWeather[newWeather.length - 1][dayNight] = {
+                    ...wthr,
+                    dayOfWeek: getDayOfWeek(theDay)
+                };
             }
-            newWeather.push(newDay);
         });
         return newWeather;
     }
@@ -440,6 +464,7 @@ const Weather = () => {
     const getCityWeather = async (city) => {
         const foundCity = allStateCityLabels.find((c) => c.cityState === city) || null;
         const loctnExists = foundCity ? loctn.some((l) => l.state === foundCity.state && l.city === foundCity.city) || null : null;
+        let curLocs;
         if (foundCity) {
             if (!loctnExists) {
                 const newLoctns = [
@@ -450,33 +475,45 @@ const Weather = () => {
                         weather: []
                     }
                 ];
+                curLocs = newLoctns;
                 setLoctn(newLoctns);
             }
             try {
-                const res = await fetch('/api/getWeather', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ city: foundCity })
-                });
-                const recvdWeather = await res.json();
+                const isLocal = true;
+                let recvdWeather = null;
+                if (process.env.NODE_ENV === 'production') {
+                    const res = await fetch('/api/getWeather', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ city: foundCity })
+                    });
+                    recvdWeather = await res.json();
+                } else {
+                    recvdWeather = { city: 'all', weather: tmpWeatherData };
+                }
 
-                const wthrLocsUpdte = unpackWeather(recvdWeather.weather);
-                const newLoctns = loctn.map((loc) => {
-                    if (
-                        loc.city === recvdWeather.city &&
-                        loc.state === recvdWeather.state
-                    ) {
-                        return {
-                            ...loc,
-                            weather: wthrLocsUpdte,
-                            noWeatherFound: wthrLocsUpdte.length === 0
-                        };
-                    }
-                    return loc;
-                });
-                setLoctn(newLoctns);
+                if (recvdWeather) {
+                    const wthrLocsUpdte = unpackWeather(recvdWeather.weather);
+                    const updtdLocs = curLocs.map((loc) => {
+                        if (
+                            isLocal ||
+                            (
+                                loc.city === recvdWeather.city &&
+                                loc.state === recvdWeather.state
+                            )
+                        ) {
+                            return {
+                                ...loc,
+                                weather: wthrLocsUpdte,
+                                noWeatherFound: wthrLocsUpdte.length === 0
+                            };
+                        }
+                        return loc;
+                    });
+                    setLoctn(updtdLocs);
+                }
             } catch (error) {
                 triggerSnackBar({
                     message: `Seems like we had some troubles finding the weather for ${foundCity.cityState}`,
@@ -642,11 +679,22 @@ const Weather = () => {
                                             <>
                                                 {
                                                     loc.weather[index]?.day &&
-                                                    <div>{loc.weather[index].day.shortForecast}</div>
+                                                    <>
+                                                        <div>
+                                                            <h3>{loc.weather[index].day.dayOfWeek}</h3>
+                                                            <div>Day: {loc.weather[index].day.shortForecast}</div>
+                                                        </div>
+                                                    </>
                                                 }
                                                 {
                                                     loc.weather[index]?.night &&
-                                                    <div>{loc.weather[index].night.shortForecast}</div>
+                                                    !loc.weather[index]?.day &&
+                                                    <>
+                                                        <div>
+                                                            <h3>{loc.weather[index].night.dayOfWeek}</h3>
+                                                            <div>Night: {loc.weather[index].night.shortForecast}</div>
+                                                        </div>
+                                                    </>
                                                 }
                                             </>
                                         ))
