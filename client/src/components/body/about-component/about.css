@@ -28,7 +28,7 @@
         .profImg {
             border-radius: 50%;
             box-shadow: 2px 4px 5px black;
-            filter: brightness(0.9);
+            filter: brightness(0.8) contrast(1.15);
             background-size: 100% 100%;
             width: 25vw;
             height: 25vw;
