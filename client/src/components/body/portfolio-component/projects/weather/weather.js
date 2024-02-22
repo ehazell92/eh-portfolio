@@ -479,9 +479,9 @@ const Weather = () => {
                 setLoctn(newLoctns);
             }
             try {
-                const isLocal = true;
+                const isLocal = process.env.NODE_ENV !== 'production';
                 let recvdWeather = null;
-                if (process.env.NODE_ENV === 'production') {
+                if (!isLocal) {
                     const res = await fetch('/api/getWeather', {
                         method: 'POST',
                         headers: {
