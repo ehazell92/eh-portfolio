@@ -14,6 +14,11 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import CircularProgress from '@mui/material/CircularProgress';
 
+import ThermostatIcon from '@mui/icons-material/Thermostat';
+import AirIcon from '@mui/icons-material/Air';
+import SpeedIcon from '@mui/icons-material/Speed';
+import WavesIcon from '@mui/icons-material/Waves';
+
 import { triggerSnackBar } from '../../../../../services/app-service';
 import unitedstates from './assets/usCities.json';
 
@@ -437,13 +442,9 @@ const Weather = () => {
         const newWeather = [];
         let curDay = null;
         weather.forEach((wthr) => {
-            let newDay;
             if (wthr) {
-                let theDay = wthr.startTime.split('T');
-                const theTime = theDay[1].split('-')[0].split(':')[0];
-                theDay = theDay[0];
-                const isDay = theTime === '06';
-                const dayNight = isDay ? 'day' : 'night';
+                const theDay = wthr.startTime.split('T')[0];
+                const dayNight = wthr.isDaytime ? 'day' : 'night';
 
                 if (theDay !== curDay) {
                     curDay = theDay;
@@ -594,6 +595,61 @@ const Weather = () => {
         );
     };
 
+    const wndDir = (dir) => {
+        const dirs = {
+            N: 'North',
+            NE: 'North East',
+            E: 'East',
+            SE: 'South East',
+            S: 'South',
+            SW: 'South West',
+            W: 'West',
+            NW: 'North West'
+        };
+        return dirs[dir];
+    };
+
+    const buildWeatherCard = (dayNight) => {
+        return (
+            <>
+                <div className='weather-day'>
+                    <h3>{dayNight.dayOfWeek}</h3>
+                    <div className='weather-pck'>
+                        <div className='tmp'>
+                            <div><ThermostatIcon/></div>
+                            <div>{dayNight.temperature} &deg;F</div>
+                            {
+                                dayNight.probabilityOfPrecipitation.value &&
+                                <div>
+                                    {dayNight.probabilityOfPrecipitation.value}
+                                </div>
+                            }
+                        </div>
+                        <div className='dtls'>
+                            <div>
+                                <div>
+                                    <AirIcon/>
+                                    {wndDir(dayNight.windDirection)}
+                                </div>
+                                <div>
+                                    <SpeedIcon/>
+                                    {dayNight.windSpeed}
+                                </div>
+                            </div>
+                        </div>
+                        <div className='dtls2'>
+                            <WavesIcon />
+                            {dayNight.relativeHumidity.value}% Humidity
+                        </div>                        
+                        {/* <div className='fcst'>
+                            {dayNight.detailedForecast}
+                        </div> */}
+                    </div>
+                </div>
+            </>
+        )
+    };
+
 
     return (
         <div className='wth-parent'>
@@ -659,7 +715,7 @@ const Weather = () => {
                     (
                         loctn.map((loc) => (
                             <div className='weather-rpt'>
-                                <div>
+                                <div className='weather-title'>
                                     <h2>{loc.cityState}</h2>
                                     <ToggleButtonGroup
                                         color="primary"
@@ -673,28 +729,21 @@ const Weather = () => {
                                         <ToggleButton value="7">7</ToggleButton>
                                     </ToggleButtonGroup>
                                 </div>
-                                <div className='weather-forecast'>
+                                <div
+
+                                    className={`weather-forecast wth-fcast-${loc.fCastLength}`}
+                                >
                                     {loc.weather?.length > 0 &&
                                         Array.from({ length: loc.fCastLength }).map((_, index) => (
                                             <>
                                                 {
                                                     loc.weather[index]?.day &&
-                                                    <>
-                                                        <div>
-                                                            <h3>{loc.weather[index].day.dayOfWeek}</h3>
-                                                            <div>Day: {loc.weather[index].day.shortForecast}</div>
-                                                        </div>
-                                                    </>
+                                                    buildWeatherCard(loc.weather[index].day)
                                                 }
                                                 {
                                                     loc.weather[index]?.night &&
                                                     !loc.weather[index]?.day &&
-                                                    <>
-                                                        <div>
-                                                            <h3>{loc.weather[index].night.dayOfWeek}</h3>
-                                                            <div>Night: {loc.weather[index].night.shortForecast}</div>
-                                                        </div>
-                                                    </>
+                                                    buildWeatherCard(loc.weather[index].night)
                                                 }
                                             </>
                                         ))
