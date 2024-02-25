@@ -13,39 +13,92 @@
         border-radius: 10px;
         padding: 1%;
         margin-left: auto;
-        margin-right: auto;        
+        margin-right: auto;
         overflow: hidden;
         overflow-y: auto;
 
         background-color: white;
 
         .weather-location {
+            margin-bottom: 2%;
+            .hdr {
+                display: grid;
+                grid-template-columns: 78% 18%;
+                grid-template-rows: auto auto;
+                grid-gap: 4%;
 
-            .MuiFormControl-root > .MuiInputBase-root > .MuiChip-root {
+                .ste-sel {
+                    align-self: end;
+                }
+
+                .cty-sel {
+
+                    .cty-chps {
+                        margin-bottom: 2%;
+                    }
+
+                    .cty-sel-in {
+
+                        .disabled {
+                            opacity: 50%;
+                            cursor: not-allowed;
+                            pointer-events: none;
+                        }
+                    }
+                }
+                .clear-btn {
+                    grid-column: span 2;
+                    Button {
+                        float: right;
+                    }
+                }
+            }
+
+            .MuiFormControl-root>.MuiInputBase-root>.MuiChip-root {
                 display: none !important;
             }
         }
+
         .weather-rpt {
 
             .weather-title {
                 display: flex;
-                flex-direction: row;
-                align-items: center;
+                flex-direction: column;
 
                 div {
+                    max-height: 35px;
+                }
+                .wt-1 {
+                    padding-bottom: 1%;
+                    span {
+                        font-size: 1.25vw;
+                        font-weight: bold;
+                        background-color: rgb(235,235,235);
+                        border-radius: 30px;
+                        padding: 10px;
+                    }
+                }
+                .wt-2 {
                     padding-left: 1%;
-                    height: 80%;
+                    span {
+                        font-size: 1vw;
+                        padding-right: 1%;
+                    }
                 }
             }
+
             .wth-fcast-7 {
                 grid-template-columns: repeat(auto-fit, minmax(calc(94% / 7), 1fr));
             }
+
             .wth-fcast-5 {
-                grid-template-columns: repeat(auto-fit, minmax(calc(70% / 5), 13vw));
+                grid-template-columns: repeat(auto-fit, minmax(calc(70% / 5), 11vw));
             }
+
             .wth-fcast-3 {
-                grid-template-columns: repeat(auto-fit, minmax(calc(50% / 3), 12vw));                
+                grid-template-columns: repeat(auto-fit, minmax(calc(40% / 3), 11vw));
             }
+
             .weather-forecast {
                 display: grid;
                 grid-template-rows: 100%;
@@ -55,10 +108,11 @@
                 width: 95%;
                 margin-left: auto;
                 margin-right: auto;
+                margin-top: 1%;
                 justify-content: center;
 
                 .weather-day {
-                    border-radius: 10%;
+                    border-radius: 2%;
                     background-color: rgba(0, 0, 0, 0.85);
                     height: 12vw;
                     max-width: 15vw;
@@ -71,7 +125,6 @@
                     box-shadow: 1px 1px 0px black;
 
                     &:hover {
-                        cursor: pointer;
                         box-shadow: 2px 2px 4px black;
                     }
 
@@ -80,27 +133,91 @@
                         justify-content: center;
                     }
 
+                    .wth-hdr {
+                        height: 62%;
+                        display: flex;
+                        flex-direction: row;
+                        justify-content: center;
+                        align-items: center;
+
+                        background-size: 70% 100%;
+                        background-position: center center;
+                        background-repeat: no-repeat;
+
+                        div {
+                            display: flex;
+                            flex-direction: row;
+                            justify-content: center;
+                            align-items: center;
+                        }
+
+                        .wth-titl {
+                            font-size: 1.5vw;
+                            font-weight: bold;
+                            width: 100%;
+                            height: 40%;
+                            background-color: rgba(94, 177, 242, 0.5);
+                            box-shadow: 1px 1px 4px black;
+
+                            .dteTtle {
+                                font-size: 1vw !important;
+                                font-weight: normal !important;
+                            }
+                        }
+                    }
+
                     .weather-pck {
                         display: grid;
                         height: 100%;
                         grid-gap: 4%;
-                        grid-template-columns: 37% 57%;
+                        grid-template-columns: 48% 48%;
+                        font-size: 0.75vw;
 
                         .tmp {
                             display: grid;
-                            grid-template-columns: 50% 50%;
+                            grid-template-columns: 100%;
                             justify-content: center;
                             align-items: center;
-                            grid-template-rows: auto auto;
+                            grid-template-rows: auto;
                         }
-                        .dtls {
 
+                        .dtls,
+                        .tmp {
+
+                            div {
+                                display: flex;
+                                flex-flow: row;
+                                align-items: center;
+                                justify-content: center;
+                            }
                         }
+
+                        .tmpR {
+                            grid-template-rows: auto auto !important;
+                        }
+
+                        .dtls {}
+
                         .dtls2 {
                             grid-column: span 2;
                         }
+
                         .fcst {
                             grid-column: span 2;
+                        }
+
+                        .dtls,
+                        .tmp {
+                            svg {
+                                margin-right: 10%;
+                            }
+                        }
+
+                        .dtls2 {
+
+                            svg {
+                                margin-right: 2%;
+                            }
                         }
 
                         .dtls,
@@ -109,9 +226,9 @@
                             display: flex;
                             flex-direction: row;
                             justify-content: center;
-                            align-items: center;                        
+                            align-items: center;
                         }
-                    }                 
+                    }
                 }
             }
         }
@@ -121,9 +238,6 @@
 @media screen and (max-height: 650px) {
     .parent {
 
-        .child {
-
-
-        }
+        .child {}
     }
 }

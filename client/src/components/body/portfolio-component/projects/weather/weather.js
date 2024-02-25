@@ -13,11 +13,13 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import CircularProgress from '@mui/material/CircularProgress';
+import Button from '@mui/material/Button';
 
 import ThermostatIcon from '@mui/icons-material/Thermostat';
 import AirIcon from '@mui/icons-material/Air';
 import SpeedIcon from '@mui/icons-material/Speed';
 import WavesIcon from '@mui/icons-material/Waves';
+import WaterDropIcon from '@mui/icons-material/WaterDrop';
 
 import { triggerSnackBar } from '../../../../../services/app-service';
 import unitedstates from './assets/usCities.json';
@@ -425,6 +427,20 @@ const Weather = () => {
     const [options, setOptions] = useState([]);
     const [state, setState] = React.useState('');
 
+    const initState = {
+        isLoading: false,
+        loctn: [],
+        selectedCities: [],
+        options: [],
+        state: ''
+    };
+
+    const resetState = () => {
+        setSelectedCities([]);
+        setLoctn([]);
+        setState(initState);
+    };
+
     function getTimeZoneOffset(timeZone) {
         const now = new Date();
         const timeZoneOffset = Intl.DateTimeFormat(undefined, { timeZone }).resolvedOptions().timeZone;
@@ -610,37 +626,47 @@ const Weather = () => {
     };
 
     const buildWeatherCard = (dayNight) => {
+        const dte = dayNight.startTime.split('T')[0].split('-').reverse().join('/').split('/');
         return (
             <>
                 <div className='weather-day'>
-                    <h3>{dayNight.dayOfWeek}</h3>
+                    <div
+                        className='wth-hdr'
+                        style={{
+                            backgroundImage: `url(${dayNight.icon})`
+                        }}
+                    >
+                        <div className='wth-titl'>
+                            <span>{dayNight.dayOfWeek}</span>
+                        </div>
+                    </div>
                     <div className='weather-pck'>
-                        <div className='tmp'>
-                            <div><ThermostatIcon/></div>
-                            <div>{dayNight.temperature} &deg;F</div>
+                        <div className={`${dayNight.probabilityOfPrecipitation.value ? 'tmpR' : ''} tmp`}>
+                            <div><ThermostatIcon />{dayNight.temperature} &deg;F</div>
                             {
                                 dayNight.probabilityOfPrecipitation.value &&
                                 <div>
-                                    {dayNight.probabilityOfPrecipitation.value}
+                                    <WaterDropIcon />
+                                    {dayNight.probabilityOfPrecipitation.value}&#37;
                                 </div>
                             }
                         </div>
                         <div className='dtls'>
                             <div>
                                 <div>
-                                    <AirIcon/>
-                                    {wndDir(dayNight.windDirection)}
-                                </div>
-                                <div>
-                                    <SpeedIcon/>
-                                    {dayNight.windSpeed}
+                                    <WavesIcon />
+                                    {dayNight.relativeHumidity.value}%
+
                                 </div>
                             </div>
                         </div>
                         <div className='dtls2'>
-                            <WavesIcon />
-                            {dayNight.relativeHumidity.value}% Humidity
-                        </div>                        
+                            <AirIcon />
+                            {wndDir(dayNight.windDirection)}
+                            &nbsp;&nbsp;&nbsp;
+                            <SpeedIcon />
+                            {dayNight.windSpeed}
+                        </div>
                         {/* <div className='fcst'>
                             {dayNight.detailedForecast}
                         </div> */}
@@ -655,8 +681,39 @@ const Weather = () => {
         <div className='wth-parent'>
             <div className='wth-child'>
                 <div className='weather-location'>
-                    <div>
-                        <div>
+                    <div className='hdr'>
+                        <div className='cty-sel'>
+                            <div className='cty-chps'>
+                                {selectedCities.map((city, index) => (
+                                    <Chip
+                                        key={`${city}-${index}`}
+                                        label={city}
+                                        onDelete={() => handleDelete(city)}
+                                        style={{ margin: '4px' }}
+                                    />
+                                ))}
+                            </div>
+                            <div className='cty-sel-in'>
+                                <Autocomplete
+                                    multiple
+                                    id="city-input"
+                                    className={`cities-autocomplete ${(state && state.length > 0) ? '' : 'disabled'}`}
+                                    options={options}
+                                    value={selectedCities}
+                                    onChange={handleCitySelect}
+                                    getOptionLabel={(option) => option}
+                                    disableCloseOnSelect
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="Available Cities"
+                                            variant="outlined"
+                                        />
+                                    )}
+                                />
+                            </div>
+                        </div>
+                        <div className='ste-sel'>
                             <FormControl fullWidth>
                                 <InputLabel id="state-select">Select State</InputLabel>
                                 <Select
@@ -674,40 +731,13 @@ const Weather = () => {
                                 </Select>
                             </FormControl>
                         </div>
-                        {
-                            state && state.length > 0 &&
-                            <div>
-                                <div>
-                                    {selectedCities.map((city, index) => (
-                                        <Chip
-                                            key={`${city}-${index}`}
-                                            label={city}
-                                            onDelete={() => handleDelete(city)}
-                                            style={{ margin: '4px' }}
-                                        />
-                                    ))}
-                                </div>
-                                <div>
-                                    <Autocomplete
-                                        multiple
-                                        id="city-input"
-                                        className='cities-autocomplete '
-                                        options={options}
-                                        value={selectedCities}
-                                        onChange={handleCitySelect}
-                                        getOptionLabel={(option) => option}
-                                        disableCloseOnSelect
-                                        renderInput={(params) => (
-                                            <TextField
-                                                {...params}
-                                                label="Available Cities"
-                                                variant="outlined"
-                                            />
-                                        )}
-                                    />
-                                </div>
-                            </div>
-                        }
+                        <div className='clear-btn'>
+                            <Button
+                                disabled={!(state && state.length > 0)}
+                                variant="contained"
+                                onClick={resetState}
+                            >Clear Selections</Button>
+                        </div>
                     </div>
                 </div>
                 {
@@ -716,18 +746,23 @@ const Weather = () => {
                         loctn.map((loc) => (
                             <div className='weather-rpt'>
                                 <div className='weather-title'>
-                                    <h2>{loc.cityState}</h2>
-                                    <ToggleButtonGroup
-                                        color="primary"
-                                        value={getLocLengthVal(loc.fCastLength)}
-                                        exclusive
-                                        onChange={(ev) => handleForecastLength(ev, loc.cityState)}
-                                        aria-label="Platform"
-                                    >
-                                        <ToggleButton value="3">3</ToggleButton>
-                                        <ToggleButton value="5">5</ToggleButton>
-                                        <ToggleButton value="7">7</ToggleButton>
-                                    </ToggleButtonGroup>
+                                    <div className='wt-1'>
+                                        <span>{loc.cityState}</span>
+                                    </div>
+                                    <div className='wt-2'>
+                                        <span>Days:</span>
+                                        <ToggleButtonGroup
+                                            color="primary"
+                                            value={getLocLengthVal(loc.fCastLength)}
+                                            exclusive
+                                            onChange={(ev) => handleForecastLength(ev, loc.cityState)}
+                                            aria-label="Platform"
+                                        >
+                                            <ToggleButton value="3">3</ToggleButton>
+                                            <ToggleButton value="5">5</ToggleButton>
+                                            <ToggleButton value="7">7</ToggleButton>
+                                        </ToggleButtonGroup>
+                                    </div>
                                 </div>
                                 <div
 
@@ -772,7 +807,7 @@ const Weather = () => {
                 {
                     loctn.length <= 0 &&
                     <>
-                        <h1>Select a weather location to begin...</h1>
+                        <h1>Select one or multiple cities to see a 3, 5, or 7 day forecast</h1>
                     </>
                 }
             </div>

@@ -1,6 +1,7 @@
 import Logon from "../components/body/portfolio-component/projects/logon/logon";
 import Weather from "../components/body/portfolio-component/projects/weather/weather";
 import logBg from '../components/body/portfolio-component/assets/LogonAppImg.webp';
+import wthBg from '../components/body/portfolio-component/assets/WeatherAppImg.webp';
 
 export const navBarOptions = [
     {
@@ -46,6 +47,7 @@ export const portfolioOptions = [
         label: 'A basic weather component used for searching for one or multiple forecast reports.',
         external: false,
         etc: 'React',
+        bgImg: wthBg,
         cmp: <Weather />
     },
     {
