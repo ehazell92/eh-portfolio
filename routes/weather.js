@@ -43,7 +43,7 @@ const processWeatherLocationRequest = async (lat, long) => {
     return new Promise(async (resolve, reject) => {
         let weatherData = [];
         try {
-            const latLong = `${long},${lat}`;
+            const latLong = `${lat},${long}`;
             console.log('the fetch: ', `https://api.weather.gov/points/${latLong}`);
             const response = await fetch(`https://api.weather.gov/points/${latLong}`);
             const data = await response.json() || null;
