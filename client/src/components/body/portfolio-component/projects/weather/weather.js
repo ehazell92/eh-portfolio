@@ -427,6 +427,7 @@ const Weather = () => {
     const [selectedCities, setSelectedCities] = useState([]);
     const [options, setOptions] = useState([]);
     const [state, setState] = React.useState('');
+    const usedCurrentLoc = false;
 
     const initState = {
         isLoading: false,
@@ -556,8 +557,8 @@ const Weather = () => {
         return `${locLength}` || "7";
     }
 
-    const handleStateChange = (event) => {
-        const theState = event.target.value;
+    const handleStateChange = (event, bypass = null) => {
+        const theState = bypass ? bypass : event.target.value;
         const filteredCities = allStateCityLabels
             .filter(city => city.stateAb === theState)
             .map(city => `${city.city}, ${city.stateAb}`)
@@ -704,16 +705,19 @@ const Weather = () => {
                                     city.city === recvdWeather.city && 
                                     city.stateAb === recvdWeather.state
                             );
+                            handleStateChange(null, recvdWeather.stateAb);
                             const newLoctns = [
                                 ...loctn,
                                 {
                                     ...foundCity,
+                                    cityState: `${foundCity.city}, ${foundCity.stateAb}`,
                                     fCastLength: 7,
                                     weather: wthrLocsUpdte,
                                     noWeatherFound: wthrLocsUpdte.length === 0
                                 }
                             ];
                             setLoctn(newLoctns);
+                            usedCurrentLoc = true;
                         }                    
                     }
                 } catch (error) {
@@ -799,7 +803,7 @@ const Weather = () => {
                                     marginRight: '1vw',
                                 }}
                                 onClick={useCurrentLocation}
-                                disabled={process.env.NODE_ENV !== 'production'}
+                                disabled={(process.env.NODE_ENV !== 'production' || usedCurrentLoc)}
                             >
                                 Use Current Location
                             </Button>
