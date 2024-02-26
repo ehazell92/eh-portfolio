@@ -48,7 +48,6 @@ const processWeatherLocationRequest = async (lat, long) => {
             const response = await fetch(`https://api.weather.gov/points/${latLong}`);
             const data = await response.json() || null;
     
-            console.log(JSON.stringify(data));
             let wData;
             if (hasInitialData(data)) {
                 const wthResponse = await fetch(`https://api.weather.gov/gridpoints/${data.properties.gridId}/${data.properties.gridX},${data.properties.gridY}/forecast`);

@@ -557,8 +557,8 @@ const Weather = () => {
         return `${locLength}` || "7";
     }
 
-    const handleStateChange = (event, bypass = null) => {
-        const theState = bypass ? bypass : event.target.value;
+    const handleStateChange = (event) => {
+        const theState = event.target.value;
         const filteredCities = allStateCityLabels
             .filter(city => city.stateAb === theState)
             .map(city => `${city.city}, ${city.stateAb}`)
