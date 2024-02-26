@@ -427,7 +427,7 @@ const Weather = () => {
     const [selectedCities, setSelectedCities] = useState([]);
     const [options, setOptions] = useState([]);
     const [state, setState] = React.useState('');
-    const usedCurrentLoc = false;
+    let usedCurrentLoc = false;
 
     const initState = {
         isLoading: false,
@@ -699,12 +699,15 @@ const Weather = () => {
                         recvdWeather = await res.json();
     
                         if (recvdWeather) {
+                            console.log('revdWeather: ', JSON.stringify(recvdWeather));
                             const wthrLocsUpdte = unpackWeather(recvdWeather.weather);
+                            console.log('unpacked W: ', JSON.stringify(wthrLocsUpdte));
                             const foundCity = unitedstates.cities.find(
                                 (city) => 
                                     city.city === recvdWeather.city && 
                                     city.stateAb === recvdWeather.state
                             );
+                            console.log('found city: ', JSON.stringify(foundCity));
                             const newLoctns = [
                                 ...loctn,
                                 {
@@ -715,6 +718,7 @@ const Weather = () => {
                                     noWeatherFound: wthrLocsUpdte.length === 0
                                 }
                             ];
+                            console.log('new locations: ', JSON.stringify(newLoctns));
                             setLoctn(newLoctns);
                             usedCurrentLoc = true;
                         }                    
