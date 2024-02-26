@@ -14,7 +14,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 // const recordRts = require("./routes/record");
 const { sendMail } = require("./routes/mailer");
-const { processWeatherRequest } = require("./routes/weather");
+const { processWeatherRequest, processWeatherLocationRequest } = require("./routes/weather");
 
 require("dotenv").config({ path: "./config.env" });
 const port = process.env.PORT || 5000;
@@ -70,6 +70,24 @@ app.post('/api/getWeather', async (req, res) => {
         res.status(500).json({ error: 'Apologies, your request failed...' });
     }    
 });
+app.post('/api/getWeather/curLocation', async (req, res) => {
+    try {
+        const { lat, long } = req.body;
+        if (lat && long) {
+            if (process.env.NODE_ENV !== 'production') {
+                console.log('LOCAL DEV');
+                reject('ERROR');
+            } else {
+                const cityWeatherData = await processWeatherLocationRequest(lat, long);
+                res.json(cityWeatherData);
+            }
+        }
+    } catch(err) {
+        console.error(err);
+        res.status(500).json({ error: 'Apologies, your request failed...' });
+    }    
+});
+
 
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);

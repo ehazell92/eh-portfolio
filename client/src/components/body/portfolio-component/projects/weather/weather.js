@@ -26,6 +26,7 @@ import unitedstates from './assets/usCities.json';
 
 import './weather.css';
 
+const usCities = unitedstates.cities;
 const allStateCityLabels = Object.values(unitedstates.cities.reduce((acc, city) => {
     const key = `${city.city}, ${city.stateAb}`;
     if (!acc[key]) {
@@ -494,48 +495,49 @@ const Weather = () => {
                 ];
                 curLocs = newLoctns;
                 setLoctn(newLoctns);
-            }
-            try {
-                const isLocal = process.env.NODE_ENV !== 'production';
-                let recvdWeather = null;
-                if (!isLocal) {
-                    const res = await fetch('/api/getWeather', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ city: foundCity })
-                    });
-                    recvdWeather = await res.json();
-                } else {
-                    recvdWeather = { city: 'all', weather: tmpWeatherData };
-                }
 
-                if (recvdWeather) {
-                    const wthrLocsUpdte = unpackWeather(recvdWeather.weather);
-                    const updtdLocs = curLocs.map((loc) => {
-                        if (
-                            isLocal ||
-                            (
-                                loc.city === recvdWeather.city &&
-                                loc.state === recvdWeather.state
-                            )
-                        ) {
-                            return {
-                                ...loc,
-                                weather: wthrLocsUpdte,
-                                noWeatherFound: wthrLocsUpdte.length === 0
-                            };
-                        }
-                        return loc;
+                try {
+                    const isLocal = process.env.NODE_ENV !== 'production';
+                    let recvdWeather = null;
+                    if (!isLocal) {
+                        const res = await fetch('/api/getWeather', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ city: foundCity })
+                        });
+                        recvdWeather = await res.json();
+                    } else {
+                        recvdWeather = { city: 'all', weather: tmpWeatherData };
+                    }
+
+                    if (recvdWeather) {
+                        const wthrLocsUpdte = unpackWeather(recvdWeather.weather);
+                        const updtdLocs = curLocs.map((loc) => {
+                            if (
+                                isLocal ||
+                                (
+                                    loc.city === recvdWeather.city &&
+                                    loc.state === recvdWeather.state
+                                )
+                            ) {
+                                return {
+                                    ...loc,
+                                    weather: wthrLocsUpdte,
+                                    noWeatherFound: wthrLocsUpdte.length === 0
+                                };
+                            }
+                            return loc;
+                        });
+                        setLoctn(updtdLocs);
+                    }
+                } catch (error) {
+                    triggerSnackBar({
+                        message: `Seems like we had some troubles finding the weather for ${foundCity.cityState}`,
+                        type: 'error'
                     });
-                    setLoctn(updtdLocs);
                 }
-            } catch (error) {
-                triggerSnackBar({
-                    message: `Seems like we had some troubles finding the weather for ${foundCity.cityState}`,
-                    type: 'error'
-                });
             }
         }
     };
@@ -676,6 +678,59 @@ const Weather = () => {
         )
     };
 
+    const useCurrentLocation = async () => {
+        const isLocal = process.env.NODE_ENV !== 'production';
+        if (!isLocal) {
+            navigator.geolocation.getCurrentPosition(async (position) => {
+                let { latitude, longitude } = position.coords;
+                latitude = latitude.toFixed(4);
+                longitude = longitude.toFixed(4);
+                try {
+                    let recvdWeather = null;
+                    if (!isLocal) {
+                        const res = await fetch('/api/getWeather/curLocation', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ lat: latitude, long: longitude})
+                        });
+                        recvdWeather = await res.json();
+    
+                        if (recvdWeather) {
+                            const wthrLocsUpdte = unpackWeather(recvdWeather.weather);
+                            const foundCity = unitedstates.cities.find(
+                                (city) => 
+                                    city.city === recvdWeather.city && 
+                                    city.stateAb === recvdWeather.state
+                            );
+                            const newLoctns = [
+                                ...loctn,
+                                {
+                                    ...foundCity,
+                                    fCastLength: 7,
+                                    weather: wthrLocsUpdte,
+                                    noWeatherFound: wthrLocsUpdte.length === 0
+                                }
+                            ];
+                            setLoctn(newLoctns);
+                        }                    
+                    }
+                } catch (error) {
+                    triggerSnackBar({
+                        message: `Seems like we had some troubles finding the weather for your location`,
+                        type: 'error'
+                    });
+                }
+            });
+        } else {
+            triggerSnackBar({
+                message: `Sorry, current location can't be used on local development.`,
+                type: 'error'
+            });
+        }
+    };
+
 
     return (
         <div className='wth-parent'>
@@ -737,10 +792,89 @@ const Weather = () => {
                                 variant="contained"
                                 onClick={resetState}
                             >Clear Selections</Button>
+                            <Button
+                                variant="outlined"
+                                color="error"
+                                style={{
+                                    marginRight: '1vw',
+                                }}
+                                onClick={useCurrentLocation}
+                                disabled={process.env.NODE_ENV !== 'production'}
+                            >
+                                Use Current Location
+                            </Button>
                         </div>
                     </div>
                 </div>
                 {
+                    loctn.length > 0 &&
+                    <div className='rpt-wrapper'>
+                        {
+                            (
+                                loctn.map((loc) => (
+                                    <div className='weather-rpt'>
+                                        <div className='weather-title'>
+                                            <div className='wt-1'>
+                                                <span>{loc.cityState}</span>
+                                            </div>
+                                            <div className='wt-2'>
+                                                <span>Days:</span>
+                                                <ToggleButtonGroup
+                                                    color="primary"
+                                                    value={getLocLengthVal(loc.fCastLength)}
+                                                    exclusive
+                                                    onChange={(ev) => handleForecastLength(ev, loc.cityState)}
+                                                    aria-label="Platform"
+                                                >
+                                                    <ToggleButton value="3">3</ToggleButton>
+                                                    <ToggleButton value="5">5</ToggleButton>
+                                                    <ToggleButton value="7">7</ToggleButton>
+                                                </ToggleButtonGroup>
+                                            </div>
+                                        </div>
+                                        <div
+
+                                            className={`weather-forecast wth-fcast-${loc.fCastLength}`}
+                                        >
+                                            {loc.weather?.length > 0 &&
+                                                Array.from({ length: loc.fCastLength }).map((_, index) => (
+                                                    <>
+                                                        {
+                                                            loc.weather[index]?.day &&
+                                                            buildWeatherCard(loc.weather[index].day)
+                                                        }
+                                                        {
+                                                            loc.weather[index]?.night &&
+                                                            !loc.weather[index]?.day &&
+                                                            buildWeatherCard(loc.weather[index].night)
+                                                        }
+                                                    </>
+                                                ))
+                                            }
+                                            {
+                                                (
+                                                    loc.weather.length === 0 &&
+                                                    !loc.noWeatherFound
+                                                ) &&
+                                                <Box sx={{ display: 'flex' }}>
+                                                    <CircularProgress />
+                                                </Box>
+                                            }
+                                            {
+                                                (
+                                                    loc.weather.length === 0 &&
+                                                    loc.noWeatherFound
+                                                ) &&
+                                                <h2>Sorry, couldn't find weather for {loc.cityState}</h2>
+                                            }
+                                        </div>
+                                    </div>
+                                ))
+                            )
+                        }
+                    </div>
+                }
+                {/* {
                     loctn.length > 0 &&
                     (
                         loctn.map((loc) => (
@@ -803,7 +937,7 @@ const Weather = () => {
                             </div>
                         ))
                     )
-                }
+                } */}
                 {
                     loctn.length <= 0 &&
                     <>

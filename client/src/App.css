@@ -140,9 +140,7 @@
           }
 
           .icoLinks {
-            bottom: 1%;
             display: flex;
-            position: absolute !important;
             flex-direction: row-reverse;
             justify-content: center;
             opacity: 1;

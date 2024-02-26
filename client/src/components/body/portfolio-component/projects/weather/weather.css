@@ -20,7 +20,7 @@
         background-color: white;
 
         .weather-location {
-            margin-bottom: 2%;
+            /* margin-bottom: 2%; */
             .hdr {
                 display: grid;
                 grid-template-columns: 78% 18%;
@@ -60,7 +60,7 @@
         }
 
         .weather-rpt {
-
+            margin-top: 3%;
             .weather-title {
                 display: flex;
                 flex-direction: column;
@@ -69,9 +69,9 @@
                     max-height: 35px;
                 }
                 .wt-1 {
-                    padding-bottom: 1%;
+                    padding-bottom: 1vw;
                     span {
-                        font-size: 1.25vw;
+                        font-size: min(5vw, 24px);
                         font-weight: bold;
                         background-color: rgb(235,235,235);
                         border-radius: 30px;
@@ -81,7 +81,7 @@
                 .wt-2 {
                     padding-left: 1%;
                     span {
-                        font-size: 1vw;
+                        font-size: min(5vw, 19px);
                         padding-right: 1%;
                     }
                 }
@@ -103,7 +103,6 @@
                 display: grid;
                 grid-template-rows: 100%;
                 position: relative;
-                min-height: 30%;
                 grid-gap: 1%;
                 width: 95%;
                 margin-left: auto;
@@ -152,7 +151,7 @@
                         }
 
                         .wth-titl {
-                            font-size: 1.5vw;
+                            font-size: min(5vw, 28px);
                             font-weight: bold;
                             width: 100%;
                             height: 40%;
@@ -171,7 +170,7 @@
                         height: 100%;
                         grid-gap: 4%;
                         grid-template-columns: 48% 48%;
-                        font-size: 0.75vw;
+                        font-size: min(16px, 20px);
 
                         .tmp {
                             display: grid;
@@ -235,9 +234,46 @@
     }
 }
 
-@media screen and (max-height: 650px) {
-    .parent {
+@media screen and (max-width: 1250px) {
+    .weather-rpt {
+        margin-bottom: 10vw !important;
+        .weather-forecast {
+            .weather-day {
+                height: 25vw !important;
+                max-width: 25vw !important;
+            }
+        }
+    }
+    .wth-fcast-3,
+    .wth-fcast-5,
+    .wth-fcast-7 {
+        grid-template-columns: 50% 50% !important;
+        grid-template-rows: auto !important;
+        grid-gap: 2% !important;
+    }
+}
+@media screen and (max-width: 600px) {
+    .weather-title {
 
-        .child {}
+        .wt-1 {
+            padding-bottom: 5vw !important;
+        }
+    }
+    .weather-rpt {
+        margin-top: 10vw !important;
+        margin-bottom: 55vw !important;
+        .weather-forecast {
+            .weather-day {
+                height: 50vw !important;
+                max-width: 60vw !important;
+            }
+        }
+    }
+    .wth-fcast-3,
+    .wth-fcast-5,
+    .wth-fcast-7 {
+        grid-template-columns: 100% !important;
+        grid-template-rows: auto !important;
+        grid-gap: 2% !important;
     }
 }
