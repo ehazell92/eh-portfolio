@@ -705,7 +705,6 @@ const Weather = () => {
                                     city.city === recvdWeather.city && 
                                     city.stateAb === recvdWeather.state
                             );
-                            handleStateChange(null, recvdWeather.stateAb);
                             const newLoctns = [
                                 ...loctn,
                                 {
