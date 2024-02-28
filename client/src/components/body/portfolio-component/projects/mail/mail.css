@@ -1,0 +1,68 @@
+
+.main-container {
+    position: relative;
+    height: 100%;
+    background-color: white;
+    color: black;
+    padding-top: 1%;
+
+    .mail-view-container {
+        display: grid;
+        grid-template-columns: auto;
+        grid-auto-rows: 50px;
+        width: 95%;
+        margin-left: auto;
+        margin-right: auto;
+    
+        .mail-item:first-child {
+            border-top: 1px solid grey;
+        }
+        .mail-item {
+            display: grid;
+            grid-template-columns: 12vw 83vw;
+            grid-template-rows: 100%;
+            border-left: 1px solid grey;
+            border-right: 1px solid grey;
+            border-bottom: 1px solid grey;
+
+            div {
+                display: flex;
+                align-content: center;
+                flex-wrap: wrap;
+            }
+            div:last-child {
+                overflow-y: auto;
+            }
+
+            &:hover {
+                cursor: pointer;
+                background-color: grey;                
+            }
+        }
+        .unread {
+            font-weight: bold;
+        }
+        .read {
+            font-weight: inherit;
+        }
+    }
+}
+
+.MuiDrawer-modal {
+    .MuiDrawer-paper {
+        height: 91% !important;
+        top: 9% !important;
+    }
+}
+
+@media screen and (max-height: 650px) {
+    .lg-parent {
+
+        .lg-child {
+
+            form {
+                overflow-y: auto;
+            }
+        }
+    }
+}
