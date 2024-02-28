@@ -1,8 +1,6 @@
 
 import React, { useState } from 'react';
-import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -26,7 +24,6 @@ import unitedstates from './assets/usCities.json';
 
 import './weather.css';
 
-const usCities = unitedstates.cities;
 const allStateCityLabels = Object.values(unitedstates.cities.reduce((acc, city) => {
     const key = `${city.city}, ${city.stateAb}`;
     if (!acc[key]) {
@@ -421,8 +418,6 @@ const tmpWeatherData = [
 ];
 
 const Weather = () => {
-    const [isLoading, setIsLoading] = useState(false);
-    const theme = useTheme();
     const [loctn, setLoctn] = React.useState([]);
     const [selectedCities, setSelectedCities] = useState([]);
     const [options, setOptions] = useState([]);
@@ -445,7 +440,6 @@ const Weather = () => {
 
     function getTimeZoneOffset(timeZone) {
         const now = new Date();
-        const timeZoneOffset = Intl.DateTimeFormat(undefined, { timeZone }).resolvedOptions().timeZone;
         const offsetInMinutes = now.getTimezoneOffset();
         return offsetInMinutes;
     }

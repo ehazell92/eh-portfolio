@@ -2,6 +2,7 @@ import Logon from "../components/body/portfolio-component/projects/logon/logon";
 import Weather from "../components/body/portfolio-component/projects/weather/weather";
 import logBg from '../components/body/portfolio-component/assets/LogonAppImg.webp';
 import wthBg from '../components/body/portfolio-component/assets/WeatherAppImg.webp';
+import Dashboard from "../components/body/portfolio-component/projects/dashboard/dashboard";
 
 export const navBarOptions = [
     {
@@ -51,11 +52,12 @@ export const portfolioOptions = [
         cmp: <Weather />
     },
     {
-        id: 'App3',
-        name: 'Place Holder',
-        label: 'App 3 was built around some lorem ipsum lorem ipsum',
+        id: 'dashboard',
+        name: 'Dashboard Component',
+        label: 'This is a basic dashboard demonstrating a regular user dashboard configuration',
         external: false,
-        etc: 'extra stuff here'
+        etc: 'React',
+        cmp: <Dashboard />
     },
     {
         id: 'App4',
@@ -91,56 +93,57 @@ export const portfolioOptions = [
         label: 'App 8 was built around some lorem ipsum lorem ipsum',
         external: false,
         etc: 'extra stuff here'
-    },
-    {
-        id: 'App9',
-        name: 'Place Holder',
-        label: 'App 9 was built around some lorem ipsum lorem ipsum',
-        external: false,
-        etc: 'extra stuff here'
-    },
-    {
-        id: 'App10',
-        name: 'Place Holder',
-        label: 'App 10 was built around some lorem ipsum lorem ipsum',
-        external: false,
-        etc: 'extra stuff here'
-    },
-    {
-        id: 'App11',
-        name: 'Place Holder',
-        label: 'App 11 was built around some lorem ipsum lorem ipsum',
-        external: false,
-        etc: 'extra stuff here'
-    },
-    {
-        id: 'App12',
-        name: 'Place Holder',
-        label: 'App 12 was built around some lorem ipsum lorem ipsum',
-        external: false,
-        etc: 'extra stuff here'
-    },
-    {
-        id: 'App13',
-        name: 'Place Holder',
-        label: 'App 10 was built around some lorem ipsum lorem ipsum',
-        external: false,
-        etc: 'extra stuff here'
-    },
-    {
-        id: 'App14',
-        name: 'Place Holder',
-        label: 'App 14 was built around some lorem ipsum lorem ipsum',
-        external: false,
-        etc: 'extra stuff here'
-    },
-    {
-        id: 'App15',
-        name: 'Place Holder',
-        label: 'App 15 was built around some lorem ipsum lorem ipsum',
-        external: false,
-        etc: 'extra stuff here'
     }
+    // ,
+    // {
+    //     id: 'App9',
+    //     name: 'Place Holder',
+    //     label: 'App 9 was built around some lorem ipsum lorem ipsum',
+    //     external: false,
+    //     etc: 'extra stuff here'
+    // },
+    // {
+    //     id: 'App10',
+    //     name: 'Place Holder',
+    //     label: 'App 10 was built around some lorem ipsum lorem ipsum',
+    //     external: false,
+    //     etc: 'extra stuff here'
+    // },
+    // {
+    //     id: 'App11',
+    //     name: 'Place Holder',
+    //     label: 'App 11 was built around some lorem ipsum lorem ipsum',
+    //     external: false,
+    //     etc: 'extra stuff here'
+    // },
+    // {
+    //     id: 'App12',
+    //     name: 'Place Holder',
+    //     label: 'App 12 was built around some lorem ipsum lorem ipsum',
+    //     external: false,
+    //     etc: 'extra stuff here'
+    // },
+    // {
+    //     id: 'App13',
+    //     name: 'Place Holder',
+    //     label: 'App 10 was built around some lorem ipsum lorem ipsum',
+    //     external: false,
+    //     etc: 'extra stuff here'
+    // },
+    // {
+    //     id: 'App14',
+    //     name: 'Place Holder',
+    //     label: 'App 14 was built around some lorem ipsum lorem ipsum',
+    //     external: false,
+    //     etc: 'extra stuff here'
+    // },
+    // {
+    //     id: 'App15',
+    //     name: 'Place Holder',
+    //     label: 'App 15 was built around some lorem ipsum lorem ipsum',
+    //     external: false,
+    //     etc: 'extra stuff here'
+    // }
 ];
 
 export const lftSkills = [

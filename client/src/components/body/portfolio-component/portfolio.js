@@ -101,53 +101,58 @@ class Portfolio extends React.Component {
                   className='appHldr'
                   key={`hldr-${cfOpt.name}-${i}`}
                 >
-                  <Tooltip
-                    key={`${cfOpt.name}-TT`}
-                    title={cfOpt.label}
+                  <div
+                    className='appOption'
+                    onClick={() => this.handleAppLoad(true, cfOpt.id, cfOpt.cmp)}
+                    key={cfOpt.name}
+                    id={cfOpt.id}
+                    style={{
+                      backgroundSize: !this.appIsFS(cfOpt.id) ? 'contain' : '',
+                      backgroundImage: !this.appIsFS(cfOpt.id) ? `url(${cfOpt.bgImg})` : ''
+                    }}
                   >
+                    <div className='title'>{cfOpt.name}</div>
                     <div
-                      className='appOption'
-                      onClick={() => this.handleAppLoad(true, cfOpt.id, cfOpt.cmp)}
-                      key={cfOpt.name}
-                      id={cfOpt.id}
-                      style={{
-                        backgroundSize: !this.appIsFS(cfOpt.id) ? 'contain' : '',
-                        backgroundImage: !this.appIsFS(cfOpt.id) ? `url(${cfOpt.bgImg})` : ''
-                      }}
+                      className='app'
+                      id={`app-${cfOpt.id}`}
                     >
-                      <div className='title'>{cfOpt.name}</div>
-                      <div
-                        className='app'
-                        id={`app-${cfOpt.id}`}
-                      >
-                        {
-                          this.appIsFS(cfOpt.id) &&
-                          <>
-                            <div className='menuBar'>
-                              <IconButton
-                                onClick={() => this.handleAppLoad(false, cfOpt.id, cfOpt.cmp)}
-                                aria-label="Close App"
-                                color="error"
+                      {
+                        this.appIsFS(cfOpt.id) &&
+                        <>
+                          <div className='menuBar'>
+                            <div>
+                              <Tooltip
+                                key={`${cfOpt.name}-TT`}
+                                title={cfOpt.label}
                               >
-                                <CloseIcon />
-                              </IconButton>
+                                <span>
+                                  The {cfOpt.name}
+                                </span>
+                              </Tooltip>
                             </div>
-                            {
-                              cfOpt.external ?
-                                <iframe
-                                  src={cfOpt.external}
-                                  title={cfOpt.title}
-                                  style={{
-                                    "border": "0px"
-                                  }}
-                                ></iframe> :
-                                this.getLocalComponent(cfOpt.cmp)
-                            }
-                          </>
-                        }
-                      </div>
+                            <IconButton
+                              onClick={() => this.handleAppLoad(false, cfOpt.id, cfOpt.cmp)}
+                              aria-label="Close App"
+                              color="error"
+                            >
+                              <CloseIcon />
+                            </IconButton>
+                          </div>
+                          {
+                            cfOpt.external ?
+                              <iframe
+                                src={cfOpt.external}
+                                title={cfOpt.title}
+                                style={{
+                                  "border": "0px"
+                                }}
+                              ></iframe> :
+                              this.getLocalComponent(cfOpt.cmp)
+                          }
+                        </>
+                      }
                     </div>
-                  </Tooltip>
+                  </div>
                 </div>
             )
           }
