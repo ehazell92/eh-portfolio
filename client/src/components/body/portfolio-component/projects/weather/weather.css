@@ -115,10 +115,13 @@
                     background-color: rgba(0, 0, 0, 0.85);
                     height: 12vw;
                     max-width: 15vw;
+                    width: 80%;
                     display: flex;
                     flex-flow: column;
                     overflow-y: auto;
                     padding: 5%;
+                    margin-left: auto;
+                    margin-right: auto;
 
                     background-color: rgba(94, 177, 242, 0.5);
                     box-shadow: 1px 1px 0px black;
@@ -261,19 +264,33 @@
     }
     .weather-rpt {
         margin-top: 10vw !important;
-        margin-bottom: 55vw !important;
-        .weather-forecast {
+
+        .weather-forecast {            
+            overflow-x: auto;
+            grid-gap: 10vw !important;
+            height: 60vw;
+            margin-left: 5%;
+            justify-content: flex-start !important;
             .weather-day {
                 height: 50vw !important;
                 max-width: 60vw !important;
+                width: 44vw !important;
             }
         }
+    }
+    .wth-fcast-3 {
+        grid-template-columns: repeat(3, 44vw) !important;
+    }
+    .wth-fcast-5 {
+        grid-template-columns: repeat(5, 44vw) !important;
+    }
+    .wth-fcast-7 {
+        grid-template-columns: repeat(7, 44vw) !important;
     }
     .wth-fcast-3,
     .wth-fcast-5,
     .wth-fcast-7 {
-        grid-template-columns: 100% !important;
-        grid-template-rows: auto !important;
+        grid-template-rows: 100% !important;
         grid-gap: 2% !important;
     }
 }

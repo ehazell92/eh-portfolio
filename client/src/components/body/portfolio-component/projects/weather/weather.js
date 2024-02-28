@@ -640,7 +640,7 @@ const Weather = () => {
                         }}
                     >
                         <div className='wth-titl'>
-                            <span>{dayNight.dayOfWeek}</span>
+                            <span>{dayNight.dayOfWeek} - {dte[1]}/{dte[0]}</span>
                         </div>
                     </div>
                     <div className='weather-pck'>

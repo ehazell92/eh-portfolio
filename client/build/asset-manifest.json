@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/static/css/main.14e9e858.css",
-    "main.js": "/static/js/main.eee04a9a.js",
+    "main.css": "/static/css/main.71b58db3.css",
+    "main.js": "/static/js/main.d2c9ffdc.js",
     "static/js/496.a447188c.chunk.js": "/static/js/496.a447188c.chunk.js",
     "static/media/mtnsBg.png": "/static/media/mtnsBg.aa19f7c4219e9e867c4d.png",
     "static/media/cityBg.png": "/static/media/cityBg.f12cdc5b149e1ff73e86.png",
-    "static/media/bg.webp": "/static/media/bg.cd0d075c2084ec679af6.webp",
     "static/media/bg2.webp": "/static/media/bg2.9bdf2972e14d7442e89f.webp",
     "static/media/Port.png": "/static/media/Port.8ebed6bcdce068e283e1.png",
+    "static/media/bg.webp": "/static/media/bg.47d59777a6d1530c49e1.webp",
     "static/media/EdwardHazellResumeW.pdf": "/static/media/EdwardHazellResumeW.5d7e354e9a90196d7968.pdf",
     "static/media/001.png": "/static/media/001.893ef272f7798a90f52a.png",
     "static/media/003.png": "/static/media/003.749ba968b30d1e6b5e1f.png",
@@ -20,12 +20,12 @@
     "static/media/LogonAppImg.webp": "/static/media/LogonAppImg.1beb732b56ce406bc044.webp",
     "static/media/WeatherAppImg.webp": "/static/media/WeatherAppImg.964fe7b9cd45b98524d8.webp",
     "index.html": "/index.html",
-    "main.14e9e858.css.map": "/static/css/main.14e9e858.css.map",
-    "main.eee04a9a.js.map": "/static/js/main.eee04a9a.js.map",
+    "main.71b58db3.css.map": "/static/css/main.71b58db3.css.map",
+    "main.d2c9ffdc.js.map": "/static/js/main.d2c9ffdc.js.map",
     "496.a447188c.chunk.js.map": "/static/js/496.a447188c.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.14e9e858.css",
-    "static/js/main.eee04a9a.js"
+    "static/css/main.71b58db3.css",
+    "static/js/main.d2c9ffdc.js"
   ]
 }
