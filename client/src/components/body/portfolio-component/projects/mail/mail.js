@@ -9,30 +9,33 @@ import InputBase from '@mui/material/InputBase';
 import Badge from '@mui/material/Badge';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import MailIcon from '@mui/icons-material/Mail';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import MoreIcon from '@mui/icons-material/MoreVert';
-
+import Checkbox from '@mui/material/Checkbox';
 
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+
+import MenuIcon from '@mui/icons-material/Menu';
+import SearchIcon from '@mui/icons-material/Search';
+import MailIcon from '@mui/icons-material/Mail';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import MoreIcon from '@mui/icons-material/MoreVert';
+import ListItemIcon from '@mui/material/ListItemIcon';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import SendIcon from '@mui/icons-material/Send';
 import DeleteIcon from '@mui/icons-material/Delete';
 import RecyclingIcon from '@mui/icons-material/Recycling';
 import AllInboxIcon from '@mui/icons-material/AllInbox';
+import NewReleasesIcon from '@mui/icons-material/NewReleases';
+import DraftsIcon from '@mui/icons-material/Drafts';
 
 import './mail.css';
 
-const inboxMail = [
+let inboxMail = [
     {
         id: 1,
         to: 'user@user.mail',
@@ -42,7 +45,8 @@ const inboxMail = [
             Hey! It's been awhile! How are you?
         `,
         html: '',
-        read: false,        
+        read: false,
+        checked: false,
     },
     {
         id: 2,
@@ -55,6 +59,7 @@ const inboxMail = [
         `,
         html: '',
         read: false,
+        checked: false,
     },
     {
         id: 3,
@@ -67,6 +72,7 @@ const inboxMail = [
         `,
         html: '',
         read: false,
+        checked: false,
     },
     {
         id: 4,
@@ -78,6 +84,7 @@ const inboxMail = [
         `,
         html: '',
         read: false,
+        checked: false,
     },
     {
         id: 5,
@@ -89,10 +96,11 @@ const inboxMail = [
         `,
         html: '',
         read: false,
-    },    
+        checked: false,
+    },
 ];
-const deletedMail = [];
-const spamMail = [];
+let deletedMail = [];
+let spamMail = [];
 const mailViews = {
     inbox: inboxMail,
     trash: deletedMail,
@@ -146,8 +154,9 @@ export default function Mail() {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
     const [open, setOpen] = React.useState(false);
+    const [checkedMail, setCheckedMail] = React.useState({});
 
-    const [mailOpts, setMailOpts] = React.useState(inboxMail);
+    const [mailOpts, setMailOpts] = React.useState([]);
 
     const toggleDrawer = (newOpen) => () => {
         setOpen(newOpen);
@@ -247,6 +256,13 @@ export default function Mail() {
         </Menu>
     );
 
+    const handleDrawerSelection = (selView) => {
+        const curView = ['All Mail', 'Sent'].includes(selView) ?
+            'inbox' :
+            selView.toLowerCase();
+        setMailOpts(mailViews[curView]);
+    };
+
     const DrawerList = (
         <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
             <List>
@@ -255,17 +271,19 @@ export default function Mail() {
                         txt: 'Inbox', ico: <InboxIcon />,
                     },
                     {
-                        txt:'All Mail', ico: <AllInboxIcon />
+                        txt: 'All Mail', ico: <AllInboxIcon />
                     },
                     {
                         txt: 'Sent', ico: <SendIcon />
-                    }, 
+                    },
                     {
-                        txt:'Spam', ico: <RecyclingIcon />
+                        txt: 'Spam', ico: <RecyclingIcon />
                     }
                 ].map((text, index) => (
                     <ListItem key={text} disablePadding>
-                        <ListItemButton>
+                        <ListItemButton
+                            onClick={() => handleDrawerSelection(text.txt)}
+                        >
                             <ListItemIcon>
                                 {text.ico}
                             </ListItemIcon>
@@ -278,9 +296,11 @@ export default function Mail() {
             <List>
                 {['Trash'].map((text, index) => (
                     <ListItem key={text} disablePadding>
-                        <ListItemButton>
+                        <ListItemButton
+                            onClick={() => handleDrawerSelection(text)}
+                        >
                             <ListItemIcon>
-                                {<DeleteIcon/>}
+                                {<DeleteIcon />}
                             </ListItemIcon>
                             <ListItemText primary={text} />
                         </ListItemButton>
@@ -289,6 +309,16 @@ export default function Mail() {
             </List>
         </Box>
     );
+
+    const handleSelection = (id) => {
+        const mailOptsChk = mailOpts.map((mailItem) => {
+            if (mailItem.id === id) {
+                mailItem.checked = !mailItem.checked;
+            }
+            return mailItem;
+        });
+        setMailOpts(mailOptsChk);
+    };
 
     const openMail = (mailId) => {
         let selMail;
@@ -301,6 +331,37 @@ export default function Mail() {
         });
         setMailOpts(changeMail);
         alert(selMail.message);
+    };
+
+    const hasCheckedMail = () => {
+        return mailOpts.some((mail) => mail.checked);
+    };
+
+    const handleSelectionButton = (btnType) => {
+        switch (btnType) {
+            case 'delete':
+                mailViews.trash = mailOpts.filter((mail) => mail.checked);
+                reSetMailOpts();
+                break;
+            case 'spam':
+                mailViews.spam = mailOpts.filter((mail) => mail.checked);
+                reSetMailOpts();
+                break;
+            case 'unread':
+                const newMOpts = mailOpts.map((mail) => {
+                    if (mail.checked) {
+                        mail.read = false;
+                        mail.checked = false;
+                    }
+                    return mail;
+                });
+                setMailOpts(newMOpts);
+                break;
+        }
+    };
+    const reSetMailOpts = () => {
+        const newMailOpts = mailOpts.filter((mail) => !mail.checked);
+        setMailOpts(newMailOpts);
     };
 
     return (
@@ -387,19 +448,61 @@ export default function Mail() {
                 className='main-container'
             >
                 <div
-                    className='mail-view-container'
+                    className='button-bar'
+                >
+                    <IconButton
+                        aria-label="mark as spam"
+                        disabled={!hasCheckedMail()}
+                        onClick={() => handleSelectionButton('spam')}
+                    >
+                        <NewReleasesIcon />
+                    </IconButton>
+                    <IconButton
+                        disabled={!hasCheckedMail()}
+                        aria-label="delete email"
+                        onClick={() => handleSelectionButton('delete')}
+                    >
+                        <DeleteIcon />
+                    </IconButton>
+                    <IconButton
+                        disabled={mailOpts.filter((mO) => mO.checked && mO.read).length <= 0}
+                        aria-label="mark as unread"
+                        onClick={() => handleSelectionButton('unread')}
+                    >
+                        <DraftsIcon />
+                    </IconButton>
+                </div>
+                <div
+                    className={`mail-view-container`}
                 >
                     {mailOpts.map((mail, index) => (
                         <>
                             <div
-                                className={`mail-item ${mail.read ? 'read' : 'unread'}`}
-                                onClick={() => {openMail(mail.id)}}
+                                className='chkbx-container'
                             >
-                                <div>{mail.from}</div>
+                                <Checkbox
+                                    checked={!!mailOpts.find((mI) => mI.id === mail.id).checked}
+                                    onClick={() => { handleSelection(mail.id) }}
+                                />
+                            </div>
+                            <div
+                                className={`mail-item ${mail.read ? 'read' : 'unread'} ${index === 0 ? 'fot' : ''}`}
+                                onClick={() => { openMail(mail.id) }}
+                            >
+                                <div
+                                    className='mail-from'
+                                >{mail.from}</div>
                                 <div>{mail.subject} - {mail.message}</div>
                             </div>
                         </>
-                    ))}                
+                    ))}
+                    {mailOpts.length <= 0 &&
+                        <div
+                            className='no-mail'
+                        >
+                            No mail in this view.
+                        </div>
+                    }
                 </div>
             </div>
         </Box>
