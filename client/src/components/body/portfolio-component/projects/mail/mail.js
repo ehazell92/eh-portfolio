@@ -3,6 +3,7 @@ import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
+import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
@@ -40,7 +41,7 @@ let staticMail = [
     {
         id: 1,
         to: 'user@user.mail',
-        from: 'otherUser@other.mail',
+        from: 'emailOne@other.mail',
         subject: 'Just reaching out!',
         message: `
             Hey! It's been awhile! How are you?
@@ -52,7 +53,7 @@ let staticMail = [
     {
         id: 2,
         to: 'user@user.mail',
-        from: 'oddball@other.mail',
+        from: 'emailTwo@other.mail',
         subject: 'Where were you...',
         message: `
             I was out in the cold waiting for hours!
@@ -65,8 +66,8 @@ let staticMail = [
     {
         id: 3,
         to: 'user@user.mail',
-        from: 'lover@other.mail',
-        subject: `Can't wait to see you ;)`,
+        from: 'emailThree@other.mail',
+        subject: `Can't wait to see you!`,
         message: `
             Dinner is going to be amazing, meeting at that italian restaurant
             is exactly what I've been looking forward to.
@@ -78,7 +79,7 @@ let staticMail = [
     {
         id: 4,
         to: 'user@user.mail',
-        from: 'fourth@other.mail',
+        from: 'emailFour@other.mail',
         subject: 'This is obviously just a test email',
         message: `
             So don't get so worried about it, alright?
@@ -90,7 +91,7 @@ let staticMail = [
     {
         id: 5,
         to: 'user@user.mail',
-        from: 'fifth@other.mail',
+        from: 'emailFive@other.mail',
         subject: `Interview Meeting`,
         message: `
             Looking forward to speaking with you about the position.
@@ -100,7 +101,7 @@ let staticMail = [
         checked: false,
     },
 ];
-const mailViews = {
+let mailViews = {
     inbox: [],
     trash: [],
     spam: [],
@@ -152,7 +153,6 @@ export default function Mail() {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
     const [open, setOpen] = React.useState(false);
-    const [checkedMail, setCheckedMail] = React.useState({});
     const [viewName, setViewName] = React.useState('Inbox');
 
     const [mailOpts, setMailOpts] = React.useState([]);
@@ -175,6 +175,13 @@ export default function Mail() {
     const handleMenuClose = () => {
         setAnchorEl(null);
         handleMobileMenuClose();
+    };
+    const handleLogOut = () => {
+        const menuBar = document.querySelector('.menuBar');
+        const closeBtn = menuBar ? menuBar.querySelector('button') : null;
+        if (closeBtn) {
+            closeBtn.click();
+        }
     };
 
     const handleMobileMenuOpen = (event) => {
@@ -199,7 +206,7 @@ export default function Mail() {
             onClose={handleMenuClose}
         >
             <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-            <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+            <MenuItem onClick={handleLogOut}>Log Out</MenuItem>
         </Menu>
     );
 
@@ -247,26 +254,10 @@ export default function Mail() {
         </Menu>
     );
 
-    const getCurrentInbox = () => {
-        const curInbox = [
-            ...mailViews.inbox,
-            ...mailViews.trash,
-            ...mailViews.spam
-        ].length ? mailViews.inbox : staticMail;
-        const filteredMail = curInbox.filter(
-            (iMail) =>
-                !(mailViews.spam.find((sMail) => sMail.id === iMail.id)) &&
-                !(mailViews.trash.find((tMail) => tMail.id === iMail.id))
-        ) || [];
-        mailViews.inbox = filteredMail;
-        return filteredMail;
-    };
-
-    const handleDrawerSelection = (selView) => {
-        unCheckMail();
-        setViewName(selView);
+    const handleDrawerSelection = (selView, ovrRde = false) => {
         const curView = selView.toLowerCase();
-        console.log(mailViews);
+        const uncheckedMail = unCheckMail(curView, ovrRde);
+        setViewName(selView);
 
         if (selView === 'All Mail') {
             const allMail = [
@@ -276,10 +267,8 @@ export default function Mail() {
             ];
             setMailOpts(allMail);
         } else {
-            console.log(mailViews);
-            setMailOpts(mailViews[curView]);
+            setMailOpts(uncheckedMail);
         }
-        console.log('');
     };
 
     const DrawerList = (
@@ -357,73 +346,97 @@ export default function Mail() {
     };
 
     const handleSelectionButton = (btnType) => {
+        const curView = viewName.toLowerCase();
+        const curMail = mailViews[curView];
+        const mailIDsSelected = viewName === 'All Mail' ? [
+            ...mailViews.inbox,
+            ...mailViews.trash,
+            ...mailViews.spam
+        ] : curMail.filter((mO) => mO.checked);
         switch (btnType) {
             case 'inbox':
-                // mailViews.inbox = [
-                //     ...mailViews.trash,
-                //     ...mailViews.spam
-                // ].filter((mail) => mail.checked);
-                // mailViews.spam = mailViews.spam.filter((mail) => !mail.checked);
-                // mailViews.trash = mailViews.trash.filter((mail) => !mail.checked);
-                // console.log(mailViews);
-                // reSetMailOpts();
+                mailViews.inbox = [
+                    ...mailViews.inbox,
+                    ...mailViews.trash.filter((mail) => mailIDsSelected.some((mIDS) => mIDS.id === mail.id)),
+                    ...mailViews.spam.filter((mail) => mailIDsSelected.some((mIDS) => mIDS.id === mail.id)),
+                ];
+                mailViews.spam = mailViews.spam.filter((mail) => !mailIDsSelected.some((mIDS) => mIDS.id === mail.id));
+                mailViews.trash = mailViews.trash.filter((mail) => !mailIDsSelected.some((mIDS) => mIDS.id === mail.id));
+                reSetMailOpts();
                 break;
             case 'delete':
                 mailViews.trash = [
-                    ...mailViews.inbox,
-                    ...mailViews.spam
-                ].filter((mail) => mail.checked);
-                mailViews.spam = mailViews.spam.filter((mail) => !mail.checked);
-                mailViews.inbox = mailViews.inbox.filter((mail) => !mail.checked);
-                console.log(mailViews);
+                    ...mailViews.trash,
+                    ...mailViews.inbox.filter((mail) => mailIDsSelected.some((mIDS) => mIDS.id === mail.id)),
+                    ...mailViews.spam.filter((mail) => mailIDsSelected.some((mIDS) => mIDS.id === mail.id)),
+                ];
+                mailViews.spam = mailViews.spam.filter((mail) => !mailIDsSelected.some((mIDS) => mIDS.id === mail.id));
+                mailViews.inbox = mailViews.inbox.filter((mail) => !mailIDsSelected.some((mIDS) => mIDS.id === mail.id));
                 reSetMailOpts();
                 break;
             case 'spam':
                 mailViews.spam = [
-                    ...mailViews.inbox,
-                    ...mailViews.trash
-                ].filter((mail) => mail.checked);
-                mailViews.trash = mailViews.trash.filter((mail) => !mail.checked);
-                mailViews.inbox = mailViews.inbox.filter((mail) => !mail.checked);
-                console.log(mailViews);
+                    ...mailViews.spam,
+                    ...mailViews.inbox.filter((mail) => mailIDsSelected.some((mIDS) => mIDS.id === mail.id)),
+                    ...mailViews.trash.filter((mail) => mailIDsSelected.some((mIDS) => mIDS.id === mail.id)),
+                ];
+                mailViews.trash = mailViews.trash.filter((mail) => !mailIDsSelected.some((mIDS) => mIDS.id === mail.id));
+                mailViews.inbox = mailViews.inbox.filter((mail) => !mailIDsSelected.some((mIDS) => mIDS.id === mail.id));
                 reSetMailOpts();
                 break;
             case 'read':
             case 'unread':
                 const isRead = btnType === 'read';
-                const newMOpts = mailOpts.map((mail) => {
+                mailViews.inbox = mailViews.inbox.map((mail) => {
                     if (mail.checked) {
                         mail.read = isRead;
                         mail.checked = false;
                     }
                     return mail;
                 });
-                setMailOpts(newMOpts);
+                mailViews.trash = mailViews.trash.map((mail) => {
+                    if (mail.checked) {
+                        mail.read = isRead;
+                        mail.checked = false;
+                    }
+                    return mail;
+                });
+                mailViews.spam = mailViews.spam.map((mail) => {
+                    if (mail.checked) {
+                        mail.read = isRead;
+                        mail.checked = false;
+                    }
+                    return mail;
+                });
+                handleDrawerSelection(viewName);
                 break;
             case 'refresh':
-                const newMOptsR = getCurrentInbox();
-                setMailOpts(newMOptsR);
+                mailViews = {
+                    inbox: staticMail,
+                    trash: [],
+                    spam: [],
+                    sent: [],
+                };
+                handleDrawerSelection('Inbox', true);
+                break;
+            default:
                 break;
         }
     };
     const reSetMailOpts = () => {
-        const newMailOpts = mailOpts.filter((mail) => !mail.checked);
-        // mailViews.inbox = mailViews.inbox.map((mvS) => ({ ...mvS, checked: false }));
+        mailViews.inbox = mailViews.inbox.map((mvS) => ({ ...mvS, checked: false }));
         mailViews.trash = mailViews.trash.map((mvT) => ({ ...mvT, checked: false }));
-        mailViews.spam = mailViews.spam.map((mvS) => ({ ...mvS, checked: false }));        
-        console.log(mailViews);
-        console.log('');
-        console.log(newMailOpts);
-        console.log('');
-        setMailOpts(newMailOpts);
+        mailViews.spam = mailViews.spam.map((mvS) => ({ ...mvS, checked: false }));
+        const curView = viewName.toLowerCase();
+        setMailOpts(mailViews[curView]);
     };
 
-    const unCheckMail = () => {
-        const newMailOpts = mailOpts.map((mail) => {
+    const unCheckMail = (crV, oVR) => {
+        return mailViews[crV].map((mail) => {
             mail.checked = false;
+            mail.read = oVR ? false : mail.read;
             return mail;
         });
-        setMailOpts(newMailOpts);
     }
 
     return (
@@ -503,60 +516,86 @@ export default function Mail() {
             {renderMenu}
             <div
                 className='main-container'
+                key={'mCnt-key'}
             >
                 <div
                     className='button-bar'
+                    key={'bBar-ky'}
                 >
-                    <IconButton
-                        aria-label="mark as spam"
-                        disabled={!hasCheckedMail() || viewName === 'Inbox'}
-                        onClick={() => handleSelectionButton('inbox')}
-                    >
-                        <InboxIcon />
-                    </IconButton>
-                    <IconButton
-                        aria-label="mark as spam"
-                        disabled={!hasCheckedMail() || viewName === 'Spam'}
-                        onClick={() => handleSelectionButton('spam')}
-                    >
-                        <NewReleasesIcon />
-                    </IconButton>
-                    <IconButton
-                        disabled={!hasCheckedMail()}
-                        aria-label="delete email"
-                        onClick={() => handleSelectionButton('delete')}
-                    >
-                        <DeleteIcon />
-                    </IconButton>
-                    <IconButton
-                        disabled={mailOpts.filter((mO) => mO.checked && !mO.read).length <= 0}
-                        aria-label="mark as read"
-                        onClick={() => handleSelectionButton('read')}
-                    >
-                        <DraftsIcon />
-                    </IconButton>
-                    <IconButton
-                        disabled={mailOpts.filter((mO) => mO.checked && mO.read).length <= 0}
-                        aria-label="mark as unread"
-                        onClick={() => handleSelectionButton('unread')}
-                    >
-                        <MailIcon />
-                    </IconButton>
-                    <IconButton
-                        disabled={viewName !== 'Inbox'}
-                        aria-label="get incoming messages"
-                        onClick={() => handleSelectionButton('refresh')}
-                    >
-                        <RefreshIcon />
-                    </IconButton>
+                    <Tooltip title="Move selected items to Inbox">
+                        <IconButton
+                            aria-label="move to inbox"
+                            disabled={!hasCheckedMail() || ['Inbox', 'All Mail'].includes(viewName)}
+                            onClick={() => handleSelectionButton('inbox')}
+                            key={'inbox-btn-ky'}
+                        >
+                            <InboxIcon />
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Mark selected items as Spam">
+                        <IconButton
+                            aria-label="mark as spam"
+                            disabled={!hasCheckedMail() || ['Spam', 'All Mail'].includes(viewName)}
+                            onClick={() => handleSelectionButton('spam')}
+                            key={'spam-btn-ky'}
+                        >
+                            <NewReleasesIcon />
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Move selected items to Trash">
+                        <IconButton
+                            disabled={!hasCheckedMail() || ['Trash', 'All Mail'].includes(viewName)}
+                            aria-label="delete email"
+                            onClick={() => handleSelectionButton('delete')}
+                            key={'delete-btn-ky'}
+                        >
+                            <DeleteIcon />
+                        </IconButton>
+                    </Tooltip>
+                    <div key={'vDiv1-ky'} className='v-dv'></div>
+                    <Tooltip title="Mark all selected as Read">
+                        <IconButton
+                            disabled={mailOpts.filter((mO) => mO.checked && !mO.read).length <= 0 || mailOpts.filter((mO) => mO.checked && mO.read).length > 0}
+                            aria-label="mark as read"
+                            onClick={() => handleSelectionButton('read')}
+                            key={'read-btn-ky'}
+                        >
+                            <DraftsIcon />
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Mark all selected as UnRead">
+                        <IconButton
+                            disabled={mailOpts.filter((mO) => mO.checked && mO.read).length <= 0 || mailOpts.filter((mO) => mO.checked && !mO.read).length > 0}
+                            aria-label="mark as unread"
+                            onClick={() => handleSelectionButton('unread')}
+                            key={'unread-btn-ky'}
+                        >
+                            <MailIcon />
+                        </IconButton>
+                    </Tooltip>
+                    <div key={'vDiv2-ky'} className='v-dv'></div>
+                    <Tooltip title="Reset mailbox messages">
+                        <IconButton
+                            aria-label="get incoming messages"
+                            onClick={() => handleSelectionButton('refresh')}
+                            key={'rfrsh-btn-ky'}
+                        >
+                            <RefreshIcon />
+                        </IconButton>
+                    </Tooltip>
                 </div>
                 <div
                     className={`mail-view-container`}
+                    key={'mView-ky'}
                 >
                     {mailOpts.map((mail, index) => (
-                        <>
+                        <div
+                            className='mView-prnt'
+                            key={`prnt-dv-${index}`}
+                        >
                             <div
-                                className='chkbx-container'
+                                className={`chkbx-container ${index === 0 ? 'fot' : ''}`}
+                                key={`chk-ky-${index}-${mail.id}`}
                             >
                                 <Checkbox
                                     checked={!!mailOpts.find((mI) => mI.id === mail.id).checked}
@@ -566,13 +605,17 @@ export default function Mail() {
                             <div
                                 className={`mail-item ${mail.read ? 'read' : 'unread'} ${index === 0 ? 'fot' : ''}`}
                                 onClick={() => { openMail(mail.id) }}
+                                key={`mail-ky-${index}-${mail.id}`}
                             >
                                 <div
                                     className='mail-from'
+                                    key={'mFrom-ky'}
                                 >{mail.from}</div>
-                                <div>{mail.subject} - {mail.message}</div>
+                                <div
+                                    key={'mSbj-ky'}
+                                >{mail.subject} - {mail.message}</div>
                             </div>
-                        </>
+                        </div>
                     ))}
                     {mailOpts.length <= 0 &&
                         <div
@@ -581,6 +624,7 @@ export default function Mail() {
                                 gridColumn: 'span 2',
                             }}
                             className='no-mail'
+                            key={'noMail-ky'}
                         >
                             No mail in this view.
                         </div>

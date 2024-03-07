@@ -13,6 +13,15 @@
         margin-right: auto;
     }
 
+    .button-bar {
+        display: flex;
+        padding-bottom: 1%;
+        .v-dv {
+            border-left: 2px solid rgba(128,128,128,0.5);
+            display: inline;
+        }
+    }
+
     .button-container {
         display: flex;
         flex-direction: row;
@@ -22,51 +31,53 @@
         margin-top: 40px;
     }
     .mail-view-container {
-        display: grid;
-        grid-template-columns: 3vw auto;
-        grid-auto-rows: 50px;
     
-        .chkbx-container:first-child,
-        .fot {
-            border-top: 1px solid grey;
-        }
-        .chkbx-container {
-            border-left: 1px solid grey;
-            border-bottom: 1px solid grey;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .mail-item {
+        .mView-prnt {
             display: grid;
-            grid-template-columns: 12vw 80vw;
-            grid-template-rows: 100%;
-            border-left: 1px solid grey;
-            border-right: 1px solid grey;
-            border-bottom: 1px solid grey;
-
-            div {
+            grid-template-columns: 3vw auto;
+            grid-auto-rows: 50px;
+            
+            .fot {
+                border-top: 1px solid grey;
+            }
+            .chkbx-container {
+                border-left: 1px solid grey;
+                border-bottom: 1px solid grey;
                 display: flex;
-                align-content: center;
-                flex-wrap: wrap;                
+                justify-content: center;
+                align-items: center;
             }
-            div:last-child {
-                overflow-y: auto;
+            .mail-item {
+                display: grid;
+                grid-template-columns: 12vw 80vw;
+                grid-template-rows: 100%;
+                border-left: 1px solid grey;
+                border-right: 1px solid grey;
+                border-bottom: 1px solid grey;
+    
+                div {
+                    display: flex;
+                    align-content: center;
+                    flex-wrap: wrap;                
+                }
+                div:last-child {
+                    overflow-y: auto;
+                }
+                .mail-from {
+                    padding-left: 5%;
+                }
+    
+                &:hover {
+                    cursor: pointer;
+                    background-color: rgba(128,128,128,0.25);                
+                }
             }
-            .mail-from {
-                padding-left: 5%;
+            .unread {
+                font-weight: bold;
             }
-
-            &:hover {
-                cursor: pointer;
-                background-color: grey;                
-            }
-        }
-        .unread {
-            font-weight: bold;
-        }
-        .read {
-            font-weight: inherit;
+            .read {
+                font-weight: inherit;
+            }            
         }
     }
 }
