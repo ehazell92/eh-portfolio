@@ -47,7 +47,7 @@ class SnackBars extends React.Component {
             open={snackBarMsg.type?.length > 0}
             autoHideDuration={6000}
             onClose={() => this.handleClose()}
-            anchorOrigin={{ vertical: snackBarMsg.vert, horizontal: snackBarMsg.hor }}
+            anchorOrigin={{ vertical: snackBarMsg.vert || 'top', horizontal: snackBarMsg.hor || 'center' }}
             style={{
               zIndex: '1600'
             }}

@@ -82,6 +82,88 @@
     }
 }
 
+.notification-dialog {
+    display: flex;
+    align-items: center;
+    .MuiDialog-container {
+        width: 45vw !important;
+        margin-left: auto;
+        margin-right: auto;
+    
+        .MuiPaper-root {
+            max-width: 100%;
+            width: 100%;
+            max-height: 100%;
+            height: max-content;
+            padding-bottom: 2%;
+
+            .MuiDialogContent-root {
+                display: flex;
+                justify-content: center;
+
+                .MuiTypography-root {
+                    width: 100%;
+                    .notification-container {
+                        display: grid;
+                        grid-gap: 3%;
+                        grid-template-rows: auto;
+                        grid-template-columns: 100%;
+                        .notification-item {
+                            color: white;
+                            font-size: 1vw;
+                            padding: 1%;
+                            display: flex;
+                            align-items: center;
+
+                            svg {
+                                display: block;
+                                position: absolute;
+                                right: 5%;
+                            }
+                        }
+                        .primary {
+                            background-color: rgb(63, 81, 181);
+                            &:hover {
+                                background-color: rgba(63, 81, 181, 0.25);
+                            }
+                        }
+                        .secondary {
+                            background-color: rgb(245, 0, 87);
+                            &:hover {
+                                background-color: rgba(245, 0, 87, 0.25);
+                            }
+                        }
+                        .error {
+                            background-color: rgb(244, 67, 54);
+                            &:hover {
+                                background-color: rgba(244, 67, 54, 0.25);
+                            }
+                        }
+                        .warn {
+                            background-color: rgb(255, 152, 0);
+                            &:hover {
+                                background-color: rgba(255, 152, 0, 0.25);
+                            }
+                        }
+                        .info {
+                            background-color: rgb(33, 150, 243);
+                            &:hover {
+                                background-color: rgba(33, 150, 243, 0.25);
+                            }
+                        }
+                        .success {
+                            background-color: rgb(76, 175, 80);
+                            &:hover {
+                                background-color: rgba(76, 175, 80, 0.25);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 .MuiDrawer-modal {
     .MuiDrawer-paper {
         height: 91% !important;

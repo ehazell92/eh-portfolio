@@ -12,6 +12,13 @@ import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import Checkbox from '@mui/material/Checkbox';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Slide from '@mui/material/Slide';
 
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -34,8 +41,13 @@ import AllInboxIcon from '@mui/icons-material/AllInbox';
 import NewReleasesIcon from '@mui/icons-material/NewReleases';
 import DraftsIcon from '@mui/icons-material/Drafts';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import WarningIcon from '@mui/icons-material/Warning';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import ErrorIcon from '@mui/icons-material/Error';
+import InfoIcon from '@mui/icons-material/Info';
 
 import './mail.css';
+import { triggerSnackBar } from '../../../../../services/app-service';
 
 let staticMail = [
     {
@@ -106,8 +118,34 @@ let mailViews = {
     trash: [],
     spam: [],
     sent: [],
+    filtered: [],
 };
-const notifications = [];
+const notifications = [
+    {
+        type: 'warn',
+        msg: 'You have 3 new messages in your inbox.',
+        read: false,
+        icon: <WarningIcon />,
+    },
+    {
+        type: 'error',
+        msg: 'There was a problem syncing your account.',
+        read: false,
+        icon: <ErrorIcon />,
+    },
+    {
+        type: 'success',
+        msg: 'Profile settings updated successfully.',
+        read: false,
+        icon: <CheckBoxIcon />,
+    },
+    {
+        type: 'info',
+        msg: 'Last successful login was... last week?',
+        read: false,
+        icon: <InfoIcon />,
+    }
+];
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -149,16 +187,36 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
 }));
 
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
+
 export default function Mail() {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
     const [open, setOpen] = React.useState(false);
+    const [openDialog, setDialogOpen] = React.useState(false);
+    const [dialogOpts, setDialogOpts] = React.useState({});
     const [viewName, setViewName] = React.useState('Inbox');
+    const [noitficats, setNotificats] = React.useState(notifications);
+    const [srchValue, setSearchVal] = React.useState('');
 
     const [mailOpts, setMailOpts] = React.useState([]);
 
     const toggleDrawer = (newOpen) => () => {
         setOpen(newOpen);
+    };
+    const handleDialogClickOpen = (dOpts) => {
+        if (dOpts) {
+            setDialogOpts(dOpts);
+            setDialogOpen(true);
+        }
+    };
+    const handleDialogClose = () => {
+        if (dialogOpts.type === 'notifications') {
+            setNotificats([]);
+        }
+        setDialogOpen(false);
     };
 
     const isMenuOpen = Boolean(anchorEl);
@@ -205,7 +263,16 @@ export default function Mail() {
             open={isMenuOpen}
             onClose={handleMenuClose}
         >
-            <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+            <MenuItem onClick={
+                () => {
+                    handleDialogClickOpen(
+                        {
+                            title: 'Profile',
+                            type: 'profile',
+                        }
+                    )
+                }
+            }>Profile</MenuItem>
             <MenuItem onClick={handleLogOut}>Log Out</MenuItem>
         </Menu>
     );
@@ -227,15 +294,30 @@ export default function Mail() {
             open={isMobileMenuOpen}
             onClose={handleMobileMenuClose}
         >
-            <MenuItem>
+            <MenuItem onClick={
+                () => {
+                    handleDialogClickOpen(
+                        {
+                            title: 'Notifications',
+                            type: 'notifications',
+                            message: noitficats,
+                        }
+                    )
+                }
+            }>
                 <IconButton
                     size="large"
-                    aria-label="show 17 new notifications"
+                    aria-label="show new notifications"
                     color="inherit"
                 >
-                    <Badge badgeContent={17} color="error">
+                    {noitficats.length > 0 &&
+                        <Badge badgeContent={noitficats.length} color="error">
+                            <NotificationsIcon />
+                        </Badge>
+                    }
+                    {noitficats.length === 0 &&
                         <NotificationsIcon />
-                    </Badge>
+                    }
                 </IconButton>
                 <p>Notifications</p>
             </MenuItem>
@@ -338,7 +420,14 @@ export default function Mail() {
             return mailItem;
         });
         setMailOpts(changeMail);
-        alert(selMail.message);
+        const dOpts = {
+            title: selMail.subject,
+            message: selMail.message,
+            from: selMail.from,
+            to: selMail.to,
+            type: 'mail'
+        };
+        handleDialogClickOpen(dOpts);
     };
 
     const hasCheckedMail = () => {
@@ -353,6 +442,8 @@ export default function Mail() {
             ...mailViews.trash,
             ...mailViews.spam
         ] : curMail.filter((mO) => mO.checked);
+        let msgM = null;
+        let msgT = null;
         switch (btnType) {
             case 'inbox':
                 mailViews.inbox = [
@@ -363,6 +454,8 @@ export default function Mail() {
                 mailViews.spam = mailViews.spam.filter((mail) => !mailIDsSelected.some((mIDS) => mIDS.id === mail.id));
                 mailViews.trash = mailViews.trash.filter((mail) => !mailIDsSelected.some((mIDS) => mIDS.id === mail.id));
                 reSetMailOpts();
+                msgM = 'Messages restored to Inbox';
+                msgT = 'success';
                 break;
             case 'delete':
                 mailViews.trash = [
@@ -373,6 +466,8 @@ export default function Mail() {
                 mailViews.spam = mailViews.spam.filter((mail) => !mailIDsSelected.some((mIDS) => mIDS.id === mail.id));
                 mailViews.inbox = mailViews.inbox.filter((mail) => !mailIDsSelected.some((mIDS) => mIDS.id === mail.id));
                 reSetMailOpts();
+                msgM = 'Messages deleted.';
+                msgT = 'error';
                 break;
             case 'spam':
                 mailViews.spam = [
@@ -383,6 +478,8 @@ export default function Mail() {
                 mailViews.trash = mailViews.trash.filter((mail) => !mailIDsSelected.some((mIDS) => mIDS.id === mail.id));
                 mailViews.inbox = mailViews.inbox.filter((mail) => !mailIDsSelected.some((mIDS) => mIDS.id === mail.id));
                 reSetMailOpts();
+                msgM = 'Messages marked and moved to Spam';
+                msgT = 'warning';
                 break;
             case 'read':
             case 'unread':
@@ -409,6 +506,7 @@ export default function Mail() {
                     return mail;
                 });
                 handleDrawerSelection(viewName);
+                msgM = `Messages marked as ${isRead ? 'Read' : 'Unread'}`;
                 break;
             case 'refresh':
                 mailViews = {
@@ -418,9 +516,16 @@ export default function Mail() {
                     sent: [],
                 };
                 handleDrawerSelection('Inbox', true);
+                setNotificats(notifications);
                 break;
             default:
                 break;
+        }
+        if (msgM) {
+            triggerSnackBar({
+                msg: msgM,
+                type: msgT
+            });
         }
     };
     const reSetMailOpts = () => {
@@ -437,10 +542,148 @@ export default function Mail() {
             mail.read = oVR ? false : mail.read;
             return mail;
         });
-    }
+    };
+
+    const getDialogComp = () => {
+        if (dialogOpts.type === 'mail') {
+            return (
+                <>
+                    <Dialog
+                        open={openDialog}
+                        TransitionComponent={Transition}
+                        keepMounted
+                        onClose={handleDialogClose}
+                        aria-describedby="message-dialog-slide-description"
+                    >
+                        <DialogTitle>Subject: {dialogOpts.title}</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="message-dialog-slide-description">
+                                <span>From: {dialogOpts.from}</span> <br />
+                                <span>To: {dialogOpts.to}</span> <br />
+                                <span>Body:</span> <br />
+                                <span>{dialogOpts.message}</span>
+                            </DialogContentText>
+                        </DialogContent>
+                    </Dialog>
+                </>
+            );
+        }
+        if (dialogOpts.type === 'profile') {
+            return (
+                <>
+                    <Dialog
+                        open={openDialog}
+                        onClose={handleDialogClose}
+                        aria-describedby="profile-dialog-description"
+                    >
+                        <DialogTitle>{dialogOpts.title}</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="profile-dialog-description">
+                                <div>
+                                    Profile Information Here
+                                </div>
+                            </DialogContentText>
+                        </DialogContent>
+                    </Dialog>
+                </>
+            );
+        }
+        if (dialogOpts.type === 'notifications') {
+            return (
+                <>
+                    <Dialog
+                        className='notification-dialog'
+                        open={openDialog}
+                        onClose={handleDialogClose}
+                        aria-describedby="notification-dialog-description"
+                    >
+                        <DialogTitle>{dialogOpts.title}</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="notification-dialog-description">
+                                <div
+                                    className='notification-container'
+                                >
+                                    {
+                                        dialogOpts.message.map((noti, index) => (
+                                            <div
+                                                className={`notification-item ${noti.type}`}
+                                            >
+                                                {noti.msg}
+                                                {noti.icon}
+                                            </div>
+                                        ))
+                                    }
+                                </div>
+                            </DialogContentText>
+                        </DialogContent>
+                    </Dialog>
+                </>
+            );
+        }
+    };
+
+    const handleSearchChange = (event) => {
+        const srchVal = event.target.value.toLowerCase() || '';
+        setSearchVal(srchVal);
+    };
+    const matchesSearchValue = (mail, index) => {
+        let returnTrue = false;
+        const srcV = srchValue.trim();
+        if (srcV.length > 0) {
+            if (
+                mail.from.toLowerCase().includes(srchValue) ||
+                mail.subject.toLowerCase().includes(srchValue) ||
+                mail.message.toLowerCase().includes(srchValue)
+            ) {
+                returnTrue = true;
+            };
+        } else {
+            returnTrue = true;
+        }
+        if (returnTrue) {
+            return (
+                <div
+                    className='mView-prnt'
+                    key={`prnt-dv-${index}`}
+                >
+                    <div
+                        className={`chkbx-container ${index === 0 ? 'fot' : ''}`}
+                        key={`chk-ky-${index}-${mail.id}`}
+                    >
+                        <Checkbox
+                            checked={!!mailOpts.find((mI) => mI.id === mail.id).checked}
+                            onClick={() => { handleSelection(mail.id) }}
+                        />
+                    </div>
+                    <div
+                        className={`mail-item ${mail.read ? 'read' : 'unread'} ${index === 0 ? 'fot' : ''}`}
+                        onClick={() => { openMail(mail.id) }}
+                        key={`mail-ky-${index}-${mail.id}`}
+                    >
+                        <div
+                            className='mail-from'
+                            key={'mFrom-ky'}
+                        >{mail.from}</div>
+                        <div
+                            key={'mSbj-ky'}
+                        >{mail.subject} - {mail.message}</div>
+                    </div>
+                </div>
+            ); 
+        } else {
+            return (
+                <div style={{display:'none'}}></div>
+            )
+        }       
+    };
 
     return (
         <Box sx={{ flexGrow: 1 }}>
+            <React.Fragment>
+                {Object.keys(dialogOpts).length > 0 &&
+                    <div>{getDialogComp()}</div>
+                }
+            </React.Fragment>
             <div>
                 <Drawer open={open} onClose={toggleDrawer(false)}>
                     {DrawerList}
@@ -473,18 +716,36 @@ export default function Mail() {
                         <StyledInputBase
                             placeholder="Search…"
                             inputProps={{ 'aria-label': 'search' }}
+                            onChange={handleSearchChange}
                         />
                     </Search>
                     <Box sx={{ flexGrow: 1 }} />
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                         <IconButton
                             size="large"
-                            aria-label="show 17 new notifications"
+                            aria-label="show new notifications"
                             color="inherit"
+                            disabled={noitficats.length === 0}
+                            onClick={
+                                () => {
+                                    handleDialogClickOpen(
+                                        {
+                                            title: 'Notifications',
+                                            type: 'notifications',
+                                            message: noitficats,
+                                        }
+                                    )
+                                }
+                            }
                         >
-                            <Badge badgeContent={17} color="error">
+                            {noitficats.length > 0 &&
+                                <Badge badgeContent={noitficats.length} color="error">
+                                    <NotificationsIcon />
+                                </Badge>
+                            }
+                            {noitficats.length === 0 &&
                                 <NotificationsIcon />
-                            </Badge>
+                            }
                         </IconButton>
                         <IconButton
                             size="large"
@@ -588,35 +849,9 @@ export default function Mail() {
                     className={`mail-view-container`}
                     key={'mView-ky'}
                 >
-                    {mailOpts.map((mail, index) => (
-                        <div
-                            className='mView-prnt'
-                            key={`prnt-dv-${index}`}
-                        >
-                            <div
-                                className={`chkbx-container ${index === 0 ? 'fot' : ''}`}
-                                key={`chk-ky-${index}-${mail.id}`}
-                            >
-                                <Checkbox
-                                    checked={!!mailOpts.find((mI) => mI.id === mail.id).checked}
-                                    onClick={() => { handleSelection(mail.id) }}
-                                />
-                            </div>
-                            <div
-                                className={`mail-item ${mail.read ? 'read' : 'unread'} ${index === 0 ? 'fot' : ''}`}
-                                onClick={() => { openMail(mail.id) }}
-                                key={`mail-ky-${index}-${mail.id}`}
-                            >
-                                <div
-                                    className='mail-from'
-                                    key={'mFrom-ky'}
-                                >{mail.from}</div>
-                                <div
-                                    key={'mSbj-ky'}
-                                >{mail.subject} - {mail.message}</div>
-                            </div>
-                        </div>
-                    ))}
+                    {mailOpts.map((mail, index) => 
+                        matchesSearchValue(mail, index)
+                    )}
                     {mailOpts.length <= 0 &&
                         <div
                             style={{
