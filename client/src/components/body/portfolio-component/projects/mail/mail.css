@@ -1,4 +1,3 @@
-
 .main-container {
     position: relative;
     height: 100%;
@@ -16,8 +15,9 @@
     .button-bar {
         display: flex;
         padding-bottom: 1%;
+
         .v-dv {
-            border-left: 2px solid rgba(128,128,128,0.5);
+            border-left: 2px solid rgba(128, 128, 128, 0.5);
             display: inline;
         }
     }
@@ -30,16 +30,18 @@
     .mt-2 {
         margin-top: 40px;
     }
+
     .mail-view-container {
-    
+
         .mView-prnt {
             display: grid;
             grid-template-columns: 3vw auto;
             grid-auto-rows: 50px;
-            
+
             .fot {
                 border-top: 1px solid grey;
             }
+
             .chkbx-container {
                 border-left: 1px solid grey;
                 border-bottom: 1px solid grey;
@@ -47,6 +49,7 @@
                 justify-content: center;
                 align-items: center;
             }
+
             .mail-item {
                 display: grid;
                 grid-template-columns: 12vw 80vw;
@@ -54,44 +57,51 @@
                 border-left: 1px solid grey;
                 border-right: 1px solid grey;
                 border-bottom: 1px solid grey;
-    
+
                 div {
                     display: flex;
                     align-content: center;
-                    flex-wrap: wrap;                
+                    flex-wrap: wrap;
                 }
+
                 div:last-child {
                     overflow-y: auto;
                 }
+
                 .mail-from {
                     padding-left: 5%;
                 }
-    
+
                 &:hover {
                     cursor: pointer;
-                    background-color: rgba(128,128,128,0.25);                
+                    background-color: rgba(128, 128, 128, 0.25);
                 }
             }
+
             .unread {
                 font-weight: bold;
             }
+
             .read {
                 font-weight: inherit;
-            }            
+            }
         }
     }
 }
 
+.profile-dialog,
 .notification-dialog {
     display: flex;
     align-items: center;
+
     .MuiDialog-container {
         width: 45vw !important;
         margin-left: auto;
         margin-right: auto;
-    
+
         .MuiPaper-root {
-            max-width: 100%;
+            min-width: max-content;
+            max-width: max-content;
             width: 100%;
             max-height: 100%;
             height: max-content;
@@ -102,12 +112,15 @@
                 justify-content: center;
 
                 .MuiTypography-root {
-                    width: 100%;
+                    /* width: 100%; */
+                    display: contents;
+
                     .notification-container {
                         display: grid;
                         grid-gap: 3%;
                         grid-template-rows: auto;
                         grid-template-columns: 100%;
+
                         .notification-item {
                             color: white;
                             font-size: 1vw;
@@ -121,38 +134,50 @@
                                 right: 5%;
                             }
                         }
+
                         .primary {
                             background-color: rgb(63, 81, 181);
+
                             &:hover {
                                 background-color: rgba(63, 81, 181, 0.25);
                             }
                         }
+
                         .secondary {
                             background-color: rgb(245, 0, 87);
+
                             &:hover {
                                 background-color: rgba(245, 0, 87, 0.25);
                             }
                         }
+
                         .error {
                             background-color: rgb(244, 67, 54);
+
                             &:hover {
                                 background-color: rgba(244, 67, 54, 0.25);
                             }
                         }
+
                         .warn {
                             background-color: rgb(255, 152, 0);
+
                             &:hover {
                                 background-color: rgba(255, 152, 0, 0.25);
                             }
                         }
+
                         .info {
                             background-color: rgb(33, 150, 243);
+
                             &:hover {
                                 background-color: rgba(33, 150, 243, 0.25);
                             }
                         }
+
                         .success {
                             background-color: rgb(76, 175, 80);
+
                             &:hover {
                                 background-color: rgba(76, 175, 80, 0.25);
                             }
@@ -164,10 +189,187 @@
     }
 }
 
+.profile-dialog {
+
+    .user-profile {
+        display: grid;
+        grid-gap: 2%;
+        grid-template-rows: 100%;
+        grid-template-columns: 35% 63%;
+        background-color: rgba(28, 28, 28, 0.25);
+        height: 30vw;
+        width: 50vw;
+        padding: 1%;
+        border-radius: 25px;
+
+        .profile-image {
+            background-color: white;
+            padding: 4%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border-radius: 15px;
+
+            .profile-img {
+                height: 48%;
+                background-size: 70% 80%;
+                border-radius: 50%;
+                background-position: 52% 20%;
+                width: 90%;
+                margin-left: auto;
+                margin-right: auto;
+                background-repeat: no-repeat;
+                background-color: rgb(228, 230, 231);
+            }
+            .user-title {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                margin-top: 10%;
+                font-size: 1vw;
+                border: 1px solid grey;
+                border-radius: 20px;
+                padding: 5%;
+            }
+        }
+
+        .profile-details {
+            background-color: white;
+            padding: 4%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border-radius: 15px;
+
+            .profile-form {
+                font-size: 1vw;
+                .profile-row {
+                    display: grid;
+                    grid-template-rows: 100%;
+                    grid-template-columns: 30% 70%;                    
+
+                    div {
+                        display: flex;
+                        align-items: end;
+                    }
+                    .txt-div {
+                        
+                        .MuiFormControl-root {
+                            width: 100%;
+
+                            .MuiInputBase-root {
+                                width: 100%;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
 .MuiDrawer-modal {
     .MuiDrawer-paper {
         height: 91% !important;
         top: 9% !important;
+    }
+}
+
+@media screen and (max-width: 750px) {
+
+
+    .mail-view-container {
+        overflow-y: auto !important;
+        height: 87% !important;
+
+        .mView-prnt {
+            grid-template-columns: 10vw auto !important;
+            grid-auto-rows: 35vw !important;
+            .mail-item {
+                grid-template-rows: 50% 50% !important;
+                grid-template-columns: 100% !important;
+    
+                div {
+                    padding-left: 5% !important;
+                }
+            }
+        }
+    }
+    .mail-dialog {
+
+        .MuiPaper-root {
+            max-width: 90vw !important;
+            width: 90vw !important;
+            height: 80vw !important;
+    
+            .MuiTypography-root {
+                font-size: 4.5vw !important;
+
+                .MuiPaper-root {
+                    width: 85vw !important;
+
+                    .MuiDialogContent-root {
+                        height: 90vw !important;
+                    }
+                }
+            }
+        }
+    }
+
+    .notification-dialog {
+
+        .MuiDialog-container {
+            width: 100% !important;
+
+            .notification-container {
+                width: 100% !important;
+
+                .notification-item {
+                    font-size: 4vw !important;
+
+                    span {
+                        width: 90% !important;
+                    }
+                    svg {
+                        right: 10vw !important;
+                    }
+                }
+            }
+        }
+    }
+
+    .profile-dialog {
+
+        .MuiPaper-root {
+            width: 90vw !important;
+            max-width: 90vw !important;
+            height: 150vw !important;
+
+            .MuiDialogContent-root {
+                margin: 2% !important;
+
+                .user-profile {
+                    height: 100% !important;
+                    width: 100% !important;
+                    grid-template-rows: 49% 49% !important;
+                    grid-template-columns: 99% !important;
+                    padding: 4% !important;
+
+                    .user-title {
+                        font-size: 4vw !important;
+                    }
+                    .profile-details {
+                        overflow-y: auto !important;
+
+                        .profile-form {
+                            font-size: 4vw !important;
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 

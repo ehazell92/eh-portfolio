@@ -52,8 +52,8 @@ class Contact extends React.Component {
 
     this.sceneTemplateImgs = {
       backgrounds: [
-        require('./contact-assets/scene/mtnsBg.png'),
-        require('./contact-assets/scene/cityBg.png')
+        require('./contact-assets/scene/mtnsBgWp.webp'),
+        require('./contact-assets/scene/cityBgWp.webp')
       ],
       ground: [
       ]

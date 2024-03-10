@@ -19,6 +19,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
+import TextField from '@mui/material/TextField';
 
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -45,9 +46,11 @@ import WarningIcon from '@mui/icons-material/Warning';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import ErrorIcon from '@mui/icons-material/Error';
 import InfoIcon from '@mui/icons-material/Info';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 import './mail.css';
 import { triggerSnackBar } from '../../../../../services/app-service';
+import prfleBg from '../mail/assets/userPrfle.webp';
 
 let staticMail = [
     {
@@ -329,9 +332,9 @@ export default function Mail() {
                     aria-haspopup="true"
                     color="inherit"
                 >
-                    <AccountCircle />
+                    <SettingsIcon />
                 </IconButton>
-                <p>Profile</p>
+                <p>Settings</p>
             </MenuItem>
         </Menu>
     );
@@ -549,6 +552,7 @@ export default function Mail() {
             return (
                 <>
                     <Dialog
+                        className='mail-dialog'
                         open={openDialog}
                         TransitionComponent={Transition}
                         keepMounted
@@ -569,9 +573,28 @@ export default function Mail() {
             );
         }
         if (dialogOpts.type === 'profile') {
+            const profileDeets = [
+                {
+                    title: 'Full Name',
+                    label: 'Temp User'
+                },
+                {
+                    title: 'Email',
+                    label: 'user@user.mail'
+                },
+                {
+                    title: 'Phone',
+                    label: '(123) 456-7891'
+                },
+                {
+                    title: 'Address',
+                    label: '123 Any Street, Seattle, WA'
+                }
+            ];
             return (
                 <>
                     <Dialog
+                        className='profile-dialog'
                         open={openDialog}
                         onClose={handleDialogClose}
                         aria-describedby="profile-dialog-description"
@@ -579,12 +602,60 @@ export default function Mail() {
                         <DialogTitle>{dialogOpts.title}</DialogTitle>
                         <DialogContent>
                             <DialogContentText id="profile-dialog-description">
-                                <div>
-                                    Profile Information Here
+                                <div
+                                    className='user-profile'
+                                >
+                                    <div
+                                        className='profile-image'
+                                    >
+                                        <div
+                                            className='profile-img'
+                                            style={{
+                                                backgroundImage: `url(${prfleBg})`,
+                                            }}
+                                        ></div>
+                                        <div
+                                            className='user-title'
+                                        >
+                                            <span>
+                                                Temp User
+                                            </span>
+                                            <span>
+                                                Temp Location Listed
+                                            </span>
+                                            <span>
+                                                Temp City, Temp State
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div
+                                        className='profile-details'
+                                    >
+                                        <div
+                                            className='profile-form'
+                                        >
+                                            {profileDeets.map((pD, index) => (
+                                                <div
+                                                    className='profile-row'
+                                                >
+                                                    <div>
+                                                        <span>
+                                                            {pD.title}
+                                                        </span>
+                                                    </div>
+                                                    <div
+                                                        className='txt-div'
+                                                    >
+                                                        <TextField id={`standard-basic-${index}`} label={`${pD.label}`} disabled="true" variant="standard" />
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
                                 </div>
                             </DialogContentText>
                         </DialogContent>
-                    </Dialog>
+                    </Dialog >
                 </>
             );
         }
@@ -608,7 +679,7 @@ export default function Mail() {
                                             <div
                                                 className={`notification-item ${noti.type}`}
                                             >
-                                                {noti.msg}
+                                                <span>{noti.msg}</span>
                                                 {noti.icon}
                                             </div>
                                         ))
@@ -669,12 +740,12 @@ export default function Mail() {
                         >{mail.subject} - {mail.message}</div>
                     </div>
                 </div>
-            ); 
+            );
         } else {
             return (
-                <div style={{display:'none'}}></div>
+                <div style={{ display: 'none' }}></div>
             )
-        }       
+        }
     };
 
     return (
@@ -849,7 +920,7 @@ export default function Mail() {
                     className={`mail-view-container`}
                     key={'mView-ky'}
                 >
-                    {mailOpts.map((mail, index) => 
+                    {mailOpts.map((mail, index) =>
                         matchesSearchValue(mail, index)
                     )}
                     {mailOpts.length <= 0 &&

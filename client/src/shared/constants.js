@@ -2,6 +2,7 @@ import Logon from "../components/body/portfolio-component/projects/logon/logon";
 import Weather from "../components/body/portfolio-component/projects/weather/weather";
 import logBg from '../components/body/portfolio-component/assets/LogonAppImg.webp';
 import wthBg from '../components/body/portfolio-component/assets/WeatherAppImg.webp';
+import mailBg from '../components/body/portfolio-component/assets/MailAppImg.webp';
 import Mail from "../components/body/portfolio-component/projects/mail/mail";
 
 export const navBarOptions = [
@@ -57,6 +58,7 @@ export const portfolioOptions = [
         label: 'This is a basic mail dashboard component for viewing and managing mail.',
         external: false,
         etc: 'React',
+        bgImg: mailBg,
         cmp: <Mail />
     },
     {
