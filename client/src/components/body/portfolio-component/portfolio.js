@@ -45,7 +45,7 @@ class Portfolio extends React.Component {
               vert: 'top',
               hor: 'center',
               type: 'error',
-              msg: `Sorry, these are just placeholders for now. Check back later!`,
+              msg: `Sorry, these are still being developed for now. Check back later!`,
             }
           );
           return;

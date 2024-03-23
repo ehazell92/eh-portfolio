@@ -4,6 +4,7 @@ import logBg from '../components/body/portfolio-component/assets/LogonAppImg.web
 import wthBg from '../components/body/portfolio-component/assets/WeatherAppImg.webp';
 import mailBg from '../components/body/portfolio-component/assets/MailAppImg.webp';
 import Mail from "../components/body/portfolio-component/projects/mail/mail";
+import FormC from "../components/body/portfolio-component/projects/form/form";
 
 export const navBarOptions = [
     {
@@ -62,36 +63,37 @@ export const portfolioOptions = [
         cmp: <Mail />
     },
     {
-        id: 'App4',
-        name: 'Place Holder',
-        label: 'App 4 was built around some lorem ipsum lorem ipsum',
+        id: 'Form',
+        name: 'Form Component',
+        label: 'The Form component is a basic example use for a form that has minor validation.',
         external: false,
-        etc: 'extra stuff here'
+        etc: 'React',
+        cmp: <FormC />,
     },
     {
         id: 'App5',
-        name: 'Place Holder',
+        name: 'Shopping Component',
         label: 'App 5 was built around some lorem ipsum lorem ipsum',
         external: false,
         etc: 'extra stuff here'
     },
     {
         id: 'App6',
-        name: 'Place Holder',
+        name: 'Coming Soon',
         label: 'App 6 was built around some lorem ipsum lorem ipsum',
         external: false,
         etc: 'extra stuff here'
     },
     {
         id: 'App7',
-        name: 'Place Holder',
+        name: 'Coming Soon',
         label: 'App 7 was built around some lorem ipsum lorem ipsum',
         external: false,
         etc: 'extra stuff here'
     },
     {
         id: 'App8',
-        name: 'Place Holder',
+        name: 'Coming Soon',
         label: 'App 8 was built around some lorem ipsum lorem ipsum',
         external: false,
         etc: 'extra stuff here'
@@ -99,49 +101,49 @@ export const portfolioOptions = [
     // ,
     // {
     //     id: 'App9',
-    //     name: 'Place Holder',
+    //     name: 'Coming Soon',
     //     label: 'App 9 was built around some lorem ipsum lorem ipsum',
     //     external: false,
     //     etc: 'extra stuff here'
     // },
     // {
     //     id: 'App10',
-    //     name: 'Place Holder',
+    //     name: 'Coming Soon',
     //     label: 'App 10 was built around some lorem ipsum lorem ipsum',
     //     external: false,
     //     etc: 'extra stuff here'
     // },
     // {
     //     id: 'App11',
-    //     name: 'Place Holder',
+    //     name: 'Coming Soon',
     //     label: 'App 11 was built around some lorem ipsum lorem ipsum',
     //     external: false,
     //     etc: 'extra stuff here'
     // },
     // {
     //     id: 'App12',
-    //     name: 'Place Holder',
+    //     name: 'Coming Soon',
     //     label: 'App 12 was built around some lorem ipsum lorem ipsum',
     //     external: false,
     //     etc: 'extra stuff here'
     // },
     // {
     //     id: 'App13',
-    //     name: 'Place Holder',
+    //     name: 'Coming Soon',
     //     label: 'App 10 was built around some lorem ipsum lorem ipsum',
     //     external: false,
     //     etc: 'extra stuff here'
     // },
     // {
     //     id: 'App14',
-    //     name: 'Place Holder',
+    //     name: 'Coming Soon',
     //     label: 'App 14 was built around some lorem ipsum lorem ipsum',
     //     external: false,
     //     etc: 'extra stuff here'
     // },
     // {
     //     id: 'App15',
-    //     name: 'Place Holder',
+    //     name: 'Coming Soon',
     //     label: 'App 15 was built around some lorem ipsum lorem ipsum',
     //     external: false,
     //     etc: 'extra stuff here'
