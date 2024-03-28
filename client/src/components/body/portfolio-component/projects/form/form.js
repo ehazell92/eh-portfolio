@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { TextField, Button, Grid, Container, Autocomplete, Checkbox, FormControlLabel, Radio, RadioGroup, Rating, Slider, Switch, ToggleButton, ToggleButtonGroup, Chip, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import './form.css';
+import { triggerSnackBar } from '../../../../../services/app-service';
 
 let submitTouched = false;
 
@@ -55,7 +56,7 @@ const Form = () => {
         if (submitTouched) {
             checkFormErrors();
         }
-    },  [formValues]);
+    }, [formValues]);
 
     const handleReset = () => {
         submitTouched = false;
@@ -86,31 +87,32 @@ const Form = () => {
         if (formValues.switch === '' || formValues.switch === null) newErrors.switch = 'Switch must be checked';
         if (formValues.toggleButton === '' || formValues.toggleButton === null) newErrors.toggleButton = 'A toggle button option is required';
 
+        setErrors(newErrors);
         const objErrs = Object.keys(newErrors);
         if (objErrs.length > 0) {
-            setErrors(newErrors);
             if (isSubmit) {
-                objErrs.forEach((e) => {
-                    console.log(`Error Encountered -${e}- :: ${newErrors[e]}`);
-                });
-                console.log('');
+                const snackBarMsg = {
+                    type: 'error',
+                    msg: `Sorry, there appears to be some fields that have errors.`,
+                  };
+                triggerSnackBar(snackBarMsg);
             }
         } else {
             if (isSubmit) {
-                console.log('NO Errors! ');
-                console.log(formValues);
-                console.log('');
+                const snackBarMsg = {
+                    type: 'success',
+                    msg: `Congrats! You didn't have any form errors! This form will reset now.`,
+                  };
+                triggerSnackBar(snackBarMsg);
+                handleReset();
             }
         }
     }
 
-    // Variable definitions go here
     const top100Films = [
         { title: 'The Shawshank Redemption', year: 1994 },
         { title: 'The Godfather', year: 1972 },
-        // Add more films here
     ];
-    const [value, setValue] = useState(2);
     const [alignment, setAlignment] = useState('left');
     const handleAlignment = (event, newAlignment) => {
         const evTxt = event.target.innerText.toLowerCase();
@@ -120,54 +122,137 @@ const Form = () => {
     const rows = [
         { name: 'Frozen yoghurt', calories: 159, fat: 6.0 },
         { name: 'Ice cream sandwich', calories: 237, fat: 9.0 },
-        // Add more rows here
     ];
 
     return (
         <Container maxWidth="sm">
-            <form style={{
-                backgroundColor: 'white',
-                color: 'black',
-            }} onSubmit={handleSubmit}>
-                <Grid container spacing={2}>
+            <form className='frm' onSubmit={handleSubmit}>
+                <Grid className='main' container spacing={2}>
                     <Grid item xs={12}>
+                        <span>Please make an Autocomplete selection.</span>
                         <Autocomplete
                             className={errors.autocomplete ? 'invalid' : ''}
-                            onChange={handleAutoCompleteChange}
+                            onChange={(ev) => handleAutoCompleteChange(ev)}
                             options={top100Films}
                             getOptionLabel={(option) => option.title}
                             renderInput={(params) => <TextField name="autocomplete"  {...params} label="Autocomplete" />}
                         />
+                        {
+                            errors.autocomplete &&
+                            <span
+                                className='invalid'
+                            >
+                                Selection for Autocomplete is required.
+                            </span>
+                        }
                     </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <FormControlLabel control={<Checkbox
-                            checked={formValues.checkbox}
-                            onClick={handleCheckboxChange}
-                            name="checkbox"
-                            className={errors.checkbox ? 'invalid' : ''}
-                        />} label="Checkbox" />
+                    <Grid item xs={12}>
+                        <span>Please interact with the checkbox.</span>
+                        <FormControlLabel control={
+                            <Checkbox
+                                checked={formValues.checkbox}
+                                onClick={handleCheckboxChange}
+                                name="checkbox"
+                                className={errors.checkbox ? 'invalid' : ''}
+                            />
+                        } label="" />
+                        {
+                            errors.checkbox &&
+                            <>
+                                <br />
+                                <span
+                                    className='invalid'
+                                >
+                                    Interacting with the Checkbox is required.
+                                </span>
+                                <br />
+                            </>
+                        }
+                    </Grid>
+                    <Grid item xs={12} >
+                        <br />
+                        <span>Please move the selection from Lost to Found</span>
                         <RadioGroup className={errors.radioGroup ? 'invalid' : ''} onChange={handleRadioGroupChange} row aria-label="position" name="position" defaultValue="top">
-                            <FormControlLabel value="top" control={<Radio color="primary" />} label="Radio 1" />
-                            <FormControlLabel value="start" control={<Radio color="primary" />} label="Radio 2" />
+                            <FormControlLabel value="top" control={<Radio color="primary" />} label="Lost" />
+                            <FormControlLabel value="start" control={<Radio color="primary" />} label="Found" />
                         </RadioGroup>
+                        {
+                            errors.radioGroup &&
+                            <>
+                                <span
+                                    className='invalid'
+                                >
+                                    Moving the selection from Lost to Found is required.
+                                </span>
+                                <br />
+                            </>
+                        }
+                    </Grid>
+                    <Grid item xs={12} >
+                        <span>What would you rate the last meal you ate?</span>
+                        <br />
                         <Rating
                             name="rating"
                             value={formValues.rating}
                             onClick={handleInputChange}
                             className={errors.rating ? 'invalid' : ''}
                         />
-                        <Slider onChange={handleSliderChange} aria-label="Default" defaultValue={30} />
+                        {
+                            errors.rating &&
+                            <>
+                                <br />
+                                <span
+                                    className='invalid'
+                                >
+                                    Setting a rating on your last meal is required.
+                                </span>
+                                <br />
+                            </>
+                        }
+                    </Grid>
+                    <Grid item xs={12} >
+                        <br/>
+                        <span>This is just a basic slider.</span>
+                        <Slider
+                            onChange={(ev) => handleSliderChange(ev)}
+                            aria-label="Default"
+                            defaultValue={30}
+                        />
+                        {
+                            errors.slider &&
+                            <span
+                                className='invalid'
+                            >
+                                Please move the slider at least once.
+                            </span>
+                        }
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <br />
+                        <span>Please interact with the switch</span>
                         <Switch
                             checked={formValues.switch}
                             onClick={handleToggleSwitchChange}
                             name="switch"
                             className={errors.switch ? 'invalid' : ''}
                         />
+                        {
+                            errors.switch &&
+                            <>
+                                <br />
+                                <span className='invalid'>Interacting with the switch is required</span>
+                                <br />
+                            </>
+                        }
+                    </Grid>
+                    <Grid item xs={12} >
+                        <br />
+                        <span>Where do you prefer your text alignment?</span>
                         <ToggleButtonGroup
                             color="primary"
                             value={alignment}
                             exclusive
-                            onClick={handleAlignment}
+                            onClick={(ev) => handleAlignment(ev)}
                             className={errors.toggleButton ? 'invalid' : ''}
                         >
                             <ToggleButton value="left">Left</ToggleButton>
@@ -175,9 +260,14 @@ const Form = () => {
                             <ToggleButton value="right">Right</ToggleButton>
                             <ToggleButton value="justify">Justify</ToggleButton>
                         </ToggleButtonGroup>
-                        <Chip label="Basic" />
-                        <Chip label="Intermediate" />
-                        <Chip label="Advanced" />
+                        {
+                            errors.toggleButton &&
+                            <>
+                                <br />
+                                <span className='invalid'>Interacting with the text alignment is required.</span>
+                                <br />
+                            </>
+                        }
                     </Grid>
                     <Grid item xs={12}>
                         <TableContainer component={Paper}>
@@ -202,10 +292,10 @@ const Form = () => {
                         </TableContainer>
                     </Grid>
                 </Grid>
-                <Button color="primary" variant="contained" fullWidth onClick={(event) => { event.preventDefault(); handleSubmit(event); }}>
+                <Button className='btn' color="primary" variant="contained" fullWidth onClick={(event) => { event.preventDefault(); handleSubmit(event); }}>
                     Submit
                 </Button>
-                <Button color="secondary" variant="contained" fullWidth onClick={handleReset}>
+                <Button className='btn2' color="secondary" variant="contained" fullWidth onClick={handleReset}>
                     Clear
                 </Button>
             </form>

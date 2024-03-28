@@ -5,6 +5,7 @@ import wthBg from '../components/body/portfolio-component/assets/WeatherAppImg.w
 import mailBg from '../components/body/portfolio-component/assets/MailAppImg.webp';
 import Mail from "../components/body/portfolio-component/projects/mail/mail";
 import FormC from "../components/body/portfolio-component/projects/form/form";
+import BscRctBg from "../components/body/portfolio-component/assets/BscRctAppImg.webp"
 
 export const navBarOptions = [
     {
@@ -63,24 +64,25 @@ export const portfolioOptions = [
         cmp: <Mail />
     },
     {
+        id: 'dynafrmnt',
+        name: 'Dynamic Form Component',
+        label: 'DFC is gonna be sick!',
+        external: false,
+        etc: 'React'
+    },    
+    {
         id: 'Form',
-        name: 'Form Component',
-        label: 'The Form component is a basic example use for a form that has minor validation.',
+        name: 'Basic React Component(s)',
+        label: 'The Basic React component(s) are an extremely basic example of some of the React MUI components and minor validation on those being required to submit.',
         external: false,
         etc: 'React',
         cmp: <FormC />,
+        bgImg: BscRctBg,
     },
     {
-        id: 'App5',
+        id: 'shopping',
         name: 'Shopping Component',
-        label: 'App 5 was built around some lorem ipsum lorem ipsum',
-        external: false,
-        etc: 'extra stuff here'
-    },
-    {
-        id: 'App6',
-        name: 'Coming Soon',
-        label: 'App 6 was built around some lorem ipsum lorem ipsum',
+        label: 'The Shopping Component is a ...',
         external: false,
         etc: 'extra stuff here'
     },
