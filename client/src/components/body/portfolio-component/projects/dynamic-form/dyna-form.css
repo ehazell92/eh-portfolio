@@ -1,0 +1,63 @@
+.invalid {
+    color: red !important;
+    margin-bottom: 2%;
+}
+
+.frm {
+    background-color: white;
+    color: black;
+    height: 95%;
+    overflow-y: scroll;
+    padding: 2%;
+
+    .MuiGrid-container {
+        display: contents !important;
+    }
+
+
+    .main {
+
+        .MuiTableContainer-root {
+            width: 97%;
+    
+            .MuiTable-root {
+                min-width: 325px !important;
+            }
+        }
+
+        .MuiGrid-item {
+
+            div {
+                margin-top: 2%;
+                margin-bottom: 2%;
+            }
+        }
+    }
+
+    .btn,
+    .btn2 {
+        position: absolute;
+        bottom: 2%;
+        width: 10vw;
+        height: 10%;
+    }
+    .btn {
+        left: 39%;
+    }
+    .btn2 {
+        left: 50%;
+    }
+}
+@media screen and (max-width: 1050px) {
+    .frm {
+        .btn {
+            width: 20vw;
+            left: 30%;
+        }
+        .btn2 {
+            width: 20vw;
+            left: 51%;
+        }
+    }
+}
+

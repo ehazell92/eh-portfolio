@@ -6,6 +6,7 @@ import mailBg from '../components/body/portfolio-component/assets/MailAppImg.web
 import Mail from "../components/body/portfolio-component/projects/mail/mail";
 import FormC from "../components/body/portfolio-component/projects/form/form";
 import BscRctBg from "../components/body/portfolio-component/assets/BscRctAppImg.webp"
+import DynaForm from "../components/body/portfolio-component/projects/dynamic-form/dyna-form";
 
 export const navBarOptions = [
     {
@@ -68,7 +69,8 @@ export const portfolioOptions = [
         name: 'Dynamic Form Component',
         label: 'DFC is gonna be sick!',
         external: false,
-        etc: 'React'
+        etc: 'React',
+        cmp: <DynaForm />
     },    
     {
         id: 'Form',
