@@ -10,42 +10,31 @@
     overflow-y: scroll;
     padding: 2%;
 
-    .MuiGrid-container {
-        display: contents !important;
-    }
+    display: grid;
+    grid-template: 90% 10% / 100%;
 
+    .controls-container {
+        display: flex;
+        flex-flow: column;
+        padding: 2%;
 
-    .main {
+        .control {
+            margin-bottom: 3%;
+            .question-div {
+                margin-bottom: 1%;
+            }
+            .control-div {
 
-        .MuiTableContainer-root {
-            width: 97%;
-    
-            .MuiTable-root {
-                min-width: 325px !important;
+            }
+            .err {
+                font-weight: bold;
+                font-size: 14px;
+                color: #F44336;
             }
         }
-
-        .MuiGrid-item {
-
-            div {
-                margin-top: 2%;
-                margin-bottom: 2%;
-            }
-        }
     }
+    .btn-container {
 
-    .btn,
-    .btn2 {
-        position: absolute;
-        bottom: 2%;
-        width: 10vw;
-        height: 10%;
-    }
-    .btn {
-        left: 39%;
-    }
-    .btn2 {
-        left: 50%;
     }
 }
 @media screen and (max-width: 1050px) {

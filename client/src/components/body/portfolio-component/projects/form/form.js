@@ -89,20 +89,18 @@ const Form = () => {
 
         setErrors(newErrors);
         const objErrs = Object.keys(newErrors);
-        if (objErrs.length > 0) {
-            if (isSubmit) {
+        if (isSubmit) {
+            if (objErrs.length > 0) {
                 const snackBarMsg = {
                     type: 'error',
                     msg: `Sorry, there appears to be some fields that have errors.`,
-                  };
+                };
                 triggerSnackBar(snackBarMsg);
-            }
-        } else {
-            if (isSubmit) {
+            } else {
                 const snackBarMsg = {
                     type: 'success',
                     msg: `Congrats! You didn't have any form errors! This form will reset now.`,
-                  };
+                };
                 triggerSnackBar(snackBarMsg);
                 handleReset();
             }
@@ -211,7 +209,7 @@ const Form = () => {
                         }
                     </Grid>
                     <Grid item xs={12} >
-                        <br/>
+                        <br />
                         <span>This is just a basic slider.</span>
                         <Slider
                             onChange={(ev) => handleSliderChange(ev)}

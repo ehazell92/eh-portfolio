@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { TextField, Button, Grid, Container, Autocomplete, Checkbox, FormControlLabel, Radio, RadioGroup, Rating, Slider, Switch, ToggleButton, ToggleButtonGroup, Chip, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
-import './form.css';
+import './dyna-form.css';
 import { triggerSnackBar } from '../../../../../services/app-service';
-
-let submitTouched = false;
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
 const tierModel = {
     type: 'tier',
-    frmCntrl: 'fifthQuest',
+    frmCntrl: 'fifthQuest1',
     question: 'Please make a selection for tier one',
     options: ['1', '2', '3', '4'],
     required: true,
@@ -50,7 +52,7 @@ const formQuestions = [
         type: 'ddl',
         frmCntrl: 'fourthQuest',
         question: 'Please select how many tiers you would like',
-        options: ['1', '2', '3', '4'],
+        options: [1, 2, 3],
         required: true,
         isVisible: false,
         class: 'fc',
@@ -92,211 +94,243 @@ const formQuestions = [
 ];
 
 const DynaForm = () => {
+    let isSubmit = false;
     const [formValues, setFormValues] = useState(formQuestions);
-
     const [formErrors, setFormErrors] = useState({});
 
-    const handleFormControlChange = (event, cntrlName) => {
+    const handleFormControlChange = async (event, cntrlName) => {
         const cntrlVal = event.target.value || event.target.innerText;
+        const cntrlValErr = controlValueValid(cntrlName, cntrlVal);
+        let controlIndx = null;
         const newFormVals = formValues.map(
-            (frmCntrl) => {
+            (frmCntrl, indx) => {
                 if (frmCntrl.frmCntrl === cntrlName) {
+                    controlIndx = indx;
                     return {
                         ...frmCntrl,
-                        value: cntrlVal
-                    }; 
+                        value: cntrlVal,
+                        hasError: cntrlValErr,
+                    };
                 } else {
-                    return frmCntrl;
+                    const showNext =
+                        (controlIndx !== null && controlIndx === (indx - 1)) ?
+                            shouldShowNextQuestion(frmCntrl, cntrlVal) :
+                            frmCntrl.isVisible;
+                    const updateOpts = shouldUpdateOpts(frmCntrl, cntrlVal);
+                    return {
+                        ...frmCntrl,
+                        isVisible: showNext
+                    };
                 }
             }
         );
-        updateFormControlValues(newFormVals);
+        setFormValues(newFormVals);
     };
-    const updateFormControlValues = (frmObj) => {
-        setFormValues({
-            frmObj
-        });
-        checkFormErrors();
+    const updateFormControlValues = (frmObj, chkErrs = false) => {
+        setFormValues(frmObj);
+        if (!chkErrs) {
+            checkFormErrors();
+        }
     };
-    const checkFormErrors = (ret = false) => {
-        formValues.forEach((frmCntrl) => {
+    const controlValueValid = (cntrlName, cntrlVal) => {
+        return (!cntrlVal || cntrlVal.length === 0);
+    };
+    const shouldShowNextQuestion = (ctrl, val) => {
+        if (['fifthQuest'].includes(ctrl.frmCntrl)) {
+            return val !== null;
+        }
+        return val.toLowerCase() === 'yes';
+    };
+    const shouldUpdateOpts = (ctrl, prevCtrlVal) => {
+        if (['fifthQuest'].includes(ctrl.frmCntrl)) {
+            return prevCtrlVal;
+        }
+        return ctrl.options;
+    };
+    const checkFormErrors = () => {
+        const newFrmVals = formValues.map((frmCntrl) => {
             const frmVal = frmCntrl.value || null;
-            if (!frmVal || frmVal.length === 0) {
-                frmCntrl.hasError = true;
-            }
+            const frmValErr = frmCntrl.isVisible ? controlValueValid(frmCntrl.frmCntrl, frmVal) : false;
+            return {
+                ...frmCntrl,
+                hasError: frmValErr,
+            };
         });
-
-        const currentErrors = formValues.filter(
-            (frmCntrl) => frmCntrl.hasError
-        ) || [];        
-        setFormErrors(currentErrors);
-    };
-
-    const handleSubmission = () => {
-        const currentErrors = formValues.filter((frmCntrl) => frmCntrl.hasError) || [];
-        if (currentErrors.length) {
-            const snackBarMsg = {
-                type: 'error',
-                msg: 'Submission Failed: The Form is Invalid'
-            };
-            triggerSnackBar(snackBarMsg);
+        updateFormControlValues(newFrmVals, true);
+        if (isSubmit) {
+            const currentErrors = newFrmVals.filter(
+                (frmCntrl) => frmCntrl.hasError
+            ) || [];
+            if (currentErrors.length) {
+                const snackBarMsg = {
+                    type: 'error',
+                    msg: 'Submission Failed: The Form is Invalid'
+                };
+                triggerSnackBar(snackBarMsg);
+            } else {
+                const snackBarMsg = {
+                    type: 'success',
+                    msg: 'Successsss'
+                };
+                triggerSnackBar(snackBarMsg);
+                isSubmit = false;
+            }
         } else {
-            const snackBarMsg = {
-                type: 'success',
-                msg: 'Successsss'
-            };
-            triggerSnackBar(snackBarMsg);
+            console.log(formValues);
         }
     };
 
-    const getValue = (cntrlName) => {
-        const foundVal = formValues.find(
-            (frmCntrl) => frmCntrl.frmCntrl === cntrlName
-        ) || null;
-        return foundVal;
+    const performSubmission = () => {
+        console.log('doing things here');
+    };
+
+    const handleSubmission = (ev) => {
+        isSubmit = true;
+        ev.preventDefault();
+        checkFormErrors();
     };
 
     useEffect(() => {
-        if (submitTouched) {
-            // checkFormErrors();
+        if (isSubmit) {
+            checkFormErrors();
         }
     }, [formValues]);
 
-    // const handleReset = () => {
-    //     submitTouched = false;
-    //     setFormValues({
-    //         autocomplete: '',
-    //         checkbox: null,
-    //         radioGroup: '',
-    //         rating: null,
-    //         slider: null,
-    //         switch: null,
-    //         toggleButton: '',
-    //     });
-    // };
-
-    // const handleSubmit = (event) => {
-    //     submitTouched = true;
-    //     event.preventDefault();
-    //     checkFormErrors(true);
-    // };
-
-    // const checkFormErrors = (isSubmit = false) => {
-    //     const newErrors = {};
-    //     if (formValues.autocomplete === '' || formValues.autocomplete === null) newErrors.autocomplete = 'Autocomplete is required';
-    //     if (formValues.checkbox === '' || formValues.checkbox === null) newErrors.checkbox = 'Checkbox must be checked';
-    //     if (formValues.radioGroup === '' || formValues.radioGroup === null) newErrors.radioGroup = 'A radio option is required';
-    //     if (formValues.rating === '' || formValues.rating === null) newErrors.rating = 'Rating is required';
-    //     if (formValues.slider === '' || formValues.slider === null) newErrors.slider = 'Slider value is required';
-    //     if (formValues.switch === '' || formValues.switch === null) newErrors.switch = 'Switch must be checked';
-    //     if (formValues.toggleButton === '' || formValues.toggleButton === null) newErrors.toggleButton = 'A toggle button option is required';
-
-    //     setErrors(newErrors);
-    //     const objErrs = Object.keys(newErrors);
-    //     if (objErrs.length > 0) {
-    //         if (isSubmit) {
-    //             const snackBarMsg = {
-    //                 type: 'error',
-    //                 msg: `Sorry, there appears to be some fields that have errors.`,
-    //               };
-    //             triggerSnackBar(snackBarMsg);
-    //         }
-    //     } else {
-    //         if (isSubmit) {
-    //             const snackBarMsg = {
-    //                 type: 'success',
-    //                 msg: `Congrats! You didn't have any form errors! This form will reset now.`,
-    //               };
-    //             triggerSnackBar(snackBarMsg);
-    //             handleReset();
-    //         }
-    //     }
-    // }
-
-    // const top100Films = [
-    //     { title: 'The Shawshank Redemption', year: 1994 },
-    //     { title: 'The Godfather', year: 1972 },
-    // ];
-    // const [alignment, setAlignment] = useState('left');
-    // const handleAlignment = (event, newAlignment) => {
-    //     const evTxt = event.target.innerText.toLowerCase();
-    //     setAlignment(evTxt);
-    //     updateFormValues('toggleButton', evTxt);
-    // };
-    // const rows = [
-    //     { name: 'Frozen yoghurt', calories: 159, fat: 6.0 },
-    //     { name: 'Ice cream sandwich', calories: 237, fat: 9.0 },
-    // ];
+    const handleReset = () => {
+        isSubmit = false;
+        setFormValues(formQuestions);
+    };
 
     const buildFormControl = (formControl, indx) => {
-        const isVisible = formValues.find((fCntrl) => fCntrl.frmCntrl === formControl.frmCntrl)?.isVisible;
         switch (formControl.type) {
             case 'tggle':
-            case isVisible:
                 return <div>
                     <ToggleButtonGroup
                         color="primary"
-                        value={getValue(formControl.frmCntrl)}
+                        value={formControl.value}
                         exclusive
                         onChange={(event) => handleFormControlChange(event, formControl.frmCntrl)}
                         aria-label="Platform"
                     >
                         {
                             formControl.options.map((opt) =>
-                                <ToggleButton value="opt">{opt}</ToggleButton>
+                                <ToggleButton
+                                    value={opt}
+                                >{opt}</ToggleButton>
                             )
                         }
                     </ToggleButtonGroup>
                 </div>;
             case 'input':
-            case isVisible:
-                return <div></div>;
+                return <div>
+                    <TextField
+                        id={formControl.frmCntrl}
+                        onChange={(event) => handleFormControlChange(event, formControl.frmCntrl)}
+                        label="See Fourth Question?"
+                        variant="outlined"
+                    />
+                </div>;
             case 'ddl':
-            case isVisible:
-                return <div></div>;
+                return <div>
+                    <InputLabel id="ddl-demo">Tiers</InputLabel>
+                    <Select
+                        labelId="ddl-demo"
+                        id={formControl.frmCntrl}
+                        value={formControl.value}
+                        label="Tiers Select"
+                        onChange={(event) => handleFormControlChange(event, formControl.frmCntrl)}
+                    >
+                        {
+                            formControl.options.map((opt) => 
+                                <MenuItem value={opt}>{opt}</MenuItem>
+                            )
+                        }
+                    </Select>
+                </div>;
             case 'tier':
-            case isVisible:
                 return <div></div>;
             case 'cb':
-            case isVisible:
                 return <div></div>;
             case 'text':
-            case isVisible:                
                 return <div></div>;
             case '':
-            case isVisible:
                 return <div></div>;
             default:
-            case !isVisible:
                 return null;
         }
     };
 
     return (
         <div
-            className='form'
+            className='frm'
         >
             {
-                formQuestions.map((frmCntrl, index) =>
+                formValues.length > 0 &&
+                <>
                     <div
-                        className='control-container'
+                        className='controls-container'
                     >
-                        <div className='question-div'>
-                            <span>
-                                {frmCntrl.question}
-                            </span>
-                        </div>
-                        <div
-                            className='control-div'
-                        >
-                            {
-                                buildFormControl(frmCntrl, index)
-                            }
-                        </div>
+                        {
+                            formValues.map((frmCntrl, index) =>
+                                <div
+                                    className='control'
+                                >
+                                    {
+                                        frmCntrl.isVisible &&
+                                        <>
+                                            <div className='question-div'>
+                                                <span>
+                                                    {frmCntrl.question}
+                                                </span>
+                                            </div>
+                                            <div
+                                                className='control-div'
+                                            >
+                                                {
+                                                    buildFormControl(frmCntrl, index)
+                                                }
+                                            </div>
+                                            {
+                                                frmCntrl.hasError &&
+                                                <div>
+                                                    <span
+                                                        className='err'
+                                                    >
+                                                        This is a required field *
+                                                    </span>
+                                                </div>
+                                            }
+                                        </>
+                                    }
+                                </div>
+                            )
+                        }
                     </div>
-                )
+                    <div
+                        className='btn-container'
+                    >
+                        <Button
+                            className='btn'
+                            color="primary"
+                            variant="contained"
+                            fullWidth
+                            onClick={(event) => { handleSubmission(event); }}
+                        >
+                            Submit
+                        </Button>
+                        <Button
+                            className='btn2'
+                            color="secondary"
+                            variant="contained"
+                            fullWidth
+                            onClick={handleReset}
+                        >
+                            Clear
+                        </Button>
+                    </div>
+                </>
             }
-        </div>
+        </div >
     );
 };
 
