@@ -6,6 +6,7 @@ import mailBg from '../components/body/portfolio-component/assets/MailAppImg.web
 import Mail from "../components/body/portfolio-component/projects/mail/mail";
 import FormC from "../components/body/portfolio-component/projects/form/form";
 import BscRctBg from "../components/body/portfolio-component/assets/BscRctAppImg.webp"
+import SndBxBg from "../components/body/portfolio-component/assets/SndBxAppImg.webp";
 import DynaForm from "../components/body/portfolio-component/projects/dynamic-form/dyna-form";
 
 export const navBarOptions = [
@@ -27,15 +28,6 @@ export const navBarOptions = [
     }
 ];
 
-// external EXAMPLE
-// {
-//     id: 'App1',
-//     name: 'DEEHV - IP',
-//     label: 'Deehv is a sandbox for development by Edward Hazell',
-//     external: "https://deehv-94b3d7c81638.herokuapp.com/",
-//     title: "Web App Developed by Edward Hazell",
-//     etc: 'Angular'
-// },
 export const portfolioOptions = [
     {
         id: 'Logon',
@@ -83,7 +75,7 @@ export const portfolioOptions = [
     },
     {
         id: 'shopping',
-        name: 'Shopping Component',
+        name: 'Shopping Component - IP',
         label: 'The Shopping Component is a ...',
         external: false,
         etc: 'extra stuff here'
@@ -101,7 +93,17 @@ export const portfolioOptions = [
         label: 'App 8 was built around some lorem ipsum lorem ipsum',
         external: false,
         etc: 'extra stuff here'
-    }
+    },
+    {
+        id: 'App9',
+        name: 'SandBox',
+        label: 'Deehv is a sandbox for development by Edward Hazell',
+        external: "https://deehv-94b3d7c81638.herokuapp.com/",
+        title: "Web App Developed & Owned by Edward Hazell",
+        etc: 'Angular',
+        cmp: true,
+        bgImg: SndBxBg,
+    },
     // ,
     // {
     //     id: 'App9',

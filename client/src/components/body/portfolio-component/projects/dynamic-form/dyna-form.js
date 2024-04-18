@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { TextField, Button, Grid, Container, Autocomplete, Checkbox, FormControlLabel, Radio, RadioGroup, Rating, Slider, Switch, ToggleButton, ToggleButtonGroup, Chip, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import { TextField, Button, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import './dyna-form.css';
 import { triggerSnackBar } from '../../../../../services/app-service';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import Checkbox from '@mui/material/Checkbox';
 
 const tierModel = {
     type: 'tier',
@@ -52,24 +52,24 @@ const formQuestions = [
         type: 'ddl',
         frmCntrl: 'fourthQuest',
         question: 'Please select how many tiers you would like',
-        options: [1, 2, 3],
+        options: [0, 1, 2, 3],
         required: true,
         isVisible: false,
         class: 'fc',
         hasError: false,
-        value: null,
+        value: 0,
     },
-    {
-        type: 'tier',
-        frmCntrl: 'fifthQuest',
-        question: 'Please make your tier selections',
-        options: [],
-        required: true,
-        isVisible: false,
-        class: 'fc',
-        hasError: false,
-        value: null,
-    },
+    // {
+    //     type: 'tier',
+    //     frmCntrl: 'fifthQuest',
+    //     question: 'Please make your tier selections',
+    //     options: [],
+    //     required: true,
+    //     isVisible: false,
+    //     class: 'fc',
+    //     hasError: false,
+    //     value: null,
+    // },
     {
         type: 'cb',
         frmCntrl: 'sixthQuest',
@@ -95,17 +95,39 @@ const formQuestions = [
 
 const DynaForm = () => {
     let isSubmit = false;
+    let setFourth = null;
+    const isTierQ = 'fifthQuest';
+    const isTierCntrl = 'fifthTierCntrl';
     const [formValues, setFormValues] = useState(formQuestions);
     const [formErrors, setFormErrors] = useState({});
 
     const handleFormControlChange = async (event, cntrlName) => {
-        const cntrlVal = event.target.value || event.target.innerText;
-        const cntrlValErr = controlValueValid(cntrlName, cntrlVal);
+        console.log('before');
+        console.log(formValues[3]);
+        let cntrlVal = event.target.value || event.target.innerText;
+        cntrlVal = cntrlName === 'sixthQuest' ? event.target.checked : cntrlVal;
+        const fndCntrl = formValues.find((frmV) => frmV.frmCntrl === cntrlName);
+        const cntrlValErr = controlValueValid(cntrlName, cntrlVal, fndCntrl);
         let controlIndx = null;
         const newFormVals = formValues.map(
             (frmCntrl, indx) => {
                 if (frmCntrl.frmCntrl === cntrlName) {
                     controlIndx = indx;
+                    // if (cntrlVal && cntrlName === isTierQ) {
+                    //     const frmCntrlVal = (frmCntrl.value && Array.isArray(frmCntrl.value)) ? frmCntrl.value : [];
+                    //     const newVal = [
+                    //         ...frmCntrlVal,
+                    //         cntrlVal
+                    //     ];
+                    //     return {
+                    //         ...frmCntrl,
+                    //         value: newVal,
+                    //         hasError: cntrlValErr,
+                    //     };
+                    // }
+                    if (cntrlValErr && !frmCntrl.required) {
+                        cntrlValErr = false;
+                    }
                     return {
                         ...frmCntrl,
                         value: cntrlVal,
@@ -117,10 +139,18 @@ const DynaForm = () => {
                             shouldShowNextQuestion(frmCntrl, cntrlVal) :
                             frmCntrl.isVisible;
                     const updateOpts = shouldUpdateOpts(frmCntrl, cntrlVal);
-                    return {
-                        ...frmCntrl,
-                        isVisible: showNext
-                    };
+                    if (updateOpts) {
+                        return {
+                            ...frmCntrl,
+                            isVisible: showNext,
+                            options: updateOpts,
+                        };
+                    } else {
+                        return {
+                            ...frmCntrl,
+                            isVisible: showNext
+                        };
+                    }
                 }
             }
         );
@@ -132,25 +162,54 @@ const DynaForm = () => {
             checkFormErrors();
         }
     };
-    const controlValueValid = (cntrlName, cntrlVal) => {
+    const controlValueValid = (cntrlName, cntrlVal, fndCntrl) => {
+        if (!fndCntrl.required) {
+            return false;
+        }
         return (!cntrlVal || cntrlVal.length === 0);
     };
     const shouldShowNextQuestion = (ctrl, val) => {
-        if (['fifthQuest'].includes(ctrl.frmCntrl)) {
+        if ([isTierQ, 'sixthQuest', 'seventhQuest'].includes(ctrl.frmCntrl)) {
             return val !== null;
         }
         return val.toLowerCase() === 'yes';
     };
     const shouldUpdateOpts = (ctrl, prevCtrlVal) => {
-        if (['fifthQuest'].includes(ctrl.frmCntrl)) {
-            return prevCtrlVal;
+        if ([isTierQ].includes(ctrl.frmCntrl)) {
+            if ((typeof prevCtrlVal) === 'number') {
+                const builtTiers = [];
+                Array.from({ length: prevCtrlVal }).forEach(() => {
+                    builtTiers.push(
+                        <>
+                            <span>
+                                Is this Tier mandatory?
+                            </span> <br />
+                            <ToggleButtonGroup
+                                color="primary"
+                                exclusive
+                                onChange={(event) => handleFormControlChange(event, isTierQ)}
+                                aria-label="Platform"
+                            >
+                                {
+                                    formQuestions[0].options.map((opt) =>
+                                        <ToggleButton
+                                            value={opt}
+                                        >{opt}</ToggleButton>
+                                    )
+                                }
+                            </ToggleButtonGroup>
+                        </>
+                    );
+                });
+                return builtTiers;
+            }
         }
-        return ctrl.options;
+        return null;
     };
     const checkFormErrors = () => {
         const newFrmVals = formValues.map((frmCntrl) => {
             const frmVal = frmCntrl.value || null;
-            const frmValErr = frmCntrl.isVisible ? controlValueValid(frmCntrl.frmCntrl, frmVal) : false;
+            const frmValErr = frmCntrl.isVisible ? controlValueValid(frmCntrl.frmCntrl, frmVal, frmCntrl) : false;
             return {
                 ...frmCntrl,
                 hasError: frmValErr,
@@ -191,6 +250,8 @@ const DynaForm = () => {
     };
 
     useEffect(() => {
+        console.log('FV Updated');
+        console.log(formValues[3]);
         if (isSubmit) {
             checkFormErrors();
         }
@@ -241,18 +302,41 @@ const DynaForm = () => {
                         onChange={(event) => handleFormControlChange(event, formControl.frmCntrl)}
                     >
                         {
-                            formControl.options.map((opt) => 
+                            formControl.options.map((opt) =>
                                 <MenuItem value={opt}>{opt}</MenuItem>
                             )
                         }
                     </Select>
                 </div>;
             case 'tier':
-                return <div></div>;
+                return <div
+                    className='tierDiv'
+                >
+                    {
+                        formControl.options.map((opt, indx) =>
+                            <div>{opt}</div>
+                        )
+                    }
+                </div>;
             case 'cb':
-                return <div></div>;
+                return <div>
+                    <Checkbox
+                        checked={formControl.value}
+                        onChange={(event) => handleFormControlChange(event, formControl.frmCntrl)}
+                        inputProps={{ 'aria-label': 'controlled' }}
+                    />
+                </div>;
             case 'text':
-                return <div></div>;
+                return <div>
+                    <TextField
+                        id={formControl.frmCntrl}
+                        onChange={(event) => handleFormControlChange(event, formControl.frmCntrl)}
+                        label="Multiline"
+                        multiline
+                        rows={4}
+                        defaultValue="Required if visible"
+                    />
+                </div>;
             case '':
                 return <div></div>;
             default:
