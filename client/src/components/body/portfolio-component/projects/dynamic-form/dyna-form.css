@@ -7,7 +7,8 @@
     background-color: white;
     color: black;
     height: 95%;
-    overflow-y: scroll;
+    /* overflow-y: scroll; */
+    overflow: hidden;
     padding: 2%;
 
     display: grid;
@@ -16,8 +17,10 @@
     .controls-container {
         display: flex;
         flex-flow: column;
+        align-items: center;
+        justify-content: center;        
         padding: 2%;
-        overflow-y: scroll;
+        overflow-y: auto;
 
         .control {
             margin-bottom: 3%;

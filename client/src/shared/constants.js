@@ -5,8 +5,10 @@ import wthBg from '../components/body/portfolio-component/assets/WeatherAppImg.w
 import mailBg from '../components/body/portfolio-component/assets/MailAppImg.webp';
 import Mail from "../components/body/portfolio-component/projects/mail/mail";
 import FormC from "../components/body/portfolio-component/projects/form/form";
+import DynmcRctBg from "../components/body/portfolio-component/assets/DynmcCmpImg.webp";
 import BscRctBg from "../components/body/portfolio-component/assets/BscRctAppImg.webp"
 import SndBxBg from "../components/body/portfolio-component/assets/SndBxAppImg.webp";
+import CmngSnBg from "../components/body/portfolio-component/assets/CmngSoonImg.webp";
 import DynaForm from "../components/body/portfolio-component/projects/dynamic-form/dyna-form";
 
 export const navBarOptions = [
@@ -62,7 +64,8 @@ export const portfolioOptions = [
         label: 'DFC is gonna be sick!',
         external: false,
         etc: 'React',
-        cmp: <DynaForm />
+        cmp: <DynaForm />,
+        bgImg: DynmcRctBg,
     },    
     {
         id: 'Form',
@@ -78,27 +81,28 @@ export const portfolioOptions = [
         name: 'Shopping Component - IP',
         label: 'The Shopping Component is a ...',
         external: false,
-        etc: 'extra stuff here'
+        etc: 'extra stuff here',
+        bgImg: CmngSnBg,
     },
-    {
-        id: 'App7',
-        name: 'Coming Soon',
-        label: 'App 7 was built around some lorem ipsum lorem ipsum',
-        external: false,
-        etc: 'extra stuff here'
-    },
-    {
-        id: 'App8',
-        name: 'Coming Soon',
-        label: 'App 8 was built around some lorem ipsum lorem ipsum',
-        external: false,
-        etc: 'extra stuff here'
-    },
+    // {
+    //     id: 'App7',
+    //     name: 'Coming Soon',
+    //     label: 'App 7 was built around some lorem ipsum lorem ipsum',
+    //     external: false,
+    //     etc: 'extra stuff here'
+    // },
+    // {
+    //     id: 'App8',
+    //     name: 'Coming Soon',
+    //     label: 'App 8 was built around some lorem ipsum lorem ipsum',
+    //     external: false,
+    //     etc: 'extra stuff here'
+    // },
     {
         id: 'App9',
-        name: 'SandBox',
+        name: 'SandBox - AI',
         label: 'Deehv is a sandbox for development by Edward Hazell',
-        external: "https://deehv-94b3d7c81638.herokuapp.com/",
+        external: "https://deehv-94b3d7c81638.herokuapp.com/guest",
         title: "Web App Developed & Owned by Edward Hazell",
         etc: 'Angular',
         cmp: true,

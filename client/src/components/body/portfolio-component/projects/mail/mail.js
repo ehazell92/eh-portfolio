@@ -540,7 +540,8 @@ export default function Mail() {
     };
 
     const unCheckMail = (crV, oVR) => {
-        return mailViews[crV].map((mail) => {
+        const mailViewSels = mailViews[crV] || [];
+        return mailViewSels.map((mail) => {
             mail.checked = false;
             mail.read = oVR ? false : mail.read;
             return mail;

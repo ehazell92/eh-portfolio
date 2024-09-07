@@ -12,6 +12,18 @@
             padding-right: 4%;
         }
         .aboutBdy {
+            flex-flow: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            height: min-content !important;
+
+            .centerDiv {
+                padding: 1%;
+                position: relative;
+                height: 100%;
+            }
+
             &:hover {
                 animation: scrollBorder 8s ease-in-out infinite;
             }
