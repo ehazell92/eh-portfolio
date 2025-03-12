@@ -9,10 +9,10 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 });
 
 // { type: 'success', msg: 'Message here' }
-// type: error
-// type: warning
-// type: info
-// type: success
+  // type: error
+  // type: warning
+  // type: info
+  // type: success
 class SnackBars extends React.Component {
   state = {
     snackBarMsg: {},

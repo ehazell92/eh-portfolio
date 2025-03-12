@@ -59,17 +59,6 @@ const formQuestions = [
         hasError: false,
         value: 0,
     },
-    // {
-    //     type: 'tier',
-    //     frmCntrl: 'fifthQuest',
-    //     question: 'Please make your tier selections',
-    //     options: [],
-    //     required: true,
-    //     isVisible: false,
-    //     class: 'fc',
-    //     hasError: false,
-    //     value: null,
-    // },
     {
         type: 'cb',
         frmCntrl: 'sixthQuest',
@@ -113,18 +102,6 @@ const DynaForm = () => {
             (frmCntrl, indx) => {
                 if (frmCntrl.frmCntrl === cntrlName) {
                     controlIndx = indx;
-                    // if (cntrlVal && cntrlName === isTierQ) {
-                    //     const frmCntrlVal = (frmCntrl.value && Array.isArray(frmCntrl.value)) ? frmCntrl.value : [];
-                    //     const newVal = [
-                    //         ...frmCntrlVal,
-                    //         cntrlVal
-                    //     ];
-                    //     return {
-                    //         ...frmCntrl,
-                    //         value: newVal,
-                    //         hasError: cntrlValErr,
-                    //     };
-                    // }
                     if (cntrlValErr && !frmCntrl.required) {
                         cntrlValErr = false;
                     }

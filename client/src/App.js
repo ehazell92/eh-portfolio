@@ -20,25 +20,15 @@ class App extends React.Component {
   setCampFireClasses = (onOff) => {
     this.setState({
       cfVar: (
-        onOff 
-        // || this.state.curView !== 'portfolio'
+        onOff
       )
     });
   };
   setCurrentView = (cView) => {
     this.setState({ curView: cView });
-    // if (cView === 'portfolio') {
-    //   this.setCampFireClasses(true);
-    // }
   };
   componentDidMount() {
     this.setCampFireClasses(true);
-    // eslint-disable-next-line no-restricted-globals        
-    // addEventListener("mousemove",
-    //   (event) => {
-    //     this.setCampFireClasses(event.screenY < 180);
-    //   }
-    // );
   };
   render() {
     return (

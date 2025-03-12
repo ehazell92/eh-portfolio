@@ -196,9 +196,6 @@ class Navbar extends React.Component {
                                         paper: 'ddl-opt'
                                     }}
                                 >
-                                    {/* <MenuItem onClick={() => this.downloadFile(0)}>
-                                        DOCX Resume
-                                    </MenuItem> */}
                                     <MenuItem 
                                         onClick={() => this.downloadFile(1)}
                                     >
